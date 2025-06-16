@@ -35,8 +35,8 @@ body {
 
 /* Header Styles */
 header {
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url(../images/home1.jpeg);
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url(../images/home1.webp);
   height: 100vh;
   min-height: 600px;
   background-size: cover;
