@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vet Clinics in Sri Lanka | PetCare Lanka</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="css/clinics.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+</head>
+<body>
+    <header class="clinics-header">
+        <div class="container">
+            <h1>Veterinary Clinics in Sri Lanka</h1>
+            <div class="clinic-filters">
+                <div class="filter-group">
+                    <label for="clinic-type">Clinic Type:</label>
+                    <select id="clinic-type">
+                        <option value="all">All Clinics</option>
+                        <option value="government">Government Hospitals</option>
+                        <option value="private">Private Clinics</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="location">Location:</label>
+                    <select id="location">
+                        <option value="all">All Districts</option>
+                        <option value="colombo">Colombo</option>
+                        <option value="kandy">Kandy</option>
+                        <option value="galle">Galle</option>
+                        <option value="colombo"> Gampaha</option>
+                        <option value="kandy">Kalutara</option>
+                        <option value="galle">Matale</option>
+                        <option value="colombo">Nuwara Eliya</option>
+                        <option value="kandy">Matara</option>
+                        <option value="galle">Hambantota</option>
+                        <option value="colombo">Kurunegala</option>
+                        <option value="kandy">Puttalam</option>
+                        <option value="galle">Kegalle</option>
+                        <option value="colombo">Ratnapura</option>
+                        <option value="kandy">Jaffna</option>
+                        <option value="galle">Kilinochchi</option>
+                        <option value="colombo">Mullaitivu</option>
+                        <option value="kandy">Mannar</option>
+                        <option value="galle">Vavuniya</option>
+                        <option value="colombo">Trincomalee</option>
+                        <option value="kandy">Batticaloa</option>
+                        <option value="galle">Ampara</option>
+                        <option value="colombo">Anuradhapura</option>
+                        <option value="kandy">Polonnaruwa</option>
+                        <option value="galle">Badulla</option>
+                        <option value="colombo">Monaragala</option>
+                        
+                    </select>
+                </div>
+                <button id="emergency-btn">🚨 Show Emergency Clinics</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="clinics-container">
+        <div class="clinics-map" id="clinics-map"></div>
+        
+        <div class="clinics-list">
+            <!-- Government Hospital-->
+            <div class="clinic-card government">
+                <div class="clinic-badge">Government</div>
+                <h2>Peradeniya Veterinary Teaching Hospital</h2>
+                <div class="clinic-meta">
+                    <span>📍 Kandy</span>
+                    <span>📞 081 238 7654</span>
+                    <span>⏰ 24/7 Emergency</span>
+                </div>
+                <p class="clinic-desc">Primary government veterinary hospital with subsidized services including rabies vaccination and sterilization programs.</p>
+                <div class="clinic-services">
+                    <span>🐕 Sterilization</span>
+                    <span>💉 Vaccination</span>
+                    <span>🏥 Emergency</span>
+                </div>
+                <a href="clinic-details.html?id=gov01" class="btn">View Details & Book</a>
+            </div>
+
+            <!-- Private Clinic -->
+            <div class="clinic-card private">
+                <div class="clinic-badge">Private</div>
+                <h2>Colombo Animal Hospital</h2>
+                <div class="clinic-meta">
+                    <span>📍 Colombo 05</span>
+                    <span>📞 011 258 9632</span>
+                    <span>⏰ 8AM - 10PM</span>
+                </div>
+                <p class="clinic-desc">Advanced private facility with diagnostic imaging and surgical services.</p>
+                <div class="clinic-services">
+                    <span>🩺 Consultation</span>
+                    <span>📷 X-Ray</span>
+                    <span>💊 Pharmacy</span>
+                </div>
+                <a href="clinic-details.html?id=private01" class="btn">View Details & Book</a>
+            </div>
+
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer>
+         <div class="footer-content">
+            <div class="footer-column">
+                <h3>Pet Owners Hub</h3>
+                <p>Your one-stop solution for all pet care needs, connecting pet lovers with quality services.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="vet-clinics/clinics.html">Vet Clinics</a></li>
+                    <li><a href="pet-shops/shops.html">Pet Shops</a></li>
+                    <li><a href="marketplace/marketplace.html">Marketplace</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="support/support.html#contact">Contact Us</a></li>
+                    <li><a href="support/support.html#faqs">FAQs</a></li>
+                    <li><a href="support/support.html#privacy">Privacy Policy</a></li>
+                    <li><a href="support/support.html#terms">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Pet Owners Hub. All rights reserved.</p>
+        </div>
+    </footer>       
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="js/clinics.js"></script>
+</body>
+</html>
