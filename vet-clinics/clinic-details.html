@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinic Details | Pet Owners Hub</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="css/clinics.css">
+</head>
+<body>
+    <div class="clinic-detail-container">
+        <div class="clinic-header">
+            <h1 id="clinic-name">Peradeniya Veterinary Teaching Hospital</h1>
+            <div class="clinic-type-badge" id="clinic-type">Government</div>
+            <div class="clinic-rating">★★★★☆ (42 reviews)</div>
+        </div>
+
+        <div class="clinic-detail-grid">
+            <div class="clinic-info">
+                <h2>📌 Location</h2>
+                <p id="clinic-address">Faculty of Veterinary Medicine, Peradeniya</p>
+                <div class="clinic-map" id="detail-map"></div>
+
+                <h2>📞 Contact</h2>
+                <p id="clinic-phone">081 238 7654</p>
+                <p id="clinic-email">pera.vet@gov.lk</p>
+
+                <h2>🕒 Hours</h2>
+                <ul id="clinic-hours">
+                    <li>Emergency: 24/7</li>
+                    <li>OPD: 8AM-4PM (Mon-Fri)</li>
+                </ul>
+
+                <h2>💵 Fees</h2>
+                <div id="clinic-fees">
+                    <p>Government subsidized rates apply</p>
+                    <ul>
+                        <li>Rabies Vaccine: FREE</li>
+                        <li>Sterilization: LKR 500</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="booking-section">
+                <h2>📅 Book Appointment</h2>
+                <form id="booking-form">
+                    <input type="text" id="pet-id" placeholder="Enter Pet ID" required>
+                    <select id="service-type" required>
+                        <option value="">Select Service</option>
+                        <option value="vaccination">Vaccination</option>
+                        <option value="emergency">Emergency</option>
+                        <option value="sterilization">Sterilization</option>
+                    </select>
+                    <input type="date" id="appointment-date" required>
+                    <div id="time-slots">
+                        <p>Select date to see available times</p>
+                    </div>
+                    <button type="submit" class="btn">Confirm Booking</button>
+                </form>
+
+                <div class="emergency-banner">
+                    <h3>🚨 Emergency?</h3>
+                    <p>Call directly for immediate assistance</p>
+                    <a href="tel:+94812387654" class="btn emergency-btn">Call Now</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="clinic-services">
+            <h2>🏥 Services Offered</h2>
+            <div class="services-grid" id="services-list">
+
+            </div>
+        </div>
+    </div>
+ <footer>
+         <div class="footer-content">
+            <div class="footer-column">
+                <h3>Pet Owners Hub</h3>
+                <p>Your one-stop solution for all pet care needs, connecting pet lovers with quality services.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="vet-clinics/clinics.html">Vet Clinics</a></li>
+                    <li><a href="pet-shops/shops.html">Pet Shops</a></li>
+                    <li><a href="marketplace/marketplace.html">Marketplace</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="support/support.html#contact">Contact Us</a></li>
+                    <li><a href="support/support.html#faqs">FAQs</a></li>
+                    <li><a href="support/support.html#privacy">Privacy Policy</a></li>
+                    <li><a href="support/support.html#terms">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Pet Owners Hub. All rights reserved.</p>
+        </div>
+    </footer>       
+    <script src="js/clinics.js"></script>
+</body>
+</html>
