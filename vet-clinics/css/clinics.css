@@ -1,13 +1,14 @@
 /* Clinic Listing Page */
 .clinics-header {
-  background: linear-gradient(
-    rgba(0, 0, 0, 0.7),
-    url(../../assets/images/clinic-bg.jpg)
-  );
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)),
+    url(../../assets/images/clinic-b.webp);
   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   padding: 3rem 0;
   color: white;
   text-align: center;
+  min-height: 200px;
 }
 
 .clinic-filters {
