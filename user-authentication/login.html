@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | PetCare Lanka</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <img src="../assets/images/petcare-logo.png" alt="PetCare Logo" class="auth-logo">
+                <h1>Welcome Back</h1>
+                <p>Login to manage your pets and appointments</p>
+            </div>
+
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <label for="login-email">Email or Phone</label>
+                    <input type="text" id="login-email" placeholder="example@email.com or 07XXXXXXXX" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="••••••••" required>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn auth-btn">Login</button>
+
+                <div class="auth-footer">
+                    <p>Don't have an account? <a href="register.html">Register now</a></p>
+                    <div class="social-login">
+                        <p>Or login with:</p>
+                        <div class="social-icons">
+                            <a href="#" class="social-icon google">G</a>
+                            <a href="#" class="social-icon facebook">F</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>
