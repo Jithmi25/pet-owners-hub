@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Pets | Pet Owners Hub </title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="profile-container">
+        <!-- Sidebar -->
+        <aside class="profile-sidebar">
+            <div class="profile-header">
+                <div class="avatar-container">
+                    <img src="../../assets/images/default-avatar.jpg" alt="Profile" class="avatar">
+                    <button class="avatar-edit">Edit</button>
+                </div>
+                <h2 id="profileName">John Doe</h2>
+                <p>Member since <span id="joinDate">Jan 2023</span></p>
+            </div>
+
+            <nav class="profile-nav">
+                <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                <a href="pets.html" class="active"><i class="fas fa-paw"></i> My Pets</a>
+                <a href="appointments.html"><i class="fas fa-calendar-alt"></i> Appointments</a>
+                <a href="saved.html"><i class="fas fa-heart"></i> Saved Items</a>
+                <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="profile-content">
+            <div class="section-header">
+                <h1>My Pets</h1>
+                <button class="btn btn-primary" id="addPetBtn">
+                    <i class="fas fa-plus"></i> Add Pet
+                </button>
+            </div>
+
+            <div class="pets-grid" id="petsContainer">
+                <!-- Pets will be loaded here -->
+                <div class="no-pets">
+                    <img src="../../assets/images/no-pets.svg" alt="No pets" class="empty-state-img">
+                    <p>You haven't added any pets yet</p>
+                    <button class="btn btn-primary" id="addFirstPetBtn">Add Your First Pet</button>
+                </div>
+            </div>
+
+            <!-- Add Pet Modal -->
+            <div class="modal" id="petModal">
+                <div class="modal-content">
+                    <span class="close-btn">&times;</span>
+                    <h2 id="modalTitle">Add New Pet</h2>
+                    <form id="petForm">
+                        <div class="form-group">
+                            <label for="petName">Pet Name</label>
+                            <input type="text" id="petName" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="petType">Type</label>
+                                <select id="petType" required>
+                                    <option value="">Select</option>
+                                    <option value="dog">Dog</option>
+                                    <option value="cat">Cat</option>
+                                    <option value="bird">Bird</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="petBreed">Breed</label>
+                                <input type="text" id="petBreed">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="petAge">Age</label>
+                                <input type="number" id="petAge" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="petGender">Gender</label>
+                                <select id="petGender">
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="petPhoto">Photo</label>
+                            <input type="file" id="petPhoto" accept="image/*">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Pet</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/pets.js"></script>
+</body>
+</html>
