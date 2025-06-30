@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments | Pet Owners Hub</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="profile-container">
+        <!-- Sidebar -->
+        <aside class="profile-sidebar">
+            <div class="profile-header">
+                <div class="avatar-container">
+                    <img src="../../assets/images/default-avatar.jpg" alt="Profile" class="avatar">
+                    <button class="avatar-edit">Edit</button>
+                </div>
+                <h2 id="profileName">John Doe</h2>
+                <p>Member since <span id="joinDate">Jan 2023</span></p>
+            </div>
+
+            <nav class="profile-nav">
+                <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                <a href="pets.html"><i class="fas fa-paw"></i> My Pets</a>
+                <a href="appointments.html" class="active"><i class="fas fa-calendar-alt"></i> Appointments</a>
+                <a href="saved.html"><i class="fas fa-heart"></i> Saved Items</a>
+                <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="profile-content">
+            <div class="section-header">
+                <h1>My Appointments</h1>
+                <a href="../vet-clinics/clinics.html" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Book New
+                </a>
+            </div>
+
+            <div class="appointment-filters">
+                <select id="statusFilter" class="filter-select">
+                    <option value="all">All Appointments</option>
+                    <option value="upcoming">Upcoming</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+
+            <div class="appointments-list" id="appointmentsContainer">
+                
+                <div class="no-appointments">
+                    <img src="../../assets/images/no-appointments.svg" alt="No appointments" class="empty-state-img">
+                    <p>You don't have any appointments yet</p>
+                    <a href="../vet-clinics/clinics.html" class="btn btn-primary">Book Your First Appointment</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/appointments.js"></script>
+</body>
+</html>
