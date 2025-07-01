@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Items | Pet Owners Hub</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="profile-container">
+        <!-- Sidebar -->
+        <aside class="profile-sidebar">
+            <div class="profile-header">
+                <div class="avatar-container">
+                    <img src="../../assets/images/default-avatar.jpg" alt="Profile" class="avatar">
+                    <button class="avatar-edit">Edit</button>
+                </div>
+                <h2 id="profileName">John Doe</h2>
+                <p>Member since <span id="joinDate">Jan 2023</span></p>
+            </div>
+
+            <nav class="profile-nav">
+                <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                <a href="pets.html"><i class="fas fa-paw"></i> My Pets</a>
+                <a href="appointments.html"><i class="fas fa-calendar-alt"></i> Appointments</a>
+                <a href="saved.html" class="active"><i class="fas fa-heart"></i> Saved Items</a>
+                <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="profile-content">
+            <h1>Saved Items</h1>
+            
+            <div class="saved-tabs">
+                <button class="tab-btn active" data-tab="clinics">Vet Clinics</button>
+                <button class="tab-btn" data-tab="products">Pet Products</button>
+                <button class="tab-btn" data-tab="articles">Care Articles</button>
+            </div>
+
+            <div class="tab-content active" id="clinics-tab">
+                <div class="saved-clinics" id="savedClinics">
+                    <!-- Saved clinics will appear here -->
+                    <div class="empty-state">
+                        <i class="fas fa-hospital-user empty-icon"></i>
+                        <p>No saved clinics yet</p>
+                        <a href="../vet-clinics/clinics.html" class="btn btn-outline">Browse Clinics</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="products-tab">
+                <div class="saved-products" id="savedProducts">
+                    <!-- Saved products will appear here -->
+                    <div class="empty-state">
+                        <i class="fas fa-shopping-bag empty-icon"></i>
+                        <p>No saved products yet</p>
+                        <a href="../marketplace/marketplace.html" class="btn btn-outline">Browse Products</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="articles-tab">
+                <div class="saved-articles" id="savedArticles">
+                    <!-- Saved articles will appear here -->
+                    <div class="empty-state">
+                        <i class="fas fa-newspaper empty-icon"></i>
+                        <p>No saved articles yet</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/auth.js"></script>
+</body>
+</html>
