@@ -276,3 +276,74 @@
   cursor: pointer;
   color: #777;
 }
+
+/* APPOINTMENTS PAGE SPECIFIC STYLES */
+.appointment-filters {
+  margin-bottom: 20px;
+}
+
+.filter-select {
+  padding: 10px 15px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.appointment-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #6c63ff;
+}
+
+.appt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.status-badge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.upcoming {
+  background: #3498db;
+  color: white;
+}
+
+.status-badge.completed {
+  background: #2ecc71;
+  color: white;
+}
+
+.status-badge.cancelled {
+  background: #e74c3c;
+  color: white;
+}
+
+.appt-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.appt-details p {
+  margin: 0;
+  color: #555;
+}
+
+.appt-details i {
+  margin-right: 8px;
+  color: #6c63ff;
+}
+
+.appt-actions {
+  display: flex;
+  gap: 10px;
+}
