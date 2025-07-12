@@ -131,3 +131,83 @@ function loadPets() {
     petsContainer.innerHTML = html;
 }
 
+// Appointments Page
+
+
+function initAppointmentsPage() {
+    if (!document.getElementById('appointmentsContainer')) return;
+
+    document.getElementById('statusFilter')?.addEventListener('change', function() {
+        loadAppointments(this.value);
+    });
+
+    loadAppointments('all');
+}
+
+function loadAppointments(filter) {
+    const container = document.getElementById('appointmentsContainer');
+    if (!container) return;
+
+    // Simulated data
+    const appointments = [
+        {
+            id: 1,
+            petName: 'Buddy',
+            clinic: 'Colombo Animal Hospital',
+            date: '2023-11-15',
+            time: '10:30 AM',
+            status: 'upcoming',
+            type: 'Vaccination'
+        },
+        {
+            id: 2,
+            petName: 'Whiskers',
+            clinic: 'Peradeniya Vet',
+            date: '2023-10-20',
+            time: '02:15 PM',
+            status: 'completed',
+            type: 'Checkup'
+        }
+    ];
+
+    const filtered = filter === 'all' 
+        ? appointments 
+        : appointments.filter(a => a.status === filter);
+
+    if (filtered.length === 0) {
+        container.innerHTML = `
+            <div class="no-appointments">
+                <img src="../../assets/images/no-appointments.svg" alt="No appointments" class="empty-state-img">
+                <p>No ${filter} appointments found</p>
+                <a href="../vet-clinics/clinics.html" class="btn btn-primary">Book Appointment</a>
+            </div>
+        `;
+        return;
+    }
+
+    let html = '';
+    filtered.forEach(appt => {
+        html += `
+            <div class="appointment-card ${appt.status}">
+                <div class="appt-header">
+                    <h3>${appt.type} for ${appt.petName}</h3>
+                    <span class="status-badge ${appt.status}">${appt.status}</span>
+                </div>
+                <div class="appt-details">
+                    <p><i class="fas fa-hospital"></i> ${appt.clinic}</p>
+                    <p><i class="fas fa-calendar-day"></i> ${appt.date} at ${appt.time}</p>
+                </div>
+                <div class="appt-actions">
+                    ${appt.status === 'upcoming' ? `
+                        <button class="btn btn-outline reschedule-btn" data-id="${appt.id}">Reschedule</button>
+                        <button class="btn btn-danger cancel-btn" data-id="${appt.id}">Cancel</button>
+                    ` : ''}
+                    <button class="btn btn-primary details-btn" data-id="${appt.id}">Details</button>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
