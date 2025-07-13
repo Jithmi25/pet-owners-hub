@@ -211,3 +211,82 @@ function loadAppointments(filter) {
     container.innerHTML = html;
 }
 
+// Saved Items Page
+
+function initSavedPage() {
+    if (!document.getElementById('savedClinics')) return;
+
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const tabId = this.dataset.tab + '-tab';
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+
+    loadSavedItems();
+}
+
+function loadSavedItems() {
+    // Simulated data
+    const savedClinics = [
+        { id: 1, name: 'Colombo Animal Hospital', rating: 4.5 }
+    ];
+
+    const savedProducts = [];
+    const savedArticles = [];
+
+    renderSavedItems('clinics', savedClinics);
+    renderSavedItems('products', savedProducts);
+    renderSavedItems('articles', savedArticles);
+}
+
+function renderSavedItems(type, items) {
+    const container = document.getElementById(`saved${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    if (!container) return;
+
+    if (items.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-${getIconForType(type)} empty-icon"></i>
+                <p>No saved ${type} yet</p>
+                ${type === 'clinics' ? 
+                    '<a href="../vet-clinics/clinics.html" class="btn btn-outline">Browse Clinics</a>' : 
+                 type === 'products' ? 
+                    '<a href="../marketplace/marketplace.html" class="btn btn-outline">Browse Products</a>' : ''}
+            </div>
+        `;
+        return;
+    }
+
+    // Render items list
+    let html = '<div class="saved-items-list">';
+    items.forEach(item => {
+        html += `
+            <div class="saved-item">
+                <h4>${item.name}</h4>
+                ${item.rating ? `<span class="rating">${'★'.repeat(Math.floor(item.rating))}${'☆'.repeat(5 - Math.floor(item.rating))}</span>` : ''}
+                <button class="btn btn-danger remove-btn" data-type="${type}" data-id="${item.id}">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+    });
+    html += '</div>';
+
+    container.innerHTML = html;
+}
+
+function getIconForType(type) {
+    switch(type) {
+        case 'clinics': return 'hospital-user';
+        case 'products': return 'shopping-bag';
+        case 'articles': return 'newspaper';
+        default: return 'heart';
+    }
+}
+
