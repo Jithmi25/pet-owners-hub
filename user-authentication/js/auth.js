@@ -290,3 +290,103 @@ function getIconForType(type) {
     }
 }
 
+// Settings Page
+
+
+function initSettingsPage() {
+    if (!document.getElementById('notificationSettings')) return;
+
+    // Load current settings
+    const settings = JSON.parse(localStorage.getItem('userSettings')) || {
+        notifications: {
+            appointmentReminders: true,
+            vaccinationAlerts: true,
+            promotionalEmails: false
+        },
+        security: {
+            twoFactorAuth: false
+        },
+        language: 'en',
+        region: 'LK'
+    };
+
+    // Set form values
+    document.getElementById('appointmentReminders').checked = settings.notifications.appointmentReminders;
+    document.getElementById('vaccinationAlerts').checked = settings.notifications.vaccinationAlerts;
+    document.getElementById('promotionalEmails').checked = settings.notifications.promotionalEmails;
+    document.getElementById('twoFactorAuth').checked = settings.security.twoFactorAuth;
+    document.getElementById('language').value = settings.language;
+    document.getElementById('region').value = settings.region;
+
+    // Form submissions
+    document.getElementById('notificationSettings')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveSettings();
+    });
+
+    document.getElementById('securitySettings')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveSettings();
+    });
+
+    document.getElementById('languageSettings')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveSettings();
+    });
+
+    document.getElementById('changePasswordBtn')?.addEventListener('click', function() {
+        // In a real app, this would open a password change modal
+        alert('Password change functionality would appear here');
+    });
+
+    document.getElementById('deactivateAccount')?.addEventListener('click', function() {
+        if (confirm('Are you sure you want to deactivate your account?')) {
+            alert('Account deactivation would be processed here');
+        }
+    });
+
+    document.getElementById('deleteAccount')?.addEventListener('click', function() {
+        if (confirm('Permanently deleting your account cannot be undone. Are you sure?')) {
+            alert('Account deletion would be processed here');
+        }
+    });
+}
+
+function saveSettings() {
+    const settings = {
+        notifications: {
+            appointmentReminders: document.getElementById('appointmentReminders').checked,
+            vaccinationAlerts: document.getElementById('vaccinationAlerts').checked,
+            promotionalEmails: document.getElementById('promotionalEmails').checked
+        },
+        security: {
+            twoFactorAuth: document.getElementById('twoFactorAuth').checked
+        },
+        language: document.getElementById('language').value,
+        region: document.getElementById('region').value
+    };
+
+    localStorage.setItem('userSettings', JSON.stringify(settings));
+    alert('Settings saved successfully!');
+}
+
+// Initialize Everything
+
+document.addEventListener('DOMContentLoaded', function() {
+    checkAuth();
+    loadUserData();
+    initSidebar();
+    
+    // Initialize specific page functionality
+    initPetsPage();
+    initAppointmentsPage();
+    initSavedPage();
+    initSettingsPage();
+
+    // Logout functionality
+    document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        localStorage.removeItem('petcareAuthToken');
+        window.location.href = '../login.html';
+    });
+});
