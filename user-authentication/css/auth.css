@@ -560,3 +560,18 @@ input:checked + .toggle-label:before {
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 768px) {
+  .profile-container {
+    flex-direction: column;
+  }
+
+  .profile-sidebar {
+    width: 100%;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}
