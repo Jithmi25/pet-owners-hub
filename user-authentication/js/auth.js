@@ -1,5 +1,3 @@
-// Auth Functions
-
 // Check authentication state
 function checkAuth() {
     const isLoggedIn = localStorage.getItem('petcareAuthToken');
@@ -9,7 +7,7 @@ function checkAuth() {
         window.location.href = 'login.html';
     }
     if (isLoggedIn && (currentPage === 'login.html' || currentPage === 'register.html')) {
-        window.location.href = 'profile/profile.html';
+        window.location.href = 'user-authentication/profile/profile.html';
     }
 }
 
@@ -32,8 +30,6 @@ function initSidebar() {
 }
 
 // Pets Page Functionality
-
-
 function initPetsPage() {
     if (!document.getElementById('petsContainer')) return;
 
@@ -53,37 +49,40 @@ function initPetsPage() {
         modal.style.display = 'none';
     }
 
-    addPetBtn?.addEventListener('click', openModal);
-    addFirstPetBtn?.addEventListener('click', openModal);
-    closeBtn?.addEventListener('click', closeModal);
+    if (addPetBtn) addPetBtn.addEventListener('click', openModal);
+    if (addFirstPetBtn) addFirstPetBtn.addEventListener('click', openModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
 
     window.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
 
     // Form submission
-    document.getElementById('petForm')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const petData = {
-            name: document.getElementById('petName').value,
-            type: document.getElementById('petType').value,
-            breed: document.getElementById('petBreed').value,
-            age: document.getElementById('petAge').value,
-            gender: document.getElementById('petGender').value,
-            photo: document.getElementById('petPhoto').files[0]
-        };
+    const petForm = document.getElementById('petForm');
+    if (petForm) {
+        petForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const petData = {
+                name: document.getElementById('petName').value,
+                type: document.getElementById('petType').value,
+                breed: document.getElementById('petBreed').value,
+                age: document.getElementById('petAge').value,
+                gender: document.getElementById('petGender').value,
+                photo: document.getElementById('petPhoto').files[0]
+            };
 
-        // In a real app, you would upload to server here
-        console.log('Pet data:', petData);
-        
-        // Simulate API call
-        setTimeout(() => {
-            closeModal();
-            alert('Pet added successfully!');
-            // You would refresh the pets list here
-        }, 1000);
-    });
+            // In a real app, you would upload to server here
+            console.log('Pet data:', petData);
+            
+            // Simulate API call
+            setTimeout(() => {
+                closeModal();
+                alert('Pet added successfully!');
+                // You would refresh the pets list here
+            }, 1000);
+        });
+    }
 
     // Load pets (simulated)
     loadPets();
@@ -132,14 +131,15 @@ function loadPets() {
 }
 
 // Appointments Page
-
-
 function initAppointmentsPage() {
     if (!document.getElementById('appointmentsContainer')) return;
 
-    document.getElementById('statusFilter')?.addEventListener('change', function() {
-        loadAppointments(this.value);
-    });
+    const statusFilter = document.getElementById('statusFilter');
+    if (statusFilter) {
+        statusFilter.addEventListener('change', function() {
+            loadAppointments(this.value);
+        });
+    }
 
     loadAppointments('all');
 }
@@ -212,7 +212,6 @@ function loadAppointments(filter) {
 }
 
 // Saved Items Page
-
 function initSavedPage() {
     if (!document.getElementById('savedClinics')) return;
 
@@ -291,8 +290,6 @@ function getIconForType(type) {
 }
 
 // Settings Page
-
-
 function initSettingsPage() {
     if (!document.getElementById('notificationSettings')) return;
 
@@ -319,37 +316,55 @@ function initSettingsPage() {
     document.getElementById('region').value = settings.region;
 
     // Form submissions
-    document.getElementById('notificationSettings')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        saveSettings();
-    });
+    const notificationSettings = document.getElementById('notificationSettings');
+    if (notificationSettings) {
+        notificationSettings.addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveSettings();
+        });
+    }
 
-    document.getElementById('securitySettings')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        saveSettings();
-    });
+    const securitySettings = document.getElementById('securitySettings');
+    if (securitySettings) {
+        securitySettings.addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveSettings();
+        });
+    }
 
-    document.getElementById('languageSettings')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        saveSettings();
-    });
+    const languageSettings = document.getElementById('languageSettings');
+    if (languageSettings) {
+        languageSettings.addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveSettings();
+        });
+    }
 
-    document.getElementById('changePasswordBtn')?.addEventListener('click', function() {
-        // In a real app, this would open a password change modal
-        alert('Password change functionality would appear here');
-    });
+    const changePasswordBtn = document.getElementById('changePasswordBtn');
+    if (changePasswordBtn) {
+        changePasswordBtn.addEventListener('click', function() {
+            // In a real app, this would open a password change modal
+            alert('Password change functionality would appear here');
+        });
+    }
 
-    document.getElementById('deactivateAccount')?.addEventListener('click', function() {
-        if (confirm('Are you sure you want to deactivate your account?')) {
-            alert('Account deactivation would be processed here');
-        }
-    });
+    const deactivateAccount = document.getElementById('deactivateAccount');
+    if (deactivateAccount) {
+        deactivateAccount.addEventListener('click', function() {
+            if (confirm('Are you sure you want to deactivate your account?')) {
+                alert('Account deactivation would be processed here');
+            }
+        });
+    }
 
-    document.getElementById('deleteAccount')?.addEventListener('click', function() {
-        if (confirm('Permanently deleting your account cannot be undone. Are you sure?')) {
-            alert('Account deletion would be processed here');
-        }
-    });
+    const deleteAccount = document.getElementById('deleteAccount');
+    if (deleteAccount) {
+        deleteAccount.addEventListener('click', function() {
+            if (confirm('Permanently deleting your account cannot be undone. Are you sure?')) {
+                alert('Account deletion would be processed here');
+            }
+        });
+    }
 }
 
 function saveSettings() {
@@ -371,7 +386,6 @@ function saveSettings() {
 }
 
 // Initialize Everything
-
 document.addEventListener('DOMContentLoaded', function() {
     checkAuth();
     loadUserData();
@@ -384,9 +398,12 @@ document.addEventListener('DOMContentLoaded', function() {
     initSettingsPage();
 
     // Logout functionality
-    document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        localStorage.removeItem('petcareAuthToken');
-        window.location.href = '../login.html';
-    });
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('petcareAuthToken');
+            window.location.href = '../login.html';
+        });
+    }
 });
