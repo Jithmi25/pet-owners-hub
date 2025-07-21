@@ -1,3 +1,130 @@
+// Auth Functions
+document.addEventListener('DOMContentLoaded', function() {
+    // Check authentication state
+    const isAuthenticated = localStorage.getItem('petcareAuthToken');
+    const currentPage = window.location.pathname;
+
+    // Redirect logic
+    if (isAuthenticated && (currentPage.includes('login.html') || currentPage.includes('register.html'))) {
+        window.location.href = '../profile/profile.html';
+    }
+    if (!isAuthenticated && currentPage.includes('profile.html')) {
+        window.location.href = '../login.html';
+    }
+
+    // Login Form
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Basic validation
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Simulate API call
+            setTimeout(() => {
+                // In a real app, this would be an actual API call
+                console.log('Login attempt with:', { username, password });
+                
+                // Store auth token
+                localStorage.setItem('petcareAuthToken', 'simulated-token-123');
+                localStorage.setItem('userData', JSON.stringify({
+                    name: 'John Doe',
+                    email: username.includes('@') ? username : '',
+                    phone: !username.includes('@') ? username : '0712345678',
+                    joinDate: 'Jan 2023'
+                }));
+                
+                // Redirect to profile
+                window.location.href = '../profile/profile.html';
+            }, 500);
+        });
+    }
+
+    // Registration Form
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                password: document.getElementById('regPassword').value,
+                confirmPassword: document.getElementById('confirmPassword').value
+            };
+
+            // Validation
+            if (formData.password !== formData.confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            if (!document.getElementById('terms').checked) {
+                alert('You must agree to the terms');
+                return;
+            }
+
+            // Simulate API call
+            setTimeout(() => {
+                console.log('Registration data:', formData);
+                
+                // Store auth token and user data
+                localStorage.setItem('petcareAuthToken', 'simulated-token-123');
+                localStorage.setItem('userData', JSON.stringify({
+                    name: `${formData.firstName} ${formData.lastName}`,
+                    email: formData.email,
+                    phone: formData.phone,
+                    joinDate: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+                }));
+                
+                // Redirect to profile
+                window.location.href = '/user-authentication/profile/profile.html';
+            }, 500);
+        });
+
+        // Password strength indicator
+        const passwordInput = document.getElementById('regPassword');
+        if (passwordInput) {
+            passwordInput.addEventListener('input', function() {
+                const strengthBars = document.querySelectorAll('.strength-bar');
+                const strength = calculatePasswordStrength(this.value);
+                
+                strengthBars.forEach((bar, index) => {
+                    bar.style.backgroundColor = index < strength ? 
+                        ['#ff4444', '#ffbb33', '#00C851'][strength-1] : '#eee';
+                });
+            });
+        }
+    }
+});
+
+// Moved outside of DOMContentLoaded since it's used by multiple functions
+function calculatePasswordStrength(password) {
+    if (password.length === 0) return 0;
+    if (password.length < 6) return 1;
+    
+    const hasUpper = /[A-Z]/.test(password);
+    const hasLower = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecial = /[^A-Za-z0-9]/.test(password);
+    
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (hasUpper && hasLower) strength++;
+    if (hasNumber) strength++;
+    if (hasSpecial) strength++;
+    
+    return Math.min(Math.floor(strength), 3);
+}
 // Check authentication state
 function checkAuth() {
     const isLoggedIn = localStorage.getItem('petcareAuthToken');
