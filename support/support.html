@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Support | Pet Owners Hub</title>
+    <link rel="stylesheet" href="support.css">
+</head>
+<body>
+    <div class="support-container">
+        <header class="support-header">
+            <h1>Customer Support</h1>
+            <p>We're here to help you 24/7</p>
+        </header>
+
+        <div class="support-content">
+            <div class="faq-section">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-item">
+                    <button class="faq-question">How do I reset my password?</button>
+                    <div class="faq-answer">
+                        <p>To reset your password, go to the login page and click on "Forgot Password". Follow the instructions sent to your email.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">What are your business hours?</button>
+                    <div class="faq-answer">
+                        <p>Our support team is available 24/7. However, our physical offices are open Monday-Friday from 9AM to 5PM.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">How can I update my billing information?</button>
+                    <div class="faq-answer">
+                        <p>You can update your billing information by logging into your account and navigating to the Billing section.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <h2>Contact Support</h2>
+                <form id="supportForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Select an option</option>
+                            <option value="billing">Billing Inquiry</option>
+                            <option value="technical">Technical Support</option>
+                            <option value="general">General Question</option>
+                            <option value="feedback">Feedback/Suggestions</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Request</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="support-footer">
+            <p>Need immediate assistance? Call us at <strong>1-800-SUPPORT</strong></p>
+        </div>
+    </div>
+
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Thank You!</h2>
+            <p>Your support request has been submitted successfully.</p>
+            <p>We'll get back to you within 24 hours.</p>
+            <button id="closeBtn" class="modal-btn">Close</button>
+        </div>
+    </div>
+
+    <script src="support.js"></script>
+</body>
+</html>
