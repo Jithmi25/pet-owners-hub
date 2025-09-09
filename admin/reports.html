@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link href="admin/assets/css/admin.css" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Reports - Admin Panel</title>
+    <style>
+        /* Same base styles as manage-users.html */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #343a40;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #4b6cb7 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 1.2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-links a.active {
+            background-color: rgba(255, 255, 255, 0.25);
+            font-weight: 600;
+        }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .admin-container h2 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .report-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .filter-select, .filter-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            align-self: flex-end;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4b6cb7 0%, #2c3e50 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .report-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .report-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .report-card h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .report-card p {
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+
+        .report-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4b6cb7;
+            margin: 1rem 0;
+        }
+
+        .report-card .trend {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .trend.up {
+            color: #2ecc71;
+        }
+
+        .trend.down {
+            color: #e74c3c;
+        }
+
+        .chart-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .chart-placeholder {
+            height: 400px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 1.2rem;
+        }
+
+        .export-options {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .logo {
+                margin-bottom: 1rem;
+            }
+
+            .nav-links {
+                width: 100%;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-links li {
+                margin: 0.3rem;
+            }
+
+            .report-filters {
+                flex-direction: column;
+            }
+
+            .export-options {
+                justify-content: center;
+            }
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #343a40;
+            color: #f8f9fa;
+        }
+        
+        body.dark-mode .admin-container h2 {
+            color: #f8f9fa;
+        }
+        
+        body.dark-mode .report-card,
+        body.dark-mode .chart-container {
+            background-color: #495057;
+            color: #f8f9fa;
+        }
+        
+        body.dark-mode .report-card h3 {
+            color: #f8f9fa;
+        }
+        
+        body.dark-mode .report-card p {
+            color: #adb5bd;
+        }
+        
+        body.dark-mode .report-card .value {
+            color: #4dabf7;
+        }
+        
+        body.dark-mode .chart-placeholder {
+            background-color: #343a40;
+            color: #adb5bd;
+        }
+        
+        body.dark-mode .filter-select,
+        body.dark-mode .filter-input {
+            background-color: #495057;
+            border-color: #6c757d;
+            color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Panel Navigation Bar -->
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Admin Panel</h1>
+            </div>
+          <ul class="nav-links">
+                <li><a href="dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="manage-users.html"><i class="fas fa-users"></i> Users</a></li>
+                <li><a href="manage-pets.html"><i class="fas fa-paw"></i> Pets</a></li>
+                <li><a href="manage-clinics.html"><i class="fas fa-hospital"></i> Clinics</a></li>
+                <li><a href="manage-shops.html"><i class="fas fa-store"></i> Shops</a></li>
+                <li><a href="reports.html"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                <li><a href="#" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Reports Section -->
+    <div class="admin-container">
+        <h2>System Reports</h2>
+        
+        <div class="report-filters">
+            <div class="filter-group">
+                <label for="reportType">Report Type</label>
+                <select class="filter-select" id="reportType">
+                    <option value="summary">Summary Report</option>
+                    <option value="users">User Activity</option>
+                    <option value="pets">Pet Listings</option>
+                    <option value="transactions">Transactions</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="dateFrom">From</label>
+                <input type="date" class="filter-input" id="dateFrom">
+            </div>
+            <div class="filter-group">
+                <label for="dateTo">To</label>
+                <input type="date" class="filter-input" id="dateTo">
+            </div>
+            <button class="btn btn-primary" id="generateReport">Generate Report</button>
+        </div>
+
+        <div class="report-cards">
+            <div class="report-card">
+                <h3>Total Users</h3>
+                <p>Registered in selected period</p>
+                <div class="value">452</div>
+                <div class="trend up">↑ 12% from last period</div>
+            </div>
+            <div class="report-card">
+                <h3>Pet Listings</h3>
+                <p>New pets added</p>
+                <div class="value">125</div>
+                <div class="trend up">↑ 8% from last period</div>
+            </div>
+            <div class="report-card">
+                <h3>Transactions</h3>
+                <p>Completed purchases</p>
+                <div class="value">84</div>
+                <div class="trend down">↓ 5% from last period</div>
+            </div>
+            <div class="report-card">
+                <h3>Revenue</h3>
+                <p>Total system revenue</p>
+                <div class="value">$5,240</div>
+                <div class="trend up">↑ 15% from last period</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3>User Growth Over Time</h3>
+            <div class="chart-placeholder">
+                [Chart would be displayed here in a real application]
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3>Pet Listings by Type</h3>
+            <div class="chart-placeholder">
+                [Chart would be displayed here in a real application]
+            </div>
+        </div>
+
+        <div class="export-options">
+            <button class="btn btn-primary" id="exportPDF">Export as PDF</button>
+            <button class="btn btn-primary" id="exportCSV">Export as CSV</button>
+        </div>
+    </div>
+
+    <button class="dark-mode-toggle" id="darkModeToggle">🌙</button>
+
+    <script>
+        // JavaScript for Reports
+        document.addEventListener('DOMContentLoaded', function() {
+            // Highlight current page in navigation
+            const currentPage = window.location.pathname.split('/').pop() || 'reports.html';
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Set default dates (last 30 days)
+            const today = new Date();
+            const lastMonth = new Date();
+            lastMonth.setMonth(lastMonth.getMonth() - 1);
+            
+            document.getElementById('dateFrom').valueAsDate = lastMonth;
+            document.getElementById('dateTo').valueAsDate = today;
+
+            // Generate report button
+            document.getElementById('generateReport').addEventListener('click', function() {
+                const reportType = document.getElementById('reportType').value;
+                const dateFrom = document.getElementById('dateFrom').value;
+                const dateTo = document.getElementById('dateTo').value;
+                
+                alert(`Generating ${reportType} report from ${dateFrom} to ${dateTo}`);
+                // In a real app, this would fetch data and update the charts
+            });
+
+            // Export buttons
+            document.getElementById('exportPDF').addEventListener('click', function() {
+                alert('Exporting report as PDF');
+            });
+
+            document.getElementById('exportCSV').addEventListener('click', function() {
+                alert('Exporting report as CSV');
+            });
+
+            // Dark mode toggle functionality
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            darkModeToggle.addEventListener('click', toggleDarkMode);
+
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                enableDarkMode();
+            }
+        });
+
+        function toggleDarkMode() {
+            if (document.body.classList.contains('dark-mode')) {
+                disableDarkMode();
+            } else {
+                enableDarkMode();
+            }
+        }
+
+        function enableDarkMode() {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('darkMode', 'enabled');
+            document.getElementById('darkModeToggle').textContent = '☀️';
+        }
+
+        function disableDarkMode() {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('darkMode', 'disabled');
+            document.getElementById('darkModeToggle').textContent = '🌙';
+        }
+    </script>
+</body>
+</html>

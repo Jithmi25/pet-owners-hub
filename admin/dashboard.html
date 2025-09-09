@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Pet Owners Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #43658b;
+            --secondary-color: #4e89ae;
+            --accent-color: #ed9b40;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --text-color: #343a40;
+            --bg-color: #f8f9fa;
+            --card-bg: white;
+            --card-border: #dee2e6;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode {
+            --text-color: #f8f9fa;
+            --bg-color: #343a40;
+            --card-bg: #495057;
+            --card-border: #6c757d;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 1.2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-links a.active {
+            background-color: rgba(255, 255, 255, 0.25);
+            font-weight: 600;
+        }
+
+        /* Admin Container */
+        .admin-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .admin-container h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .admin-container p {
+            color: #6c757d;
+            margin-bottom: 2rem;
+            max-width: 800px;
+        }
+
+        /* Stats Overview */
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0.5rem 0;
+        }
+
+        .stat-card .trend {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        .trend.up {
+            color: var(--success-color);
+        }
+
+        .trend.down {
+            color: var(--danger-color);
+        }
+
+        /* Admin Cards */
+        .admin-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .admin-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--secondary-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-card h3 {
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .admin-card h3 i {
+            margin-right: 10px;
+            color: var(--secondary-color);
+        }
+
+        .admin-card p {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin: 1rem 0;
+        }
+
+        .admin-card .description {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+
+        .admin-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: auto;
+            align-self: flex-start;
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn i {
+            margin-right: 8px;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Recent Activity */
+        .recent-activity {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+        }
+
+        .recent-activity h3 {
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(78, 137, 174, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-content p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        /* Dark mode toggle */
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .admin-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .logo {
+                margin-bottom: 1rem;
+            }
+
+            .nav-links {
+                width: 100%;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-links li {
+                margin: 0.3rem;
+            }
+
+            .admin-options {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-overview {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Panel Navigation Bar -->
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Admin Dashboard</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="manage-users.html"><i class="fas fa-users"></i> Users</a></li>
+                <li><a href="manage-pets.html"><i class="fas fa-paw"></i> Pets</a></li>
+                <li><a href="manage-clinics.html"><i class="fas fa-hospital"></i> Clinics</a></li>
+                <li><a href="manage-shops.html"><i class="fas fa-store"></i> Shops</a></li>
+                <li><a href="reports.html"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                <li><a href="#" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-container">
+        <h2>Admin Dashboard</h2>
+        <p>Welcome to the Admin Panel. Monitor and manage the Pet Owners Hub system from this centralized dashboard.</p>
+
+        <!-- Stats Overview -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <div class="value" id="total-users">452</div>
+                <div class="trend up"><i class="fas fa-arrow-up"></i> 12% from last week</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Pets</h3>
+                <div class="value" id="total-pets">125</div>
+                <div class="trend up"><i class="fas fa-arrow-up"></i> 8% from last week</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Clinics</h3>
+                <div class="value" id="total-clinics">52</div>
+                <div class="trend up"><i class="fas fa-arrow-up"></i> 5% from last week</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Shops</h3>
+                <div class="value" id="total-shops">31</div>
+                <div class="trend up"><i class="fas fa-arrow-up"></i> 3% from last week</div>
+            </div>
+        </div>
+
+        <!-- Admin Options -->
+        <div class="admin-options">
+            <div class="admin-card">
+                <h3><i class="fas fa-users-cog"></i> User Management</h3>
+                <p id="user-count">452</p>
+                <div class="description">Manage registered users, permissions, and access levels</div>
+                <a href="manage-users.html" class="admin-btn"><i class="fas fa-cog"></i> Manage Users</a>
+            </div>
+            <div class="admin-card">
+                <h3><i class="fas fa-paw"></i> Pet Management</h3>
+                <p id="pet-count">125</p>
+                <div class="description">Manage pet listings, categories, and verification status</div>
+                <a href="manage-pets.html" class="admin-btn"><i class="fas fa-cog"></i> Manage Pets</a>
+            </div>
+            <div class="admin-card">
+                <h3><i class="fas fa-hospital"></i> Vet Clinics</h3>
+                <p id="clinic-count">52</p>
+                <div class="description">Manage veterinary clinics, services, and appointments</div>
+                <a href="manage-clinics.html" class="admin-btn"><i class="fas fa-cog"></i> Manage Clinics</a>
+            </div>
+            <div class="admin-card">
+                <h3><i class="fas fa-store"></i> Pet Shops</h3>
+                <p id="shop-count">31</p>
+                <div class="description">Manage pet shops, products, and inventory</div>
+                <a href="manage-shops.html" class="admin-btn"><i class="fas fa-cog"></i> Manage Shops</a>
+            </div>
+            <div class="admin-card">
+                <h3><i class="fas fa-chart-bar"></i> Reports & Analytics</h3>
+                <p>15+</p>
+                <div class="description">View system reports, analytics, and performance metrics</div>
+                <a href="reports.html" class="admin-btn"><i class="fas fa-cog"></i> View Reports</a>
+            </div>
+            <div class="admin-card">
+                <h3><i class="fas fa-cogs"></i> System Settings</h3>
+                <p>20+</p>
+                <div class="description">Configure system settings, preferences, and modules</div>
+                <a href="settings.html" class="admin-btn"><i class="fas fa-cog"></i> System Settings</a>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="recent-activity">
+            <h3><i class="fas fa-history"></i> Recent Activity</h3>
+            <ul class="activity-list">
+                <li class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p>New user registered: John Doe</p>
+                        <div class="activity-time">10 minutes ago</div>
+                    </div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p>New pet listing: Golden Retriever puppy</p>
+                        <div class="activity-time">45 minutes ago</div>
+                    </div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p>New pet shop registered: City Pets</p>
+                        <div class="activity-time">2 hours ago</div>
+                    </div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-hospital"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p>New vet clinic registered: Happy Paws Veterinary</p>
+                        <div class="activity-time">5 hours ago</div>
+                    </div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p>System backup completed successfully</p>
+                        <div class="activity-time">Yesterday at 11:30 PM</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <button class="dark-mode-toggle" id="darkModeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script>
+        // JavaScript for Admin Panel
+        document.addEventListener('DOMContentLoaded', function() {
+            // Highlight current page in navigation
+            const currentPage = window.location.pathname.split('/').pop() || 'admin.html';
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+
+            // BACKEND INTEGRATION: Fetch dashboard stats from API
+            // Simulated API call - replace with actual fetch to your backend
+            function fetchDashboardStats() {
+                /*
+                // Example of actual backend integration:
+                fetch('/api/admin/dashboard-stats')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('total-users').textContent = data.totalUsers;
+                        document.getElementById('total-pets').textContent = data.totalPets;
+                        document.getElementById('total-clinics').textContent = data.totalClinics;
+                        document.getElementById('total-shops').textContent = data.totalShops;
+                        
+                        document.getElementById('user-count').textContent = data.totalUsers;
+                        document.getElementById('pet-count').textContent = data.totalPets;
+                        document.getElementById('clinic-count').textContent = data.totalClinics;
+                        document.getElementById('shop-count').textContent = data.totalShops;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching dashboard stats:', error);
+                    });
+                */
+                
+                // Simulated data for demonstration
+                setTimeout(() => {
+                    document.getElementById('total-users').textContent = '452';
+                    document.getElementById('total-pets').textContent = '125';
+                    document.getElementById('total-clinics').textContent = '52';
+                    document.getElementById('total-shops').textContent = '31';
+                    
+                    document.getElementById('user-count').textContent = '452';
+                    document.getElementById('pet-count').textContent = '125';
+                    document.getElementById('clinic-count').textContent = '52';
+                    document.getElementById('shop-count').textContent = '31';
+                }, 1000);
+            }
+
+            // BACKEND INTEGRATION: Logout functionality
+            document.getElementById('logout-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                /*
+                // Example of actual backend integration:
+                fetch('/api/auth/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/login.html';
+                    } else {
+                        alert('Logout failed. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during logout:', error);
+                    alert('Logout failed. Please try again.');
+                });
+                */
+                
+                // For demonstration purposes
+                alert('Logout functionality would redirect to login page');
+                window.location.href = '../User Authentication/login.html';
+            });
+
+            // Fetch dashboard stats on page load
+            fetchDashboardStats();
+
+            // Dark mode toggle functionality
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            darkModeToggle.addEventListener('click', toggleDarkMode);
+
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                enableDarkMode();
+            }
+        });
+
+        function toggleDarkMode() {
+            if (document.body.classList.contains('dark-mode')) {
+                disableDarkMode();
+            } else {
+                enableDarkMode();
+            }
+        }
+
+        function enableDarkMode() {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('darkMode', 'enabled');
+            document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        function disableDarkMode() {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('darkMode', 'disabled');
+            document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-moon"></i>';
+        }
+    </script>
+</body>
+</html>
