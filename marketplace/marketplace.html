@@ -4,19 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pet Marketplace | Pet Owners Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../assets/css/main.css">
     <link rel="stylesheet" href="marketplace.css">
 </head>
 <body>
     <!-- Navigation -->
     <header class="marketplace-header">
-        <div class="logo">
-            <h1>Pet Owners Hub</h1>
+        <nav>
+            <div class="logo">
+                <h1>Pet Owners Hub</h1>
+            </div>
             <ul class="nav-links">
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../vet-clinics/clinics.html">Vet Clinics</a></li>
+                <li><a href="../../pet-shops/shops.html">Pet Shops</a></li>
+                <li><a href="marketplace.html" class="active">Marketplace</a></li>
                 <li><a href="../../user-authentication/profile/profile.html">Profile</a></li>
                 <li><a href="../../user-authentication/login.html">Logout</a></li>
             </ul>
-        </div>
+        </nav>
         <div class="hero-content">
             <h2>Pet Marketplace</h2>
             <p>Find your perfect pet or find a loving home for your pet</p>
@@ -27,107 +34,41 @@
     <main class="marketplace-container">
         <div class="marketplace-actions">
             <div class="search-filter">
-                <input type="text" placeholder="Search pets...">
-                <select>
+                <input type="text" placeholder="Search pets..." id="searchInput">
+                <select id="typeFilter">
                     <option value="">All Types</option>
                     <option value="dog">Dogs</option>
                     <option value="cat">Cats</option>
                     <option value="bird">Birds</option>
                     <option value="other">Other</option>
                 </select>
-                <select>
+                <select id="locationFilter">
                     <option value="">All Locations</option>
                     <option value="ny">New York</option>
                     <option value="la">Los Angeles</option>
                     <option value="ch">Chicago</option>
                 </select>
-                <button class="btn">Search</button>
+                <button class="btn" id="searchBtn">Search</button>
             </div>
             <a href="post-listing.html" class="btn btn-primary">Post a Listing</a>
         </div>
 
-        <div class="pet-listings">
-            <!-- Listing 1 -->
-            <div class="pet-card">
-                <img src="../../assets/images/pet1.jpg" alt="Golden Retriever">
-                <div class="pet-info">
-                    <h3>Golden Retriever Puppy</h3>
-                    <p class="price">$800</p>
-                    <p class="location">New York, NY</p>
-                    <div class="pet-meta">
-                        <span>Dog</span>
-                        <span>8 weeks</span>
-                        <span>Male</span>
-                    </div>
-                    <p class="description">Beautiful golden retriever puppy from champion bloodline. Vaccinated and vet checked.</p>
-                    <a href="pet-details.html?id=1" class="btn">View Details</a>
-                </div>
-            </div>
-
-            <!-- Listing 2 -->
-            <div class="pet-card">
-                <img src="../../assets/images/pet2.webp" alt="Siamese Cat">
-                <div class="pet-info">
-                    <h3>Siamese Cat</h3>
-                    <p class="price">$450</p>
-                    <p class="location">Chicago, IL</p>
-                    <div class="pet-meta">
-                        <span>Cat</span>
-                        <span>6 months</span>
-                        <span>Female</span>
-                    </div>
-                    <p class="description">Purebred Siamese cat with blue eyes. Litter trained and very affectionate.</p>
-                    <a href="pet-details.html?id=2" class="btn">View Details</a>
-                </div>
-            </div>
-
-            <!-- Listing 3 -->
-            <div class="pet-card">
-                <img src="../../assets/images/pet3.webp" alt="Parrot">
-                <div class="pet-info">
-                    <h3>African Grey Parrot</h3>
-                    <p class="price">$1200</p>
-                    <p class="location">Los Angeles, CA</p>
-                    <div class="pet-meta">
-                        <span>Bird</span>
-                        <span>2 years</span>
-                        <span>Male</span>
-                    </div>
-                    <p class="description">Smart and talkative African Grey. Comes with large cage and toys.</p>
-                    <a href="pet-details.html?id=3" class="btn">View Details</a>
-                </div>
-            </div>
-
-            <!-- Listing 4 -->
-            <div class="pet-card">
-                <img src="../../assets/images/pet4.jpg" alt="Labrador">
-                <div class="pet-info">
-                    <h3>Labrador Retriever</h3>
-                    <p class="price">Adoption Fee: $250</p>
-                    <p class="location">Boston, MA</p>
-                    <div class="pet-meta">
-                        <span>Dog</span>
-                        <span>1 year</span>
-                        <span>Female</span>
-                    </div>
-                    <p class="description">Sweet lab looking for a forever home. Spayed and up to date on shots.</p>
-                    <a href="pet-details.html?id=4" class="btn">View Details</a>
-                </div>
-            </div>
+        <div class="pet-listings" id="petListings">
+            <!-- Pet listings will be dynamically loaded here -->
         </div>
 
-        <div class="pagination">
-            <button disabled>Previous</button>
+        <div class="pagination" id="pagination">
+            <button disabled id="prevBtn">Previous</button>
             <button class="active">1</button>
             <button>2</button>
             <button>3</button>
-            <button>Next</button>
+            <button id="nextBtn">Next</button>
         </div>
     </main>
 
     <!-- Footer -->
     <footer>
-         <div class="footer-content">
+        <div class="footer-content">
             <div class="footer-column">
                 <h3>Pet Owners Hub</h3>
                 <p>Your one-stop solution for all pet care needs, connecting pet lovers with quality services.</p>
@@ -135,25 +76,24 @@
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
                     <a href="#"><i class="fab fa-instagram"></i></a>
-
                 </div>
             </div>
             <div class="footer-column">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="vet-clinics/clinics.html">Vet Clinics</a></li>
-                    <li><a href="pet-shops/shops.html">Pet Shops</a></li>
-                    <li><a href="marketplace/marketplace.html">Marketplace</a></li>
+                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="../../vet-clinics/clinics.html">Vet Clinics</a></li>
+                    <li><a href="../../pet-shops/shops.html">Pet Shops</a></li>
+                    <li><a href="marketplace.html">Marketplace</a></li>
                 </ul>
             </div>
             <div class="footer-column">
                 <h3>Support</h3>
                 <ul>
-                    <li><a href="support/support.html#contact">Contact Us</a></li>
-                    <li><a href="support/support.html#faqs">FAQs</a></li>
-                    <li><a href="support/support.html#privacy">Privacy Policy</a></li>
-                    <li><a href="support/support.html#terms">Terms of Service</a></li>
+                    <li><a href="../../support/support.html">Contact Us</a></li>
+                    <li><a href="../../support/support.html">FAQs</a></li>
+                    <li><a href="../../support/support.html">Privacy Policy</a></li>
+                    <li><a href="../../support/support.html">Terms of Service</a></li>
                 </ul>
             </div>
         </div>
