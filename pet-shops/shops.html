@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Shops Directory | Pet Owners Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="shops.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <header class="shops-header">
+        <nav>
+            <div class="logo">
+                <h1>Pet Owners Hub</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../vet-clinics/clinics.html">Vet Clinics</a></li>
+                <li><a href="shops.html" class="active">Pet Shops</a></li>
+                <li><a href="../../marketplace/marketplace.html">Marketplace</a></li>
+                <li><a href="../../user-authentication/profile/profile.html">Profile</a></li>
+                <li><a href="../../user-authentication/login.html">Logout</a></li>
+            </ul>
+        </nav>
+        <div class="hero-content">
+            <h2>Pet Shops Directory</h2>
+            <p>Discover the best pet shops for all your pet needs</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="shops-container">
+        <div class="shops-actions">
+            <div class="search-filter">
+                <input type="text" placeholder="Search pet shops..." id="searchInput">
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="food">Pet Food</option>
+                    <option value="toys">Toys & Accessories</option>
+                    <option value="grooming">Grooming</option>
+                    <option value="supplies">Supplies</option>
+                </select>
+                <select id="locationFilter">
+                    <option value="">All Locations</option>
+                    <option value="ny">New York</option>
+                    <option value="la">Los Angeles</option>
+                    <option value="ch">Chicago</option>
+                    <option value="sf">San Francisco</option>
+                </select>
+                <button class="btn" id="searchBtn">Search</button>
+            </div>
+            <button class="btn btn-primary" id="addShopBtn">Add Your Shop</button>
+        </div>
+
+        <div class="shops-listings" id="shopsListings">
+            <!-- Shop listings will be dynamically loaded here -->
+        </div>
+
+        <div class="pagination" id="pagination">
+            <button disabled id="prevBtn">Previous</button>
+            <button class="active">1</button>
+            <button>2</button>
+            <button>3</button>
+            <button id="nextBtn">Next</button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Pet Owners Hub</h3>
+                <p>Your one-stop solution for all pet care needs, connecting pet lovers with quality services.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="../../vet-clinics/clinics.html">Vet Clinics</a></li>
+                    <li><a href="shops.html">Pet Shops</a></li>
+                    <li><a href="../../marketplace/marketplace.html">Marketplace</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="../../support/support.html">Contact Us</a></li>
+                    <li><a href="../../support/support.html">FAQs</a></li>
+                    <li><a href="../../support/support.html">Privacy Policy</a></li>
+                    <li><a href="../../support/support.html">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Pet Owners Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="shops.js"></script>
+</body>
+</html>
