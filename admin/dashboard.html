@@ -46,7 +46,7 @@
 
         /* Header Styles */
         header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            background: linear-gradient(135deg, #2c3e50 0%, #4b6cb7 100%);
             color: white;
             padding: 1rem 0;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -380,7 +380,8 @@
                 <li><a href="manage-clinics.html"><i class="fas fa-hospital"></i> Clinics</a></li>
                 <li><a href="manage-shops.html"><i class="fas fa-store"></i> Shops</a></li>
                 <li><a href="reports.html"><i class="fas fa-chart-bar"></i> Reports</a></li>
-                <li><a href="#" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                <li><a href="settings.html" class="active"><i class="fas fa-cogs"></i> Settings</a></li>
+                <li><a href="../../user-authentication/login.html" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </nav>
     </header>
@@ -587,7 +588,7 @@
                 
                 // For demonstration purposes
                 alert('Logout functionality would redirect to login page');
-                window.location.href = '../User Authentication/login.html';
+                window.location.href = '../../user-authentication/login.html';
             });
 
             // Fetch dashboard stats on page load

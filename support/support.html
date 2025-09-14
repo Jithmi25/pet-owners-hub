@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Support | Pet Owners Hub</title>
     <link rel="stylesheet" href="support.css">
+    <title>Customer Support | Pet Owners Hub</title>
 </head>
 <body>
     <div class="support-container">
         <header class="support-header">
             <h1>Customer Support</h1>
-            <p>We're here to help you 24/7</p>
+            <p>We're here to help you and your pets 24/7</p>
             
-            <!-- Added navigation links -->
+            <!-- Navigation links -->
             <nav class="support-nav">
                 <ul>
                     <li><a href="#contact">Contact Us</a></li>
@@ -26,49 +26,183 @@
         <div class="support-content">
             <div id="faqs" class="faq-section">
                 <h2>Frequently Asked Questions</h2>
-                <!-- FAQ items remain the same -->
+                
+                <div class="faq-item">
+                    <div class="faq-question">How do I create an account on Pet Owners Hub?</div>
+                    <div class="faq-answer">
+                        <p>To create an account, click on the "Sign Up" button at the top right of our homepage. You'll need to provide your email address, create a password, and enter some basic information about yourself and your pets.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">What should I do if I forget my password?</div>
+                    <div class="faq-answer">
+                        <p>Click on the "Forgot Password" link on the login page. Enter your email address, and we'll send you a link to reset your password. Check your spam folder if you don't see the email within a few minutes.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">How can I update my pet's information?</div>
+                    <div class="faq-answer">
+                        <p>After logging in, go to your dashboard and select "My Pets." Click on the pet whose information you want to update, make your changes, and be sure to save them.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">What payment methods do you accept?</div>
+                    <div class="faq-answer">
+                        <p>We accept all major credit cards (Visa, MasterCard, American Express, Discover), PayPal, and Apple Pay for your convenience.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">How do I cancel my subscription?</div>
+                    <div class="faq-answer">
+                        <p>You can cancel your subscription at any time by going to your account settings, selecting "Subscription," and clicking "Cancel Subscription." Your access will continue until the end of your current billing period.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">Can I use Pet Owners Hub for multiple pets?</div>
+                    <div class="faq-answer">
+                        <p>Yes! Our platform allows you to create profiles for all your pets. The basic plan includes up to 3 pets, and our premium plan allows unlimited pets.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">How do I contact a veterinarian through the platform?</div>
+                    <div class="faq-answer">
+                        <p>If you have a premium subscription, you can access our "Ask a Vet" feature 24/7. Go to the "Health" section of your dashboard and select "Consult a Veterinarian" to start a chat or video consultation.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">Is my personal information secure?</div>
+                    <div class="faq-answer">
+                        <p>Yes, we take data security very seriously. We use industry-standard encryption and security measures to protect your personal information. For more details, please see our Privacy Policy.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">Do you offer refunds?</div>
+                    <div class="faq-answer">
+                        <p>We offer a 30-day money-back guarantee on all annual subscriptions. Monthly subscriptions can be canceled at any time, but refunds are not provided for partial months. Please contact our support team for assistance with refund requests.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">How can I suggest a new feature?</div>
+                    <div class="faq-answer">
+                        <p>We love hearing from our users! You can submit feature requests through our "Feedback" section in the app or by emailing suggestions@petownershub.com. Our team reviews all suggestions regularly.</p>
+                    </div>
+                </div>
             </div>
 
             <div id="contact" class="contact-form">
                 <h2>Contact Support</h2>
-                <!-- Contact form remains the same -->
+                <form id="supportForm">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Select a topic</option>
+                            <option value="account">Account Issues</option>
+                            <option value="billing">Billing Questions</option>
+                            <option value="technical">Technical Support</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+                
+                <div class="contact-details">
+                    <div class="contact-card">
+                        <h3>Customer Support</h3>
+                        <p>Email: support@petownershub.com</p>
+                        <p>Phone: 1-800-PET-HUB1</p>
+                        <p>(1-800-738-4821)</p>
+                        <p>Mon-Fri: 8am - 8pm EST</p>
+                        <p>Weekends: 9am - 5pm EST</p>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <h3>Emergency Technical Support</h3>
+                        <p>Email: tech@petownershub.com</p>
+                        <p>Phone: 1-800-PET-TECH</p>
+                        <p>(1-800-738-8324)</p>
+                        <p>Available 24/7</p>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <h3>Billing Department</h3>
+                        <p>Email: billing@petownershub.com</p>
+                        <p>Phone: 1-800-PET-BILL</p>
+                        <p>(1-800-738-2455)</p>
+                        <p>Mon-Fri: 9am - 6pm EST</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- Added new sections for Privacy and Terms -->
+            <!-- Privacy Policy Section -->
             <div id="privacy" class="policy-section">
                 <h2>Privacy Policy</h2>
                 <div class="policy-content">
                     <h3>Information We Collect</h3>
-                    <p>We collect information you provide directly to us, such as when you create an account, contact customer support, or make a purchase.</p>
+                    <p>We collect information you provide directly to us, such as when you create an account, contact customer support, or make a purchase. This includes your name, email address, payment information, and details about your pets.</p>
                     
                     <h3>How We Use Your Information</h3>
-                    <p>We use the information we collect to provide, maintain, and improve our services, to develop new services, and to protect our company and our users.</p>
+                    <p>We use the information we collect to provide, maintain, and improve our services, to develop new services, and to protect our company and our users. We may also use your information to send you important updates about your account or our services.</p>
                     
                     <h3>Information Sharing</h3>
-                    <p>We do not share your personal information with third parties except as described in this policy or with your consent.</p>
+                    <p>We do not share your personal information with third parties except as described in this policy or with your consent. We may share information with service providers who assist us in operating our platform, but they are bound by confidentiality agreements.</p>
+                    
+                    <h3>Data Security</h3>
+                    <p>We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no internet transmission is completely secure, so we cannot guarantee absolute security.</p>
                 </div>
             </div>
 
+            <!-- Terms of Service Section -->
             <div id="terms" class="policy-section">
                 <h2>Terms of Service</h2>
                 <div class="policy-content">
                     <h3>Account Terms</h3>
-                    <p>You are responsible for maintaining the security of your account and for all activities that occur under the account.</p>
+                    <p>You are responsible for maintaining the security of your account and for all activities that occur under the account. You must be at least 18 years old to use our services, or have parental consent if between 13-17 years old.</p>
                     
                     <h3>Payment Terms</h3>
-                    <p>All fees are exclusive of taxes, which we will charge as applicable. You agree to pay all fees and taxes.</p>
+                    <p>All fees are exclusive of taxes, which we will charge as applicable. You agree to pay all fees and taxes. Subscription fees are billed in advance on a monthly or annual basis, depending on your chosen plan.</p>
                     
                     <h3>Cancellation Policy</h3>
-                    <p>You may cancel your account at any time. Cancellation will result in the deactivation or deletion of your account.</p>
+                    <p>You may cancel your account at any time. Cancellation will result in the deactivation or deletion of your account. For annual plans, we offer prorated refunds for unused months if canceled within the first 30 days.</p>
+                    
+                    <h3>User Conduct</h3>
+                    <p>You agree not to use the service to post inappropriate content, harass other users, or violate any applicable laws. We reserve the right to terminate accounts that violate these terms.</p>
                 </div>
             </div>
         </div>
 
-        <!-- Footer remains the same -->
+        <footer class="support-footer">
+            <p>© 2023 Pet Owners Hub. All rights reserved.</p>
+            <p>We're committed to helping you provide the best care for your furry friends!</p>
+        </footer>
     </div>
 
-    <!-- Modal remains the same -->
-
-    <script src="support.js"></script>
+     <script src="support.js"></script>
+   
 </body>
 </html>

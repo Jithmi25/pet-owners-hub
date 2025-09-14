@@ -9,15 +9,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <div id="authCheck" style="display:none;"></div>
+    
     <div class="profile-container">
         <!-- Sidebar -->
         <aside class="profile-sidebar">
             <div class="profile-header">
                 <div class="avatar-container">
-                    <img src="../../assets/images/default-avatar.jpg" alt="Profile" class="avatar">
+                    <img src="../../assets/images/default-avatar.jpeg" alt="Profile" class="avatar">
                     <button class="avatar-edit">Edit</button>
                 </div>
-                <h2 id="profileName">John Doe</h2>
+                   <h2 id="profileName">J. Kaushalya</h2>
                 <p>Member since <span id="joinDate">Jan 2023</span></p>
             </div>
 
@@ -27,7 +29,8 @@
                 <a href="appointments.html"><i class="fas fa-calendar-alt"></i> Appointments</a>
                 <a href="saved.html"><i class="fas fa-heart"></i> Saved Items</a>
                 <a href="settings.html" class="active"><i class="fas fa-cog"></i> Settings</a>
-                <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="../../index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="../../user-authentication/login.html" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </nav>
         </aside>
 

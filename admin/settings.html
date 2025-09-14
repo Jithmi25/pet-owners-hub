@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Settings - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #43658b;
+            --secondary-color: #4e89ae;
+            --accent-color: #ed9b40;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --text-color: #343a40;
+            --bg-color: #f8f9fa;
+            --card-bg: white;
+            --card-border: #dee2e6;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode {
+            --text-color: #f8f9fa;
+            --bg-color: #343a40;
+            --card-bg: #495057;
+            --card-border: #6c757d;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #4b6cb7 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 1.2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-links a.active {
+            background-color: rgba(255, 255, 255, 0.25);
+            font-weight: 600;
+        }
+
+        /* Admin Container */
+        .admin-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .admin-container h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .admin-container p {
+            color: #6c757d;
+            margin-bottom: 2rem;
+            max-width: 800px;
+        }
+
+        /* Settings Tabs */
+        .settings-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--card-border);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: #6c757d;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .tab-btn.active::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Settings Cards */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .settings-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .settings-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .settings-card h3 {
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.5rem;
+        }
+
+        .settings-card h3 i {
+            margin-right: 10px;
+            color: var(--secondary-color);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--card-border);
+            border-radius: 4px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(78, 137, 174, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        /* Toggle Switch */
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+        }
+
+        .toggle-label {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .toggle-description {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--success-color);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--card-border);
+        }
+
+        /* Danger Zone */
+        .danger-zone {
+            background-color: rgba(231, 76, 60, 0.05);
+            border: 1px solid rgba(231, 76, 60, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .danger-zone h3 {
+            color: var(--danger-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .danger-zone h3 i {
+            margin-right: 10px;
+        }
+
+        .danger-zone p {
+            color: #6c757d;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Dark mode toggle */
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .logo {
+                margin-bottom: 1rem;
+            }
+
+            .nav-links {
+                width: 100%;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-links li {
+                margin: 0.3rem;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Panel Navigation Bar -->
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Admin Dashboard</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="manage-users.html"><i class="fas fa-users"></i> Users</a></li>
+                <li><a href="manage-pets.html"><i class="fas fa-paw"></i> Pets</a></li>
+                <li><a href="manage-clinics.html"><i class="fas fa-hospital"></i> Clinics</a></li>
+                <li><a href="manage-shops.html"><i class="fas fa-store"></i> Shops</a></li>
+                <li><a href="reports.html"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                <li><a href="settings.html" class="active"><i class="fas fa-cogs"></i> Settings</a></li>
+                <li><a href="../user-authentication/login.html" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- System Settings -->
+    <div class="admin-container">
+        <h2><i class="fas fa-cogs"></i> System Settings</h2>
+        <p>Configure and manage all system settings for the Pet Owners Hub platform.</p>
+
+        <!-- Settings Tabs -->
+        <div class="settings-tabs">
+            <button class="tab-btn active" data-tab="general"><i class="fas fa-cog"></i> General</button>
+            <button class="tab-btn" data-tab="notifications"><i class="fas fa-bell"></i> Notifications</button>
+            <button class="tab-btn" data-tab="security"><i class="fas fa-shield-alt"></i> Security</button>
+            <button class="tab-btn" data-tab="appearance"><i class="fas fa-paint-brush"></i> Appearance</button>
+            <button class="tab-btn" data-tab="backup"><i class="fas fa-database"></i> Backup & Restore</button>
+        </div>
+
+        <!-- General Settings -->
+        <div class="tab-content active" id="general-tab">
+            <div class="settings-grid">
+                <div class="settings-card">
+                    <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+                    <form id="basic-info-form">
+                        <div class="form-group">
+                            <label for="site-name">Site Name</label>
+                            <input type="text" id="site-name" value="Pet Owners Hub" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="site-description">Site Description</label>
+                            <textarea id="site-description" rows="3">Your one-stop solution for all pet care needs</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-email">Admin Email</label>
+                            <input type="email" id="admin-email" value="admin@petownershub.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="timezone">Timezone</label>
+                            <select id="timezone">
+                                <option value="UTC-12">(UTC-12:00) International Date Line West</option>
+                                <option value="UTC-5" selected>(UTC-05:00) Eastern Time (US & Canada)</option>
+                                <option value="UTC+0">(UTC+00:00) Greenwich Mean Time</option>
+                                <option value="UTC+5:30">(UTC+05:30) India Standard Time</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+                            <button type="reset" class="btn btn-secondary"><i class="fas fa-undo"></i> Reset</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="settings-card">
+                    <h3><i class="fas fa-globe"></i> Regional Settings</h3>
+                    <form id="regional-form">
+                        <div class="form-group">
+                            <label for="default-language">Default Language</label>
+                            <select id="default-language">
+                                <option value="en" selected>English</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                                <option value="de">German</option>
+                                <option value="si">Sinhala</option>
+                                <option value="ta">Tamil</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="date-format">Date Format</label>
+                            <select id="date-format">
+                                <option value="MM/DD/YYYY">MM/DD/YYYY (US)</option>
+                                <option value="DD/MM/YYYY" selected>DD/MM/YYYY (International)</option>
+                                <option value="YYYY-MM-DD">YYYY-MM-DD (ISO)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="currency">Currency</label>
+                            <select id="currency">
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                                <option value="LKR" selected>LKR (Rs)</option>
+                                <option value="JPY">JPY (¥)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="units">Measurement Units</label>
+                            <select id="units">
+                                <option value="metric" selected>Metric (kg, cm)</option>
+                                <option value="imperial">Imperial (lb, in)</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+                            <button type="reset" class="btn btn-secondary"><i class="fas fa-undo"></i> Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Settings -->
+        <div class="tab-content" id="notifications-tab">
+            <div class="settings-grid">
+                <div class="settings-card">
+                    <h3><i class="fas fa-envelope"></i> Email Notifications</h3>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">System Notifications</div>
+                            <div class="toggle-description">Receive emails about system updates and maintenance</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">New User Registrations</div>
+                            <div class="toggle-description">Get notified when new users register</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">Appointment Alerts</div>
+                            <div class="toggle-description">Receive alerts for new appointments</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">Marketing Emails</div>
+                            <div class="toggle-description">Receive promotional and marketing emails</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary"><i class="fas fa-save"></i> Save Preferences</button>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3><i class="fas fa-sliders-h"></i> Notification Preferences</h3>
+                    
+                    <div class="form-group">
+                        <label for="email-frequency">Email Frequency</label>
+                        <select id="email-frequency">
+                            <option value="immediate">Immediate</option>
+                            <option value="hourly" selected>Hourly Digest</option>
+                            <option value="daily">Daily Digest</option>
+                            <option value="weekly">Weekly Digest</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notification-sound">Notification Sound</label>
+                        <select id="notification-sound">
+                            <option value="default" selected>Default</option>
+                            <option value="chime">Chime</option>
+                            <option value="ding">Ding</option>
+                            <option value="bell">Bell</option>
+                            <option value="none">None</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="browser-notifications">Browser Notifications</label>
+                        <select id="browser-notifications">
+                            <option value="enabled" selected>Enabled</option>
+                            <option value="disabled">Disabled</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="push-notifications">Push Notifications</label>
+                        <select id="push-notifications">
+                            <option value="enabled">Enabled</option>
+                            <option value="disabled" selected>Disabled</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary"><i class="fas fa-save"></i> Save Preferences</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Settings -->
+        <div class="tab-content" id="security-tab">
+            <div class="settings-grid">
+                <div class="settings-card">
+                    <h3><i class="fas fa-lock"></i> Authentication</h3>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">Two-Factor Authentication</div>
+                            <div class="toggle-description">Require 2FA for all admin users</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">Password Expiration</div>
+                            <div class="toggle-description">Require password change every 90 days</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="session-timeout">Session Timeout</label>
+                        <select id="session-timeout">
+                            <option value="15">15 minutes</option>
+                            <option value="30">30 minutes</option>
+                            <option value="60" selected>1 hour</option>
+                            <option value="120">2 hours</option>
+                            <option value="240">4 hours</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="max-login-attempts">Max Login Attempts</label>
+                        <select id="max-login-attempts">
+                            <option value="3">3 attempts</option>
+                            <option value="5" selected>5 attempts</option>
+                            <option value="10">10 attempts</option>
+                            <option value="unlimited">Unlimited</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary"><i class="fas fa-save"></i> Save Settings</button>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3><i class="fas fa-shield-alt"></i> Security Policies</h3>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">IP Whitelisting</div>
+                            <div class="toggle-description">Restrict admin access to specific IP addresses</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="allowed-ips">Allowed IP Addresses (comma separated)</label>
+                        <textarea id="allowed-ips" rows="3" placeholder="192.168.1.1, 10.0.0.1"></textarea>
+                    </div>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">HTTPS Enforcement</div>
+                            <div class="toggle-description">Redirect all traffic to HTTPS</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">API Rate Limiting</div>
+                            <div class="toggle-description">Limit API requests to prevent abuse</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary"><i class="fas fa-save"></i> Save Policies</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- More tabs would continue here for Appearance, Backup, etc. -->
+
+        <!-- Danger Zone -->
+        <div class="danger-zone">
+            <h3><i class="fas fa-exclamation-triangle"></i> Danger Zone</h3>
+            <p>These actions are irreversible. Please be certain before proceeding.</p>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <button class="btn btn-danger" id="clear-cache-btn"><i class="fas fa-broom"></i> Clear System Cache</button>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-danger" id="reset-settings-btn"><i class="fas fa-redo"></i> Reset to Default Settings</button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <button class="btn btn-danger" id="delete-all-data-btn"><i class="fas fa-trash"></i> Delete All Data</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="dark-mode-toggle" id="darkModeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script>
+        // JavaScript for System Settings
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons and contents
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding content
+                    button.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+
+            // Form submissions
+            document.getElementById('basic-info-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Basic information settings saved successfully!');
+            });
+
+            document.getElementById('regional-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Regional settings saved successfully!');
+            });
+
+            // Danger zone actions
+            document.getElementById('clear-cache-btn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear the system cache? This may temporarily affect performance.')) {
+                    alert('System cache cleared successfully.');
+                }
+            });
+
+            document.getElementById('reset-settings-btn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to reset all settings to default? This action cannot be undone.')) {
+                    alert('All settings have been reset to default values.');
+                }
+            });
+
+            document.getElementById('delete-all-data-btn').addEventListener('click', function() {
+                if (confirm('WARNING: This will permanently delete all data from the system. This action cannot be undone. Are you absolutely sure?')) {
+                    alert('Data deletion process started. This may take several minutes.');
+                }
+            });
+
+            // Dark mode toggle functionality
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            darkModeToggle.addEventListener('click', toggleDarkMode);
+
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                enableDarkMode();
+            }
+        });
+
+        function toggleDarkMode() {
+            if (document.body.classList.contains('dark-mode')) {
+                disableDarkMode();
+            } else {
+                enableDarkMode();
+            }
+        }
+
+        function enableDarkMode() {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('darkMode', 'enabled');
+            document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        function disableDarkMode() {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('darkMode', 'disabled');
+            document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-moon"></i>';
+        }
+    </script>
+</body>
+</html>

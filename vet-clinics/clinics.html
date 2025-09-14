@@ -4,15 +4,516 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vet Clinics in Sri Lanka | Pet Owners Hub</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="css/clinics.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+    <style>
+        /* Clinic Listing Page */
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #166088;
+            --accent: #4caf50;
+            --danger: #ff4444;
+            --warning: #ff9800;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gov-color: #4caf50;
+            --private-color: #2196f3;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7f9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .clinics-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
+                url(../../assets/images/clinic-b.webp);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 3rem 0;
+            color: white;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .clinics-header .container {
+            width: 100%;
+        }
+
+        .clinics-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .clinic-filters {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 2rem auto;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .filter-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .filter-group select {
+            padding: 0.7rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background: white;
+            min-width: 180px;
+        }
+        
+        #search-input {
+            padding: 0.7rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            min-width: 250px;
+        }
+
+        #emergency-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            align-self: flex-end;
+            transition: all 0.3s ease;
+        }
+        
+        #emergency-btn:hover {
+            background: #ff2222;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .clinics-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            padding: 2rem 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 992px) {
+            .clinics-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .clinics-map {
+                height: 400px;
+                order: 2;
+            }
+            
+            .clinics-list {
+                order: 1;
+            }
+        }
+
+        .clinics-map {
+            height: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1;
+        }
+        
+        /* Fix for Leaflet map */
+        .clinics-map .leaflet-container {
+            border-radius: 10px;
+            height: 100%;
+        }
+
+        .clinics-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .results-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0 0.5rem;
+        }
+        
+        .sort-options {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .sort-options select {
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .clinic-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .clinic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .clinic-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .clinic-badge.government {
+            background: var(--gov-color);
+            color: white;
+        }
+
+        .clinic-badge.private {
+            background: var(--private-color);
+            color: white;
+        }
+        
+        .clinic-card h2 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            padding-right: 100px;
+        }
+
+        .clinic-meta {
+            display: flex;
+            gap: 1rem;
+            margin: 0.5rem 0;
+            color: #666;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        
+        .clinic-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .clinic-desc {
+            margin: 1rem 0;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .clinic-services {
+            display: flex;
+            gap: 0.7rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .clinic-services span {
+            background: #f0f5ff;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--primary);
+            border: 1px solid #dde7ff;
+        }
+        
+        .clinic-card .btn {
+            margin-top: 0.5rem;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            grid-column: 1 / -1;
+        }
+        
+        .no-results i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 0 0;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1rem;
+            color: #fff;
+            font-size: 1.2rem;
+        }
+        
+        .footer-column p {
+            margin-bottom: 1rem;
+            color: #ccc;
+            line-height: 1.6;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 0.7rem;
+        }
+        
+        .footer-column ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: modalFadeIn 0.3s;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .clinics-header {
+                min-height: 250px;
+                padding: 2rem 0;
+            }
+            
+            .clinics-header h1 {
+                font-size: 2rem;
+            }
+            
+            .clinic-filters {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .filter-group select, #search-input {
+                width: 100%;
+            }
+            
+            #emergency-btn {
+                align-self: stretch;
+                margin-top: 0.5rem;
+            }
+            
+            .clinics-container {
+                padding: 1rem;
+                gap: 1.5rem;
+            }
+            
+            .clinics-map {
+                height: 350px;
+            }
+            
+            .results-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .clinic-card h2 {
+                padding-right: 80px;
+                font-size: 1.3rem;
+            }
+            
+            .clinic-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <header class="clinics-header">
         <div class="container">
             <h1>Veterinary Clinics in Sri Lanka</h1>
             <div class="clinic-filters">
+                <div class="filter-group">
+                    <label for="search-input">Search Clinics:</label>
+                    <input type="text" id="search-input" placeholder="Enter clinic name or area...">
+                </div>
                 <div class="filter-group">
                     <label for="clinic-type">Clinic Type:</label>
                     <select id="clinic-type">
@@ -28,20 +529,19 @@
                         <option value="colombo">Colombo</option>
                         <option value="kandy">Kandy</option>
                         <option value="galle">Galle</option>
-                        <option value="colombo"> Gampaha</option>
-                        <option value="kandy">Kalutara</option>
-                        <option value="kandy">Matara</option>
-                        <option value="colombo">Kurunegala</option>
-                        <option value="galle">Kegalle</option>
-                        <option value="colombo">Ratnapura</option>
-                        <option value="kandy">Jaffna</option>
-                        <option value="kandy">Batticaloa</option>
-                        <option value="colombo">Anuradhapura</option>
-                        <option value="galle">Badulla</option>
-                        
+                        <option value="gampaha">Gampaha</option>
+                        <option value="kalutara">Kalutara</option>
+                        <option value="matara">Matara</option>
+                        <option value="kurunegala">Kurunegala</option>
+                        <option value="kegalle">Kegalle</option>
+                        <option value="ratnapura">Ratnapura</option>
+                        <option value="jaffna">Jaffna</option>
+                        <option value="batticaloa">Batticaloa</option>
+                        <option value="anuradhapura">Anuradhapura</option>
+                        <option value="badulla">Badulla</option>
                     </select>
                 </div>
-                <button id="emergency-btn">🚨 Show Emergency Clinics</button>
+                <button id="emergency-btn"><i class="fas fa-bell"></i> Emergency Clinics</button>
             </div>
         </div>
     </header>
@@ -50,81 +550,372 @@
         <div class="clinics-map" id="clinics-map"></div>
         
         <div class="clinics-list">
+            <div class="results-info">
+                <p id="results-count">Showing 5 clinics</p>
+                <div class="sort-options">
+                    <label for="sort-by">Sort by:</label>
+                    <select id="sort-by">
+                        <option value="name">Name</option>
+                        <option value="location">Location</option>
+                        <option value="type">Type</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading clinics...</p>
+            </div>
+            
             <!-- Government Hospital-->
-            <div class="clinic-card government">
-                <div class="clinic-badge">Government</div>
+            <div class="clinic-card government" data-type="government" data-location="kandy" data-name="Peradeniya Veterinary Teaching Hospital">
+                <div class="clinic-badge government">Government</div>
                 <h2>Peradeniya Veterinary Teaching Hospital</h2>
                 <div class="clinic-meta">
-                    <span>📍 Kandy</span>
-                    <span>📞 081 238 7654</span>
-                    <span>⏰ 24/7 Emergency</span>
+                    <span><i class="fas fa-map-marker-alt"></i> Kandy</span>
+                    <span><i class="fas fa-phone"></i> 081 238 7654</span>
+                    <span><i class="fas fa-clock"></i> 24/7 Emergency</span>
                 </div>
                 <p class="clinic-desc">Primary government veterinary hospital with subsidized services including rabies vaccination and sterilization programs.</p>
                 <div class="clinic-services">
-                    <span>🐕 Sterilization</span>
-                    <span>💉 Vaccination</span>
-                    <span>🏥 Emergency</span>
+                    <span>Vaccinations</span>
+                    <span>Surgery</span>
+                    <span>Emergency Care</span>
+                    <span>Dental</span>
                 </div>
-                <a href="clinic-details.html?id=gov01" class="btn">View Details & Book</a>
+                <a href="#" class="btn view-details" data-id="1">View Details</a>
             </div>
-
+            
             <!-- Private Clinic -->
-            <div class="clinic-card private">
-                <div class="clinic-badge">Private</div>
-                <h2>Colombo Animal Hospital</h2>
+            <div class="clinic-card private" data-type="private" data-location="colombo" data-name="PetVet Animal Hospital">
+                <div class="clinic-badge private">Private</div>
+                <h2>PetVet Animal Hospital</h2>
                 <div class="clinic-meta">
-                    <span>📍 Colombo 05</span>
-                    <span>📞 011 258 9632</span>
-                    <span>⏰ 8AM - 10PM</span>
+                    <span><i class="fas fa-map-marker-alt"></i> Colombo 05</span>
+                    <span><i class="fas fa-phone"></i> 011 345 6789</span>
+                    <span><i class="fas fa-clock"></i> 8:00 AM - 8:00 PM</span>
                 </div>
-                <p class="clinic-desc">Advanced private facility with diagnostic imaging and surgical services.</p>
+                <p class="clinic-desc">Full-service private veterinary hospital offering advanced diagnostics, surgery, and grooming services.</p>
                 <div class="clinic-services">
-                    <span>🩺 Consultation</span>
-                    <span>📷 X-Ray</span>
-                    <span>💊 Pharmacy</span>
+                    <span>Grooming</span>
+                    <span>Boarding</span>
+                    <span>Ultrasound</span>
+                    <span>Surgery</span>
                 </div>
-                <a href="clinic-details.html?id=private01" class="btn">View Details & Book</a>
+                <a href="#" class="btn view-details" data-id="2">View Details</a>
             </div>
-
+            
+            <!-- Government Hospital -->
+            <div class="clinic-card government" data-type="government" data-location="colombo" data-name="National Veterinary Hospital">
+                <div class="clinic-badge government">Government</div>
+                <h2>National Veterinary Hospital</h2>
+                <div class="clinic-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Colombo 07</span>
+                    <span><i class="fas fa-phone"></i> 011 234 5678</span>
+                    <span><i class="fas fa-clock"></i> 8:00 AM - 6:00 PM</span>
+                </div>
+                <p class="clinic-desc">Government veterinary hospital providing affordable care for pets and livestock with specialized departments.</p>
+                <div class="clinic-services">
+                    <span>Vaccinations</span>
+                    <span>Diagnostics</span>
+                    <span>Livestock Care</span>
+                    <span>Emergency Care</span>
+                </div>
+                <a href="#" class="btn view-details" data-id="3">View Details</a>
+            </div>
+            
+            <!-- Private Clinic -->
+            <div class="clinic-card private" data-type="private" data-location="galle" data-name="Paws & Claws Veterinary Center">
+                <div class="clinic-badge private">Private</div>
+                <h2>Paws & Claws Veterinary Center</h2>
+                <div class="clinic-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Galle</span>
+                    <span><i class="fas fa-phone"></i> 091 223 4567</span>
+                    <span><i class="fas fa-clock"></i> 9:00 AM - 7:00 PM</span>
+                </div>
+                <p class="clinic-desc">Modern veterinary center offering comprehensive care including specialized surgeries and 24/7 emergency services.</p>
+                <div class="clinic-services">
+                    <span>Emergency Care</span>
+                    <span>Surgery</span>
+                    <span>Dental</span>
+                    <span>Grooming</span>
+                </div>
+                <a href="#" class="btn view-details" data-id="4">View Details</a>
+            </div>
+            
+            <!-- Government Hospital -->
+            <div class="clinic-card government" data-type="government" data-location="anuradhapura" data-name="Anuradhapura Veterinary Hospital">
+                <div class="clinic-badge government">Government</div>
+                <h2>Anuradhapura Veterinary Hospital</h2>
+                <div class="clinic-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Anuradhapura</span>
+                    <span><i class="fas fa-phone"></i> 025 222 3456</span>
+                    <span><i class="fas fa-clock"></i> 8:30 AM - 4:30 PM</span>
+                </div>
+                <p class="clinic-desc">Government veterinary hospital serving the North Central Province with focus on both companion animals and livestock.</p>
+                <div class="clinic-services">
+                    <span>Vaccinations</span>
+                    <span>Livestock Care</span>
+                    <span>Basic Surgery</span>
+                    <span>Consultation</span>
+                </div>
+                <a href="#" class="btn view-details" data-id="5">View Details</a>
+            </div>
         </div>
     </main>
-    <!-- Footer -->
+
+    <div class="modal" id="clinic-modal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-paw"></i>
+            </div>
+            <h2>Clinic Details</h2>
+            <p id="modal-clinic-name"></p>
+            <p id="modal-clinic-address"></p>
+            <p id="modal-clinic-phone"></p>
+            <p id="modal-clinic-hours"></p>
+            <button class="btn" id="close-modal">Close</button>
+            <button class="btn" id="more-modal">More</button>
+        </div>
+    </div>
+
     <footer>
-         <div class="footer-content">
+        <div class="footer-content">
             <div class="footer-column">
                 <h3>Pet Owners Hub</h3>
-                <p>Your one-stop solution for all pet care needs, connecting pet lovers with quality services.</p>
+                <p>Your trusted resource for pet care in Sri Lanka. Find veterinary clinics, pet services, and valuable information to keep your pets healthy and happy.</p>
                 <div class="social-links">
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
                     <a href="#"><i class="fab fa-instagram"></i></a>
-
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
             <div class="footer-column">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="vet-clinics/clinics.html">Vet Clinics</a></li>
-                    <li><a href="pet-shops/shops.html">Pet Shops</a></li>
-                    <li><a href="marketplace/marketplace.html">Marketplace</a></li>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../pages/clinics.html">Find a Clinic</a></li>
+                    <li><a href="../pages/pet-services.html">Pet Services</a></li>
+                    <li><a href="../pages/pet-care.html">Pet Care Tips</a></li>
+                    <li><a href="../pages/emergency.html">Emergency Guide</a></li>
                 </ul>
             </div>
             <div class="footer-column">
-                <h3>Support</h3>
-                <ul>
-                    <li><a href="support/support.html#contact">Contact Us</a></li>
-                    <li><a href="support/support.html#faqs">FAQs</a></li>
-                    <li><a href="support/support.html#privacy">Privacy Policy</a></li>
-                    <li><a href="support/support.html#terms">Terms of Service</a></li>
-                </ul>
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> 123 Pet Street, Colombo, Sri Lanka</p>
+                <p><i class="fas fa-phone"></i> +94 11 234 5678</p>
+                <p><i class="fas fa-envelope"></i> info@petownershub.lk</p>
             </div>
         </div>
         <div class="copyright">
-            <p>&copy; 2025 Pet Owners Hub. All rights reserved.</p>
+            <p>&copy; 2023 Pet Owners Hub. All rights reserved.</p>
         </div>
-    </footer>       
+    </footer>
+
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="js/clinics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize map
+            const map = L.map('clinics-map').setView([7.8731, 80.7718], 8); // Center on Sri Lanka
+            
+            // Add tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            
+            // Sample clinic locations with coordinates
+            const clinics = [
+                { id: 1, name: "Peradeniya Veterinary Teaching Hospital", lat: 7.2692, lng: 80.5953, type: "government", location: "kandy" },
+                { id: 2, name: "PetVet Animal Hospital", lat: 6.9271, lng: 79.8612, type: "private", location: "colombo" },
+                { id: 3, name: "National Veterinary Hospital", lat: 6.9022, lng: 79.8607, type: "government", location: "colombo" },
+                { id: 4, name: "Paws & Claws Veterinary Center", lat: 6.0535, lng: 80.2200, type: "private", location: "galle" },
+                { id: 5, name: "Anuradhapura Veterinary Hospital", lat: 8.3114, lng: 80.4037, type: "government", location: "anuradhapura" }
+            ];
+            
+            // Custom icons for different clinic types
+            const govIcon = L.icon({
+                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+            
+            const privateIcon = L.icon({
+                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+            
+            // Add markers to the map
+            const markers = [];
+            
+            clinics.forEach(clinic => {
+                const icon = clinic.type === 'government' ? govIcon : privateIcon;
+                
+                const marker = L.marker([clinic.lat, clinic.lng], { icon: icon })
+                    .addTo(map)
+                    .bindPopup(`<b>${clinic.name}</b><br>${clinic.type === 'government' ? 'Government Hospital' : 'Private Clinic'}`);
+                
+                markers.push(marker);
+            });
+            
+            // Filter functionality
+            const searchInput = document.getElementById('search-input');
+            const clinicTypeFilter = document.getElementById('clinic-type');
+            const locationFilter = document.getElementById('location');
+            const clinicCards = document.querySelectorAll('.clinic-card');
+            
+            function filterClinics() {
+                const searchText = searchInput.value.toLowerCase();
+                const typeValue = clinicTypeFilter.value;
+                const locationValue = locationFilter.value;
+                
+                let visibleCount = 0;
+                
+                clinicCards.forEach(card => {
+                    const name = card.getAttribute('data-name').toLowerCase();
+                    const type = card.getAttribute('data-type');
+                    const location = card.getAttribute('data-location');
+                    
+                    const matchesSearch = name.includes(searchText);
+                    const matchesType = typeValue === 'all' || type === typeValue;
+                    const matchesLocation = locationValue === 'all' || location === locationValue;
+                    
+                    if (matchesSearch && matchesType && matchesLocation) {
+                        card.style.display = 'block';
+                        visibleCount++;
+                        
+                        // Highlight the corresponding marker on the map
+                        const clinicId = parseInt(card.querySelector('.view-details').getAttribute('data-id'));
+                        const clinic = clinics.find(c => c.id === clinicId);
+                        if (clinic) {
+                            const markerIndex = clinics.findIndex(c => c.id === clinicId);
+                            if (markerIndex !== -1) {
+                                markers[markerIndex].openPopup();
+                            }
+                        }
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                document.getElementById('results-count').textContent = `Showing ${visibleCount} clinics`;
+                
+                // Show no results message if needed
+                if (visibleCount === 0) {
+                    if (!document.querySelector('.no-results')) {
+                        const noResults = document.createElement('div');
+                        noResults.className = 'no-results';
+                        noResults.innerHTML = `
+                            <i class="fas fa-search"></i>
+                            <h3>No clinics found</h3>
+                            <p>Try adjusting your search filters</p>
+                        `;
+                        document.querySelector('.clinics-list').appendChild(noResults);
+                    }
+                } else {
+                    const noResults = document.querySelector('.no-results');
+                    if (noResults) {
+                        noResults.remove();
+                    }
+                }
+            }
+            
+            searchInput.addEventListener('input', filterClinics);
+            clinicTypeFilter.addEventListener('change', filterClinics);
+            locationFilter.addEventListener('change', filterClinics);
+            
+            // Emergency button functionality
+            document.getElementById('emergency-btn').addEventListener('click', function() {
+                clinicTypeFilter.value = 'all';
+                locationFilter.value = 'all';
+                searchInput.value = 'emergency';
+                filterClinics();
+            });
+            
+            // Modal functionality
+            const modal = document.getElementById('clinic-modal');
+            const closeModal = document.getElementById('close-modal');
+            const moreModal = document.getElementById('more-modal');
+            const modalClinicName = document.getElementById('modal-clinic-name');
+            const modalClinicAddress = document.getElementById('modal-clinic-address');
+            const modalClinicPhone = document.getElementById('modal-clinic-phone');
+            const modalClinicHours = document.getElementById('modal-clinic-hours');
+            
+            document.querySelectorAll('.view-details').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const card = this.closest('.clinic-card');
+                    const name = card.querySelector('h2').textContent;
+                    const address = card.querySelector('.clinic-meta span:first-child').textContent;
+                    const phone = card.querySelector('.clinic-meta span:nth-child(2)').textContent;
+                    const hours = card.querySelector('.clinic-meta span:last-child').textContent;
+                    
+                    modalClinicName.textContent = name;
+                    modalClinicAddress.textContent = address;
+                    modalClinicPhone.textContent = phone;
+                    modalClinicHours.textContent = hours;
+                    
+                    modal.classList.add('active');
+                });
+            });
+            
+            closeModal.addEventListener('click', function() {
+                modal.classList.remove('active');
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+             moreModal.addEventListener('click', function() {
+            const clinicId = 1; 
+            window.location.href = `clinic-details.html`;
+        });
+            
+          
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+            
+            // Sort functionality
+            document.getElementById('sort-by').addEventListener('change', function() {
+                const sortBy = this.value;
+                const clinicsList = document.querySelector('.clinics-list');
+                const clinicCardsArray = Array.from(clinicCards);
+                
+                clinicCardsArray.sort((a, b) => {
+                    if (sortBy === 'name') {
+                        return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
+                    } else if (sortBy === 'location') {
+                        return a.getAttribute('data-location').localeCompare(b.getAttribute('data-location'));
+                    } else if (sortBy === 'type') {
+                        return a.getAttribute('data-type').localeCompare(b.getAttribute('data-type'));
+                    }
+                    return 0;
+                });
+                
+                // Remove all cards and re-add in sorted order
+                clinicCardsArray.forEach(card => {
+                    clinicsList.appendChild(card);
+                });
+            });
+            
+            // Initialize map to show all markers
+            const group = new L.featureGroup(markers);
+            map.fitBounds(group.getBounds().pad(0.1));
+        });
+    </script>
 </body>
 </html>

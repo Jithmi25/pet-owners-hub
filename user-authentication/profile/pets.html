@@ -3,21 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Pets | Pet Owners Hub </title>
+    <title>My Pets | Pet Owners Hub</title>
     <link rel="stylesheet" href="../../assets/css/main.css">
     <link rel="stylesheet" href="../css/auth.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Pets Grid Styles */
+        .pets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .pet-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .pet-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .pet-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #6c63ff 0%, #4d44db 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+
+        .pet-info {
+            padding: 20px;
+        }
+
+        .pet-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .pet-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .pet-detail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .pet-detail i {
+            color: #6c63ff;
+        }
+
+        .pet-actions {
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .btn-icon {
+            padding: 8px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-edit {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .btn-edit:hover {
+            background: #bbdefb;
+        }
+
+        .btn-delete {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        .btn-delete:hover {
+            background: #ffcdd2;
+        }
+
+        .no-pets {
+            text-align: center;
+            padding: 40px 20px;
+            grid-column: 1 / -1;
+        }
+
+        .empty-state-img {
+            max-width: 200px;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Form Styles */
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            flex: 1;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #6c63ff;
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6c63ff 0%, #4d44db 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Section Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .section-header h1 {
+            font-size: 28px;
+            color: #333;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
+    <div id="authCheck" style="display:none;"></div>
+    
     <div class="profile-container">
         <!-- Sidebar -->
         <aside class="profile-sidebar">
             <div class="profile-header">
                 <div class="avatar-container">
-                    <img src="../../assets/images/default-avatar.jpg" alt="Profile" class="avatar">
+                    <img src="../../assets/images/default-avatar.jpeg" alt="Profile" class="avatar">
                     <button class="avatar-edit">Edit</button>
                 </div>
-                <h2 id="profileName">John Doe</h2>
+                <h2 id="profileName">J. Kaushalya</h2>
                 <p>Member since <span id="joinDate">Jan 2023</span></p>
             </div>
 
@@ -27,7 +261,8 @@
                 <a href="appointments.html"><i class="fas fa-calendar-alt"></i> Appointments</a>
                 <a href="saved.html"><i class="fas fa-heart"></i> Saved Items</a>
                 <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
-                <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="../../index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="../../user-authentication/login.html" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </nav>
         </aside>
 
@@ -42,10 +277,9 @@
 
             <div class="pets-grid" id="petsContainer">
                 <!-- Pets will be loaded here -->
-                <div class="no-pets">
-                    <img src="../../assets/images/no-pets.svg" alt="No pets" class="empty-state-img">
-                    <p>You haven't added any pets yet</p>
-                    <button class="btn btn-primary" id="addFirstPetBtn">Add Your First Pet</button>
+                <div class="no-pets" id="noPetsMessage">
+                    <img src="../../assets/images/mypet.png" alt="My pets" class="empty-state-img">
+                    <button class="btn btn-primary" id="addFirstPetBtn">Add Your Pet</button>
                 </div>
             </div>
 
@@ -55,6 +289,7 @@
                     <span class="close-btn">&times;</span>
                     <h2 id="modalTitle">Add New Pet</h2>
                     <form id="petForm">
+                        <input type="hidden" id="petId">
                         <div class="form-group">
                             <label for="petName">Pet Name</label>
                             <input type="text" id="petName" required>
@@ -103,6 +338,219 @@
         </main>
     </div>
 
-    <script src="../js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const authToken = localStorage.getItem('petcareAuthToken');
+            if (!authToken) {
+                window.location.href = '../../user-authentication/login.html';
+                return;
+            }
+
+            // Hardcoded user data - replace with API call later
+            const userData = {
+                name: "J. Kaushalya",
+                joinDate: "Jan 2023"
+            };
+
+            // Hardcoded pet data - replace with API call later
+            let pets = [
+                {
+                    id: '1',
+                    name: 'Max',
+                    type: 'dog',
+                    breed: 'Local',
+                    age: 3,
+                    gender: 'male'
+                },
+                {
+                    id: '2',
+                    name: 'Luna',
+                    type: 'cat',
+                    breed: 'Siamese',
+                    age: 2,
+                    gender: 'female'
+                }
+            ];
+
+            // DOM Elements
+            const petsContainer = document.getElementById('petsContainer');
+            const noPetsMessage = document.getElementById('noPetsMessage');
+            const petModal = document.getElementById('petModal');
+            const petForm = document.getElementById('petForm');
+            const modalTitle = document.getElementById('modalTitle');
+            const addPetBtn = document.getElementById('addPetBtn');
+            const addFirstPetBtn = document.getElementById('addFirstPetBtn');
+            const closeBtn = document.querySelector('.close-btn');
+            const petIdInput = document.getElementById('petId');
+            
+            // Set user data
+            document.getElementById('profileName').textContent = userData.name;
+            document.getElementById('joinDate').textContent = userData.joinDate;
+            
+            // Display pets
+            function renderPets() {
+                petsContainer.innerHTML = '';
+                
+                if (pets.length === 0) {
+                    noPetsMessage.style.display = 'block';
+                    return;
+                }
+                
+                noPetsMessage.style.display = 'none';
+                
+                pets.forEach(pet => {
+                    const petCard = document.createElement('div');
+                    petCard.className = 'pet-card';
+                    
+                    const icon = pet.type === 'dog' ? 'fa-dog' : 
+                                pet.type === 'cat' ? 'fa-cat' : 
+                                pet.type === 'bird' ? 'fa-dove' : 'fa-paw';
+                    
+                    petCard.innerHTML = `
+                        <div class="pet-image">
+                            <i class="fas ${icon}"></i>
+                        </div>
+                        <div class="pet-info">
+                            <h3 class="pet-name">${pet.name}</h3>
+                            <div class="pet-details">
+                                <div class="pet-detail">
+                                    <i class="fas ${icon}"></i>
+                                    <span>${pet.type}</span>
+                                </div>
+                                <div class="pet-detail">
+                                    <i class="fas fa-venus-mars"></i>
+                                    <span>${pet.gender}</span>
+                                </div>
+                                <div class="pet-detail">
+                                    <i class="fas fa-birthday-cake"></i>
+                                    <span>${pet.age} years</span>
+                                </div>
+                                <div class="pet-detail">
+                                    <i class="fas fa-dna"></i>
+                                    <span>${pet.breed || 'Mixed'}</span>
+                                </div>
+                            </div>
+                            <div class="pet-actions">
+                                <button class="btn-icon btn-edit" data-id="${pet.id}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-icon btn-delete" data-id="${pet.id}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    petsContainer.appendChild(petCard);
+                });
+                
+                // Add event listeners to edit and delete buttons
+                document.querySelectorAll('.btn-edit').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const petId = this.getAttribute('data-id');
+                        editPet(petId);
+                    });
+                });
+                
+                document.querySelectorAll('.btn-delete').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const petId = this.getAttribute('data-id');
+                        deletePet(petId);
+                    });
+                });
+            }
+            
+            // Open modal for adding a new pet
+            function openAddModal() {
+                modalTitle.textContent = 'Add New Pet';
+                petForm.reset();
+                petIdInput.value = '';
+                petModal.style.display = 'block';
+            }
+            
+            // Open modal for editing an existing pet
+            function editPet(petId) {
+                const pet = pets.find(p => p.id === petId);
+                if (pet) {
+                    modalTitle.textContent = 'Edit Pet';
+                    document.getElementById('petName').value = pet.name;
+                    document.getElementById('petType').value = pet.type;
+                    document.getElementById('petBreed').value = pet.breed || '';
+                    document.getElementById('petAge').value = pet.age;
+                    document.getElementById('petGender').value = pet.gender;
+                    petIdInput.value = pet.id;
+                    petModal.style.display = 'block';
+                }
+            }
+            
+            // Delete a pet
+            function deletePet(petId) {
+                if (confirm('Are you sure you want to delete this pet?')) {
+                    pets = pets.filter(p => p.id !== petId);
+                    // In a real app, you would call your backend API here
+                    renderPets();
+                }
+            }
+            
+            // Save pet (add or update)
+            function savePet(petData) {
+                if (petData.id) {
+                    // Update existing pet
+                    const index = pets.findIndex(p => p.id === petData.id);
+                    if (index !== -1) {
+                        pets[index] = {...pets[index], ...petData};
+                    }
+                } else {
+                    // Add new pet
+                    petData.id = Date.now().toString();
+                    pets.push(petData);
+                }
+                
+                // In a real app, you would call your backend API here
+                renderPets();
+                petModal.style.display = 'none';
+            }
+            
+            // Event Listeners
+            addPetBtn.addEventListener('click', openAddModal);
+            addFirstPetBtn.addEventListener('click', openAddModal);
+            
+            closeBtn.addEventListener('click', function() {
+                petModal.style.display = 'none';
+            });
+            
+            window.addEventListener('click', function(e) {
+                if (e.target === petModal) {
+                    petModal.style.display = 'none';
+                }
+            });
+            
+            petForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const petData = {
+                    id: petIdInput.value,
+                    name: document.getElementById('petName').value,
+                    type: document.getElementById('petType').value,
+                    breed: document.getElementById('petBreed').value,
+                    age: document.getElementById('petAge').value,
+                    gender: document.getElementById('petGender').value
+                };
+                
+                savePet(petData);
+            });
+            
+            // Logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('petcareAuthToken');
+                window.location.href = '../../user-authentication/login.html';
+            });
+            
+            // Initial render
+            renderPets();
+        });
+    </script>
 </body>
 </html>

@@ -4,110 +4,698 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clinic Details | Pet Owners Hub</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="css/clinics.css">
+    <style>
+        :root {
+            --primary: #4caf50;
+            --primary-dark: #388e3c;
+            --secondary: #2196f3;
+            --secondary-dark: #1976d2;
+            --accent: #ff9800;
+            --danger: #ff4444;
+            --danger-dark: #d32f2f;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Clinic Details Page */
+        .clinic-detail-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .clinic-header {
+            margin-bottom: 2rem;
+            position: relative;
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .clinic-type-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            margin-left: 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .clinic-type-badge.government {
+            background: var(--primary);
+            color: white;
+        }
+
+        .clinic-type-badge.private {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .clinic-rating {
+            display: flex;
+            align-items: center;
+            margin-top: 0.5rem;
+            color: #f39c12;
+            font-weight: 500;
+        }
+
+        .clinic-rating i {
+            margin-right: 0.3rem;
+        }
+
+        .clinic-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .clinic-info {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .clinic-info h2 {
+            color: var(--primary-dark);
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .clinic-info h2:first-child {
+            margin-top: 0;
+        }
+
+        .clinic-info h2 i {
+            margin-right: 0.5rem;
+        }
+
+        .clinic-map {
+            height: 250px;
+            margin: 1rem 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .booking-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        #booking-form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        #time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .time-slot {
+            background: var(--light-gray);
+            padding: 0.5rem;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .time-slot:hover {
+            background: #d1e7dd;
+        }
+
+        .time-slot.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        .time-slot.booked {
+            background: #f8d7da;
+            color: var(--danger-dark);
+            cursor: not-allowed;
+        }
+
+        .emergency-banner {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-top: 1.5rem;
+            text-align: center;
+            border-left: 4px solid var(--accent);
+        }
+
+        .emergency-btn {
+            background: var(--danger);
+            margin-top: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .emergency-btn:hover {
+            background: var(--danger-dark);
+        }
+
+        .clinic-services {
+            margin-top: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .service-item {
+            background: var(--light);
+            padding: 1.2rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .service-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-item h3 {
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Payment Section Styles */
+        .payment-section {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-top: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .payment-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .payment-option {
+            border: 2px solid var(--light-gray);
+            padding: 1.2rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .payment-option:hover {
+            border-color: var(--primary);
+        }
+
+        .payment-option.selected {
+            border-color: var(--primary);
+            background-color: #e8f5e9;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        .payment-form {
+            display: none;
+            margin-top: 1rem;
+            padding: 1.5rem;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            background: white;
+        }
+
+        .payment-form.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .card-details {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Confirmation Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .clinic-detail-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .payment-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="clinic-detail-container">
         <div class="clinic-header">
             <h1 id="clinic-name">Peradeniya Veterinary Teaching Hospital</h1>
-            <div class="clinic-type-badge" id="clinic-type">Government</div>
-            <div class="clinic-rating">★★★★☆ (42 reviews)</div>
+            <div class="clinic-type-badge government" id="clinic-type">Government</div>
+            <div class="clinic-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <span style="color: var(--gray); margin-left: 0.5rem;">(42 reviews)</span>
+            </div>
         </div>
 
         <div class="clinic-detail-grid">
             <div class="clinic-info">
-                <h2>📌 Location</h2>
+                <h2><i class="fas fa-map-marker-alt"></i> Location</h2>
                 <p id="clinic-address">Faculty of Veterinary Medicine, Peradeniya</p>
                 <div class="clinic-map" id="detail-map"></div>
 
-                <h2>📞 Contact</h2>
-                <p id="clinic-phone">081 238 7654</p>
-                <p id="clinic-email">pera.vet@gov.lk</p>
+                <h2><i class="fas fa-phone-alt"></i> Contact</h2>
+                <p id="clinic-phone"><i class="fas fa-phone" style="margin-right: 0.5rem;"></i> 081 238 7654</p>
+                <p id="clinic-email"><i class="fas fa-envelope" style="margin-right: 0.5rem;"></i> pera.vet@gov.lk</p>
 
-                <h2>🕒 Hours</h2>
+                <h2><i class="fas fa-clock"></i> Hours</h2>
                 <ul id="clinic-hours">
-                    <li>Emergency: 24/7</li>
-                    <li>OPD: 8AM-4PM (Mon-Fri)</li>
+                    <li><i class="fas fa-bolt" style="color: var(--accent); margin-right: 0.5rem;"></i> Emergency: 24/7</li>
+                    <li><i class="fas fa-stethoscope" style="color: var(--primary); margin-right: 0.5rem;"></i> OPD: 8AM-4PM (Mon-Fri)</li>
                 </ul>
 
-                <h2>💵 Fees</h2>
+                <h2><i class="fas fa-money-bill-wave"></i> Fees</h2>
                 <div id="clinic-fees">
                     <p>Government subsidized rates apply</p>
                     <ul>
                         <li>Rabies Vaccine: FREE</li>
                         <li>Sterilization: LKR 500</li>
+                        <li>Consultation: LKR 200</li>
                     </ul>
                 </div>
             </div>
 
             <div class="booking-section">
-                <h2>📅 Book Appointment</h2>
+                <h2><i class="fas fa-calendar-check"></i> Book Appointment</h2>
                 <form id="booking-form">
-                    <input type="text" id="pet-id" placeholder="Enter Pet ID" required>
-                    <select id="service-type" required>
-                        <option value="">Select Service</option>
-                        <option value="vaccination">Vaccination</option>
-                        <option value="emergency">Emergency</option>
-                        <option value="sterilization">Sterilization</option>
-                    </select>
-                    <input type="date" id="appointment-date" required>
-                    <div id="time-slots">
-                        <p>Select date to see available times</p>
+                    <div class="form-group">
+                        <label for="pet-id"><i class="fas fa-paw"></i> Pet ID</label>
+                        <input type="text" id="pet-id" placeholder="Enter Pet ID" required>
                     </div>
-                    <button type="submit" class="btn">Confirm Booking</button>
+                    
+                    <div class="form-group">
+                        <label for="service-type"><i class="fas fa-concierge-bell"></i> Service Type</label>
+                        <select id="service-type" required>
+                            <option value="">Select Service</option>
+                            <option value="vaccination">Vaccination</option>
+                            <option value="emergency">Emergency</option>
+                            <option value="sterilization">Sterilization</option>
+                            <option value="consultation">Consultation</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="appointment-date"><i class="fas fa-calendar-day"></i> Appointment Date</label>
+                        <input type="date" id="appointment-date" required min="">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-clock"></i> Available Time Slots</label>
+                        <div id="time-slots">
+                            <p>Select date to see available times</p>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-section">
+                        <h3><i class="fas fa-credit-card"></i> Payment Method</h3>
+                        <div class="payment-options">
+                            <div class="payment-option" data-method="online" onclick="selectPaymentMethod('online')">
+                                <h4><i class="fas fa-desktop"></i> Pay Now</h4>
+                                <p>Secure online payment</p>
+                                <small>10% discount for online payments</small>
+                            </div>
+                            <div class="payment-option" data-method="onsite" onclick="selectPaymentMethod('onsite')">
+                                <h4><i class="fas fa-building"></i> Pay at Clinic</h4>
+                                <p>Pay when you visit</p>
+                                <small>Cash or card accepted</small>
+                            </div>
+                        </div>
+                        
+                        <div id="online-payment-form" class="payment-form">
+                            <h4><i class="fas fa-credit-card"></i> Card Details</h4>
+                            <div class="form-group">
+                                <label for="card-number">Card Number</label>
+                                <input type="text" id="card-number" placeholder="1234 5678 9012 3456">
+                            </div>
+                            <div class="card-details">
+                                <div class="form-group">
+                                    <label for="expiry-date">Expiry Date</label>
+                                    <input type="text" id="expiry-date" placeholder="MM/YY">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvv">CVV</label>
+                                    <input type="text" id="cvv" placeholder="123">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="card-name">Name on Card</label>
+                                <input type="text" id="card-name" placeholder="John Doe">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn" style="width: 100%;">
+                        <i class="fas fa-check-circle"></i> Confirm Booking
+                    </button>
                 </form>
 
                 <div class="emergency-banner">
-                    <h3>🚨 Emergency?</h3>
+                    <h3><i class="fas fa-ambulance"></i> Emergency?</h3>
                     <p>Call directly for immediate assistance</p>
-                    <a href="tel:+94812387654" class="btn emergency-btn">Call Now</a>
+                    <a href="tel:+94812387654" class="btn emergency-btn">
+                        <i class="fas fa-phone"></i> Call Now
+                    </a>
                 </div>
             </div>
         </div>
 
         <div class="clinic-services">
-            <h2>🏥 Services Offered</h2>
-            <div class="services-grid" id="services-list">
-
+            <h2><i class="fas fa-list"></i> Services Offered</h2>
+            <div class="services-grid">
+                <div class="service-item">
+                    <i class="fas fa-syringe fa-2x" style="color: var(--primary);"></i>
+                    <h3>Vaccinations</h3>
+                    <p>Rabies, DHPP, and more</p>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-stethoscope fa-2x" style="color: var(--primary);"></i>
+                    <h3>Consultations</h3>
+                    <p>General health checkups</p>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-briefcase-medical fa-2x" style="color: var(--primary);"></i>
+                    <h3>Surgery</h3>
+                    <p>Sterilization and more</p>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-ambulance fa-2x" style="color: var(--primary);"></i>
+                    <h3>Emergency Care</h3>
+                    <p>24/7 emergency services</p>
+                </div>
             </div>
         </div>
     </div>
- <footer>
-         <div class="footer-content">
-            <div class="footer-column">
-                <h3>Pet Owners Hub</h3>
-                <p>Your one-stop solution for all pet care needs, connecting pet lovers with quality services.</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
 
-                </div>
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmation-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
             </div>
-            <div class="footer-column">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="vet-clinics/clinics.html">Vet Clinics</a></li>
-                    <li><a href="pet-shops/shops.html">Pet Shops</a></li>
-                    <li><a href="marketplace/marketplace.html">Marketplace</a></li>
-                </ul>
+            <h2>Appointment Confirmed!</h2>
+            <p>Your appointment has been successfully booked.</p>
+            <div id="appointment-details" style="text-align: left; margin: 1.5rem 0; padding: 1rem; background: var(--light); border-radius: var(--border-radius);">
+                <p><strong>Clinic:</strong> <span id="confirm-clinic-name">Peradeniya Veterinary Teaching Hospital</span></p>
+                <p><strong>Date:</strong> <span id="confirm-date">Not set</span></p>
+                <p><strong>Time:</strong> <span id="confirm-time">Not set</span></p>
+                <p><strong>Service:</strong> <span id="confirm-service">Not set</span></p>
             </div>
-            <div class="footer-column">
-                <h3>Support</h3>
-                <ul>
-                    <li><a href="support/support.html#contact">Contact Us</a></li>
-                    <li><a href="support/support.html#faqs">FAQs</a></li>
-                    <li><a href="support/support.html#privacy">Privacy Policy</a></li>
-                    <li><a href="support/support.html#terms">Terms of Service</a></li>
-                </ul>
-            </div>
+            <p>You will receive a confirmation email shortly.</p>
+            <button class="btn" onclick="closeModal()" style="margin-top: 1rem;">
+                <i class="fas fa-check"></i> Done
+            </button>
         </div>
-        <div class="copyright">
-            <p>&copy; 2025 Pet Owners Hub. All rights reserved.</p>
-        </div>
-    </footer>       
-    <script src="js/clinics.js"></script>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Initialize map
+        function initMap() {
+            // Default coordinates for Peradeniya
+            const defaultLat = 7.2575;
+            const defaultLng = 80.5957;
+            
+            // Initialize the map
+            const map = L.map('detail-map').setView([defaultLat, defaultLng], 15);
+            
+            // Add tile layer (OpenStreetMap)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            
+            // Add a marker
+            L.marker([defaultLat, defaultLng])
+                .addTo(map)
+                .bindPopup('Peradeniya Veterinary Teaching Hospital')
+                .openPopup();
+        }
+
+        // Initialize date picker with minimum date as today
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set minimum date for appointment date input
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('appointment-date').min = formattedDate;
+            
+            // Initialize the map
+            initMap();
+            
+            // Add event listeners
+            document.getElementById('appointment-date').addEventListener('change', generateTimeSlots);
+            document.getElementById('booking-form').addEventListener('submit', handleBookingSubmit);
+        });
+
+        // Generate time slots based on selected date
+        function generateTimeSlots() {
+            const date = document.getElementById('appointment-date').value;
+            const timeSlotsContainer = document.getElementById('time-slots');
+            
+            if (!date) {
+                timeSlotsContainer.innerHTML = '<p>Please select a date first</p>';
+                return;
+            }
+            
+            // Clear previous time slots
+            timeSlotsContainer.innerHTML = '';
+            
+            // Generate time slots (every 30 minutes from 8AM to 4PM)
+            const startHour = 8;
+            const endHour = 16;
+            const slots = [];
+            
+            for (let hour = startHour; hour < endHour; hour++) {
+                for (let minute = 0; minute < 60; minute += 30) {
+                    const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                    const isBooked = Math.random() < 0.2; // 20% chance a slot is booked
+                    
+                    const slotElement = document.createElement('div');
+                    slotElement.className = `time-slot ${isBooked ? 'booked' : ''}`;
+                    slotElement.textContent = timeString;
+                    
+                    if (!isBooked) {
+                        slotElement.addEventListener('click', function() {
+                            // Deselect all other time slots
+                            document.querySelectorAll('.time-slot').forEach(slot => {
+                                slot.classList.remove('selected');
+                            });
+                            
+                            // Select this time slot
+                            this.classList.add('selected');
+                        });
+                    }
+                    
+                    timeSlotsContainer.appendChild(slotElement);
+                }
+            }
+        }
+
+        // Select payment method
+        function selectPaymentMethod(method) {
+            // Update UI for selected payment method
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            document.querySelector(`.payment-option[data-method="${method}"]`).classList.add('selected');
+            
+            // Show/hide payment form
+            const paymentForm = document.getElementById('online-payment-form');
+            if (method === 'online') {
+                paymentForm.classList.add('active');
+            } else {
+                paymentForm.classList.remove('active');
+            }
+        }
+
+        // Handle booking form submission
+        function handleBookingSubmit(e) {
+            e.preventDefault();
+            
+            // Get selected time
+            const selectedTimeSlot = document.querySelector('.time-slot.selected');
+            if (!selectedTimeSlot) {
+                alert('Please select a time slot');
+                return;
+            }
+            
+            // Get form data
+            const date = document.getElementById('appointment-date').value;
+            const time = selectedTimeSlot.textContent;
+            const service = document.getElementById('service-type').value;
+            
+            // Update confirmation modal with details
+            document.getElementById('confirm-date').textContent = date;
+            document.getElementById('confirm-time').textContent = time;
+            document.getElementById('confirm-service').textContent = document.getElementById('service-type').options[document.getElementById('service-type').selectedIndex].text;
+            
+            // Show confirmation modal
+            document.getElementById('confirmation-modal').classList.add('active');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('confirmation-modal').classList.remove('active');
+        }
+    </script>
 </body>
 </html>

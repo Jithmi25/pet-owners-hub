@@ -22,25 +22,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-    // FAQ Accordion functionality
-    const faqQuestions = document.querySelectorAll('.faq-question');
-    
-    faqQuestions.forEach(question => {
-        question.addEventListener('click', () => {
-            const faqItem = question.parentElement;
-            const isActive = faqItem.classList.contains('active');
-            
-            // Close all other FAQ items
-            document.querySelectorAll('.faq-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // Toggle current item if it wasn't active
-            if (!isActive) {
-                faqItem.classList.add('active');
-            }
-        });
-    });
 
     // Form submission handling
     const supportForm = document.getElementById('supportForm');
@@ -82,3 +63,18 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+        // FAQ toggle functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                item.classList.toggle('active');
+            });
+        });
+        
+        // Form submission handling
+        document.getElementById('supportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! Our support team will get back to you within 24 hours.');
+            this.reset();
+        });

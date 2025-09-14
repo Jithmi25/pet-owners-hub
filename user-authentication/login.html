@@ -5,13 +5,321 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Pet Owners Hub</title>
     <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="css/auth.css">
+    <style>
+        /* Auth Container */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
+                              url("../assets/images/pet-background.jpg");
+            background-size: cover;
+            background-position: center;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .auth-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .auth-header {
+            padding: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, #6c63ff 0%, #4d44db 100%);
+            color: white;
+        }
+
+        .auth-logo {
+            height: 70px;
+            margin-bottom: 15px;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        .auth-header h1 {
+            margin: 10px 0 5px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .auth-header p {
+            opacity: 0.9;
+            margin: 0;
+            font-size: 16px;
+        }
+
+        /* Auth Forms */
+        .auth-form {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #6c63ff;
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+        }
+
+        .form-group input.error {
+            border-color: #ff4444;
+        }
+
+        .error-message {
+            color: #ff4444;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: right;
+            margin-top: 8px;
+            font-size: 14px;
+            color: #6c63ff;
+            text-decoration: none;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6c63ff 0%, #4d44db 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-google {
+            background: white;
+            color: #333;
+            border: 2px solid #e1e5e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-google:hover {
+            border-color: #6c63ff;
+        }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: #666;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e1e5e9;
+        }
+
+        .auth-divider span {
+            padding: 0 15px;
+            font-size: 14px;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .auth-footer a {
+            color: #6c63ff;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Password Strength */
+        .password-strength {
+            display: flex;
+            gap: 5px;
+            margin-top: 8px;
+            height: 6px;
+        }
+
+        .strength-bar {
+            flex: 1;
+            height: 100%;
+            background: #eee;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .strength-text {
+            font-size: 12px;
+            margin-top: 5px;
+            color: #666;
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-size: 14px;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.error {
+            background: #ff4444;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #6c63ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .auth-card {
+                margin: 10px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .auth-header {
+                padding: 20px;
+            }
+
+            .auth-form {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
-                <img src="../assets/images/logo.png" alt="PetCare Logo" class="auth-logo">
+                <img src="../assets/images/logo.png" alt="Pet Owners Hub Logo" class="auth-logo">
                 <h1>Welcome Back</h1>
                 <p>Login to manage your pets and appointments</p>
             </div>
@@ -20,15 +328,32 @@
                 <div class="form-group">
                     <label for="login-email">Email or Phone</label>
                     <input type="text" id="login-email" placeholder="example@email.com or 07XXXXXXXX" required>
+                    <div class="error-message" id="email-error">Please enter a valid email or phone number</div>
                 </div>
 
                 <div class="form-group">
                     <label for="login-password">Password</label>
                     <input type="password" id="login-password" placeholder="••••••••" required>
-                    <a href="#" class="forgot-password">Forgot password?</a>
+                    <button type="button" class="password-toggle" id="password-toggle">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <div class="error-message" id="password-error">Password is required</div>
+                    <a href="#forgot-password" class="forgot-password">Forgot password?</a>
                 </div>
 
-                <button type="submit" class="btn auth-btn">Login</button>
+                <button type="submit" class="btn btn-primary" id="login-btn">
+                    <span>Login</span>
+                    <div class="spinner" id="login-spinner"></div>
+                </button>
+
+                <div class="auth-divider">
+                    <span>Or continue with</span>
+                </div>
+
+                <button type="button" class="btn btn-google">
+                    <i class="fab fa-google"></i>
+                    Sign in with Google
+                </button>
 
                 <div class="auth-footer">
                     <p>Don't have an account? <a href="register.html">Register now</a></p>
@@ -37,6 +362,174 @@
         </div>
     </div>
 
-    <script src="js/auth.js"></script>
+    <!-- Forgot Password Modal -->
+    <div class="modal" id="forgot-password-modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Reset Password</h2>
+            <p>Enter your email address and we'll send you a link to reset your password.</p>
+            <form id="forgot-password-form">
+                <div class="form-group">
+                    <label for="reset-email">Email Address</label>
+                    <input type="email" id="reset-email" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Reset Link</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message"></span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is already logged in
+            const authToken = localStorage.getItem('petcareAuthToken');
+            if (authToken) {
+                window.location.href = '/index.html';
+            }
+
+            // Password visibility toggle
+            const passwordToggle = document.getElementById('password-toggle');
+            const passwordInput = document.getElementById('login-password');
+            
+            passwordToggle.addEventListener('click', function() {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    passwordToggle.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                } else {
+                    passwordInput.type = 'password';
+                    passwordToggle.innerHTML = '<i class="fas fa-eye"></i>';
+                }
+            });
+
+            // Form validation
+            const loginForm = document.getElementById('login-form');
+            const loginEmail = document.getElementById('login-email');
+            const loginPassword = document.getElementById('login-password');
+            const emailError = document.getElementById('email-error');
+            const passwordError = document.getElementById('password-error');
+            const loginBtn = document.getElementById('login-btn');
+            const loginSpinner = document.getElementById('login-spinner');
+
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                let isValid = true;
+
+                // Validate email/phone
+                if (!loginEmail.value.trim()) {
+                    showError(loginEmail, emailError, 'Email or phone is required');
+                    isValid = false;
+                } else if (!isValidEmailOrPhone(loginEmail.value.trim())) {
+                    showError(loginEmail, emailError, 'Please enter a valid email or phone number');
+                    isValid = false;
+                } else {
+                    clearError(loginEmail, emailError);
+                }
+
+                // Validate password
+                if (!loginPassword.value.trim()) {
+                    showError(loginPassword, passwordError, 'Password is required');
+                    isValid = false;
+                } else if (loginPassword.value.length < 6) {
+                    showError(loginPassword, passwordError, 'Password must be at least 6 characters');
+                    isValid = false;
+                } else {
+                    clearError(loginPassword, passwordError);
+                }
+
+                if (isValid) {
+                    // Show loading state
+                    loginBtn.disabled = true;
+                    loginSpinner.style.display = 'inline-block';
+                    loginBtn.querySelector('span').textContent = 'Logging in...';
+
+                    // Simulate API call
+                    setTimeout(() => {
+                        // Mock authentication
+                        const userData = {
+                            name: 'J. Kaushalya',
+                            email: loginEmail.value.includes('@') ? loginEmail.value : '',
+                            phone: !loginEmail.value.includes('@') ? loginEmail.value : '0712345678',
+                            joinDate: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+                        };
+
+                        // Store auth token and user data
+                        localStorage.setItem('petcareAuthToken', 'simulated-token-' + Date.now());
+                        localStorage.setItem('userData', JSON.stringify(userData));
+
+                        // Show success message
+                        showToast('Login successful! Redirecting...', 'success');
+
+                        // Redirect to profile
+                          setTimeout(() => {
+                          window.location.href = '../../index.html';
+                       }, 1500);
+                   }, 1500);
+              }
+           }); 
+
+            // Forgot password functionality
+            const forgotPasswordLink = document.querySelector('.forgot-password');
+            const forgotPasswordModal = document.getElementById('forgot-password-modal');
+            const closeBtn = document.querySelector('.close-btn');
+
+            forgotPasswordLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                forgotPasswordModal.style.display = 'block';
+            });
+
+            closeBtn.addEventListener('click', function() {
+                forgotPasswordModal.style.display = 'none';
+            });
+
+            window.addEventListener('click', function(e) {
+                if (e.target === forgotPasswordModal) {
+                    forgotPasswordModal.style.display = 'none';
+                }
+            });
+
+            // Google sign in
+            const googleBtn = document.querySelector('.btn-google');
+            googleBtn.addEventListener('click', function() {
+                showToast('Google sign-in would be implemented here', 'info');
+            });
+
+            // Helper functions
+            function isValidEmailOrPhone(input) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const phoneRegex = /^07\d{8}$/;
+                return emailRegex.test(input) || phoneRegex.test(input);
+            }
+
+            function showError(input, errorElement, message) {
+                input.classList.add('error');
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+
+            function clearError(input, errorElement) {
+                input.classList.remove('error');
+                errorElement.style.display = 'none';
+            }
+
+            function showToast(message, type = 'success') {
+                const toast = document.getElementById('toast');
+                const toastMessage = document.getElementById('toast-message');
+                
+                toastMessage.textContent = message;
+                toast.className = type === 'error' ? 'toast error show' : 'toast show';
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+        });
+    </script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>

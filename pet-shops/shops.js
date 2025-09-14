@@ -29,48 +29,48 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: "Paws & Claws Pet Store",
                 rating: 4.7,
                 reviewCount: 128,
-                location: "New York, NY",
+                location: "Kandy, Dalada Vidiya",
                 categories: ["food", "toys", "grooming"],
                 description: "Your one-stop shop for all pet supplies. We offer premium pet food, toys, and grooming services.",
                 image: "../../assets/images/shop1.jpg",
                 hours: "9 AM - 8 PM",
-                phone: "(212) 555-1234"
+                phone: "081 555-1234"
             },
             {
                 id: 2,
                 name: "Aqua World Fish Store",
                 rating: 4.5,
                 reviewCount: 86,
-                location: "Los Angeles, CA",
+                location: "Colombo, Kirulupana",
                 categories: ["supplies"],
                 description: "Specializing in aquarium supplies and exotic fish. We have everything for your aquatic pets.",
                 image: "../../assets/images/shop2.jpg",
                 hours: "10 AM - 7 PM",
-                phone: "(310) 555-5678"
+                phone: "011 555-5678"
             },
             {
                 id: 3,
                 name: "Bark Avenue Boutique",
                 rating: 4.9,
                 reviewCount: 204,
-                location: "Chicago, IL",
+                location: "Gampaha, Negombo Road",
                 categories: ["toys", "grooming"],
                 description: "Luxury pet boutique offering designer accessories, gourmet treats, and spa services.",
-                image: "../../assets/images/shop3.jpg",
+                image: "../../assets/images/shop3.webp",
                 hours: "10 AM - 6 PM",
-                phone: "(312) 555-9012"
+                phone: "033 555-9012"
             },
             {
                 id: 4,
                 name: "Healthy Pets Nutrition",
                 rating: 4.8,
                 reviewCount: 153,
-                location: "San Francisco, CA",
+                location: "Kurunagala, Kandy Road",
                 categories: ["food", "supplies"],
                 description: "Organic and natural pet foods and supplements. We care about your pet's health.",
                 image: "../../assets/images/shop4.jpg",
                 hours: "9 AM - 7 PM",
-                phone: "(415) 555-3456"
+                phone: "081 555-3456"
             }
         ];
         

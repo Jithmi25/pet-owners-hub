@@ -9,24 +9,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <div id="authCheck" style="display:none;"></div>
+    
     <div class="profile-container">
         <aside class="profile-sidebar">
             <div class="profile-header">
                 <div class="avatar-container">
-                    <img src="../../assets/images/default-avatar.jpg" alt="Profile" class="avatar">
+                    <img src="../../assets/images/default-avatar.jpeg" alt="Profile" class="avatar">
                     <button class="avatar-edit">Edit</button>
                 </div>
-                <h2 id="profileName">John Doe</h2>
+                <h2 id="profileName">J. Kaushalya</h2>
                 <p>Member since <span id="joinDate">Jan 2023</span></p>
             </div>
 
             <nav class="profile-nav">
-                <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
-                <a href="pets.html" class="active"><i class="fas fa-paw"></i> My Pets</a>
+                <a href="profile.html" class="active"><i class="fas fa-user"></i> Profile</a>
+                <a href="pets.html"><i class="fas fa-paw"></i> My Pets</a>
                 <a href="appointments.html"><i class="fas fa-calendar-alt"></i> Appointments</a>
                 <a href="saved.html"><i class="fas fa-heart"></i> Saved Items</a>
                 <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
-                <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="../../index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="../../user-authentication/login.html" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </nav>
         </aside>
 
@@ -37,17 +40,17 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>First Name</label>
-                            <input type="text" id="profileFirstName" value="John">
+                            <input type="text" id="profileFirstName" value="Kaushalya">
                         </div>
                         <div class="form-group">
                             <label>Last Name</label>
-                            <input type="text" id="profileLastName" value="Doe">
+                            <input type="text" id="profileLastName" value="Jayasuriya">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="email" id="profileEmail" value="john@example.com">
+                        <input type="email" id="profileEmail" value="Kaushalya23@example.com">
                     </div>
 
                     <div class="form-group">

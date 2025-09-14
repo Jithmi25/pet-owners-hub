@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Store auth token
                 localStorage.setItem('petcareAuthToken', 'simulated-token-123');
                 localStorage.setItem('userData', JSON.stringify({
-                    name: 'John Doe',
+                    name: 'J. Kaushalya',
                     email: username.includes('@') ? username : '',
                     phone: !username.includes('@') ? username : '0712345678',
                     joinDate: 'Jan 2023'
