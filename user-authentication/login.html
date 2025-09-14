@@ -294,6 +294,37 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         /* Responsive */
         @media (max-width: 480px) {
             .auth-card {
@@ -363,7 +394,7 @@
     </div>
 
     <!-- Forgot Password Modal -->
-    <div class="modal" id="forgot-password-modal" style="display: none;">
+    <div class="modal" id="forgot-password-modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <h2>Reset Password</h2>
@@ -385,11 +416,33 @@
     </div>
 
     <script>
+        // Hardcoded user data
+        const users = [
+            {
+                email: "admin@petcare.com",
+                phone: "0712345678",
+                password: "admin123",
+                name: "System Admin",
+                role: "admin",
+                joinDate: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+            },
+            {
+                email: "user@petcare.com",
+                phone: "0787654321",
+                password: "user123",
+                name: "J. Kaushalya",
+                role: "user",
+                joinDate: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+            }
+        ];
+
         document.addEventListener('DOMContentLoaded', function() {
             // Check if user is already logged in
             const authToken = localStorage.getItem('petcareAuthToken');
-            if (authToken) {
-                window.location.href = '/index.html';
+            const userRole = localStorage.getItem('userRole');
+            
+            if (authToken && userRole) {
+                redirectBasedOnRole(userRole);
             }
 
             // Password visibility toggle
@@ -450,28 +503,34 @@
 
                     // Simulate API call
                     setTimeout(() => {
-                        // Mock authentication
-                        const userData = {
-                            name: 'J. Kaushalya',
-                            email: loginEmail.value.includes('@') ? loginEmail.value : '',
-                            phone: !loginEmail.value.includes('@') ? loginEmail.value : '0712345678',
-                            joinDate: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
-                        };
-
-                        // Store auth token and user data
-                        localStorage.setItem('petcareAuthToken', 'simulated-token-' + Date.now());
-                        localStorage.setItem('userData', JSON.stringify(userData));
-
-                        // Show success message
-                        showToast('Login successful! Redirecting...', 'success');
-
-                        // Redirect to profile
-                          setTimeout(() => {
-                          window.location.href = '../../index.html';
-                       }, 1500);
-                   }, 1500);
-              }
-           }); 
+                        // Check against hardcoded users
+                        const user = authenticateUser(loginEmail.value.trim(), loginPassword.value.trim());
+                        
+                        if (user) {
+                            // Store auth token and user data
+                            localStorage.setItem('petcareAuthToken', 'simulated-token-' + Date.now());
+                            localStorage.setItem('userData', JSON.stringify(user));
+                            localStorage.setItem('userRole', user.role);
+                            
+                            // Show success message
+                            showToast('Login successful! Redirecting...', 'success');
+                            
+                            // Redirect based on role
+                            setTimeout(() => {
+                                redirectBasedOnRole(user.role);
+                            }, 1500);
+                        } else {
+                            // Show error message
+                            showToast('Invalid credentials. Please try again.', 'error');
+                            
+                            // Reset loading state
+                            loginBtn.disabled = false;
+                            loginSpinner.style.display = 'none';
+                            loginBtn.querySelector('span').textContent = 'Login';
+                        }
+                    }, 1500);
+                }
+            });
 
             // Forgot password functionality
             const forgotPasswordLink = document.querySelector('.forgot-password');
@@ -505,6 +564,21 @@
                 const phoneRegex = /^07\d{8}$/;
                 return emailRegex.test(input) || phoneRegex.test(input);
             }
+            
+            function authenticateUser(identifier, password) {
+                return users.find(user => 
+                    (user.email === identifier || user.phone === identifier) && 
+                    user.password === password
+                );
+            }
+            
+            function redirectBasedOnRole(role) {
+                if (role === 'admin') {
+                    window.location.href = '../admin/dashboard.html';
+                } else {
+                    window.location.href = '../index.html';
+                }
+            }
 
             function showError(input, errorElement, message) {
                 input.classList.add('error');
@@ -530,6 +604,8 @@
             }
         });
     </script>
+
+    <!-- Font Awesome for icons -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>
