@@ -187,3 +187,167 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// // JavaScript for Shop Form
+// document.addEventListener('DOMContentLoaded', function() {
+//     // Check if user is authenticated
+//     checkAuthentication();
+    
+//     // Highlight current page in navigation
+//     const currentPage = window.location.pathname.split('/').pop() || 'post-shop.html';
+//     const navLinks = document.querySelectorAll('.marketplace-header .nav-links a');
+    
+//     navLinks.forEach(link => {
+//         link.classList.remove('active');
+//         if (link.getAttribute('href') === currentPage) {
+//             link.classList.add('active');
+//         }
+//     });
+
+//     // Photo upload functionality
+//     const uploadArea = document.getElementById('shopUploadArea');
+//     const fileInput = document.getElementById('shop-photos');
+//     const previewArea = document.getElementById('shopUploadPreview');
+
+//     uploadArea.addEventListener('click', () => {
+//         fileInput.click();
+//     });
+
+//     uploadArea.addEventListener('dragover', (e) => {
+//         e.preventDefault();
+//         uploadArea.style.borderColor = 'var(--primary)';
+//         uploadArea.style.backgroundColor = 'rgba(108, 99, 255, 0.1)';
+//     });
+
+//     uploadArea.addEventListener('dragleave', () => {
+//         uploadArea.style.borderColor = '#ddd';
+//         uploadArea.style.backgroundColor = 'transparent';
+//     });
+
+//     uploadArea.addEventListener('drop', (e) => {
+//         e.preventDefault();
+//         uploadArea.style.borderColor = '#ddd';
+//         uploadArea.style.backgroundColor = 'transparent';
+        
+//         if (e.dataTransfer.files.length > 0) {
+//             handleFiles(e.dataTransfer.files);
+//         }
+//     });
+
+//     fileInput.addEventListener('change', () => {
+//         if (fileInput.files.length > 0) {
+//             handleFiles(fileInput.files);
+//         }
+//     });
+
+//     function handleFiles(files) {
+//         const maxFiles = 8;
+//         const currentCount = previewArea.children.length;
+        
+//         if (currentCount + files.length > maxFiles) {
+//             alert(`You can only upload up to ${maxFiles} photos total.`);
+//             return;
+//         }
+
+//         Array.from(files).forEach(file => {
+//             if (!file.type.match('image.*')) {
+//                 alert('Please upload only image files.');
+//                 return;
+//             }
+
+//             if (file.size > 5 * 1024 * 1024) {
+//                 alert('File size must be less than 5MB.');
+//                 return;
+//             }
+
+//             const reader = new FileReader();
+//             reader.onload = function(e) {
+//                 const img = document.createElement('img');
+//                 img.src = e.target.result;
+//                 img.style.cursor = 'pointer';
+                
+//                 const container = document.createElement('div');
+//                 container.style.position = 'relative';
+//                 container.style.display = 'inline-block';
+                
+//                 const removeBtn = document.createElement('button');
+//                 removeBtn.innerHTML = '×';
+//                 removeBtn.style.position = 'absolute';
+//                 removeBtn.style.top = '5px';
+//                 removeBtn.style.right = '5px';
+//                 removeBtn.style.background = 'red';
+//                 removeBtn.style.color = 'white';
+//                 removeBtn.style.border = 'none';
+//                 removeBtn.style.borderRadius = '50%';
+//                 removeBtn.style.width = '20px';
+//                 removeBtn.style.height = '20px';
+//                 removeBtn.style.cursor = 'pointer';
+//                 removeBtn.style.fontSize = '12px';
+//                 removeBtn.style.lineHeight = '1';
+                
+//                 removeBtn.addEventListener('click', (e) => {
+//                     e.stopPropagation();
+//                     container.remove();
+//                 });
+                
+//                 container.appendChild(img);
+//                 container.appendChild(removeBtn);
+//                 previewArea.appendChild(container);
+//             };
+//             reader.readAsDataURL(file);
+//         });
+//     }
+
+//     // Form submission
+//     document.getElementById('shopForm').addEventListener('submit', function(e) {
+//         e.preventDefault();
+        
+//         // Basic validation
+//         const shopName = document.getElementById('shop-name').value;
+//         const shopEmail = document.getElementById('shop-email').value;
+//         const shopAddress = document.getElementById('shop-address').value;
+        
+//         if (!shopName || !shopEmail || !shopAddress) {
+//             alert('Please fill in all required fields.');
+//             return;
+//         }
+        
+//         // Here you would typically send the data to your backend
+//         // For demonstration, we'll just show a success message
+//         alert('Shop information submitted successfully! It will be reviewed before going live.');
+        
+//         // Reset form or redirect
+//         this.reset();
+//         previewArea.innerHTML = '';
+//     });
+
+//     // BACKEND INTEGRATION: Logout functionality
+//     document.getElementById('logout-link').addEventListener('click', function(e) {
+//         e.preventDefault();
+//         performLogout();
+//     });
+// });
+
+// // Check if user is authenticated
+// function checkAuthentication() {
+//     const isAuthenticated = localStorage.getItem('userAuthenticated') === 'true';
+    
+//     if (!isAuthenticated) {
+//         // Redirect to login page if not authenticated
+//         window.location.href = '../../user-authentication/login.html';
+//         return;
+//     }
+// }
+
+// // Perform logout
+// function performLogout() {
+//     // Clear authentication data
+//     localStorage.removeItem('userAuthenticated');
+//     sessionStorage.removeItem('userAuthenticated');
+    
+//     // Clear any cookies related to authentication
+//     document.cookie = 'userAuth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    
+//     // Redirect to login page
+//     window.location.href = '../../user-authentication/login.html';
+// }

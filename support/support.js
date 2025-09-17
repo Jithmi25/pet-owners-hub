@@ -64,6 +64,11 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+        // Function to handle navigation to home page
+        function goToHomePage() {
+            window.location.href = '../../index.html';
+        }
+
         // FAQ toggle functionality
         document.querySelectorAll('.faq-question').forEach(question => {
             question.addEventListener('click', () => {

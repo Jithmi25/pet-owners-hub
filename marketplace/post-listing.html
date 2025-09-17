@@ -9,14 +9,20 @@
 </head>
 <body>
     <!-- Navigation -->
-    <header class="marketplace-header">
-        <div class="logo">
-            <h1>Pet Owners Hub</h1>
+      <header class="marketplace-header">
+        <nav>
+            <div class="logo">
+                <h1>Pet Owners Hub</h1>
+            </div>
             <ul class="nav-links">
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../vet-clinics/clinics.html">Vet Clinics</a></li>
+                <li><a href="../../pet-shops/shops.html">Pet Shops</a></li>
+                <li><a href="marketplace.html" class="active">Marketplace</a></li>
                 <li><a href="../../user-authentication/profile/profile.html">Profile</a></li>
-                <li><a href="../../user-authentication/login.html">Logout</a></li>
+                <li><a href="../../user-authentication/login.html" id="logout-link">Logout</a></li>
             </ul>
-        </div>
+        </nav>
     </header>
 
     <!-- Main Content -->
@@ -162,8 +168,13 @@
             </div>
             
             <div class="form-actions">
-                <button type="button" class="btn btn-outline">Save Draft</button>
-                <button type="submit" class="btn btn-primary">Post Listing</button>
+                <div class="left-buttons">
+                    <button type="button" class="btn btn-outline">Save Draft</button>
+                    <button type="submit" class="btn btn-primary">Post Listing</button>
+                </div>
+                <div class="right-buttons">
+                    <button type="button" class="btn btn-primary" onclick="window.location.href='marketplace.html'">Marketplace</button>
+                </div>
             </div>
         </form>
     </main>
@@ -192,11 +203,11 @@
             </div>
             <div class="footer-column">
                 <h3>Support</h3>
-                <ul>
-                    <li><a href="support/support.html#contact">Contact Us</a></li>
-                    <li><a href="support/support.html#faqs">FAQs</a></li>
-                    <li><a href="support/support.html#privacy">Privacy Policy</a></li>
-                    <li><a href="support/support.html#terms">Terms of Service</a></li>
+                   <ul>
+                    <li><a href="../../support/support.html#contact">Contact Us</a></li>
+                    <li><a href="../../support/support.html#faqs">FAQs</a></li>
+                    <li><a href="../../support/support.html#privacy">Privacy Policy</a></li>
+                    <li><a href="../../support/support.html#terms">Terms of Service</a></li>
                 </ul>
             </div>
         </div>

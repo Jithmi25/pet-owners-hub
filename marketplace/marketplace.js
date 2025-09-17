@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 id: 1,
                 name: "Golden Retriever Puppy",
-                price: 800,
+                price: 20000,
                 location: "Kandy, Pilimathalawa",
                 type: "dog",
                 breed: "Golden Retriever",
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 id: 2,
                 name: "Siamese Cat",
-                price: 450,
+                price: 45000,
                 location: "Gampaha, Nittabuwa",
                 type: "cat",
                 breed: "Siamese",
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 id: 3,
                 name: "African Grey Parrot",
-                price: 1200,
+                price: 20000,
                 location: "Kurunagala, Kuliyapitiya",
                 type: "bird",
                 breed: "African Grey",
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 id: 4,
                 name: "Labrador Retriever",
-                price: 250,
+                price: 25000,
                 location: "Kagalle, Mawanella",
                 type: "dog",
                 breed: "Labrador",
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <img src="${pet.image}" alt="${pet.name}">
                 <div class="pet-info">
                     <h3>${pet.name}</h3>
-                    <p class="price">$${pet.price}</p>
+                    <p class="price">RS.${pet.price}</p>
                     <p class="location"><i class="fas fa-map-marker-alt"></i> ${pet.location}</p>
                     <div class="pet-meta">
                         <span>${pet.type}</span>
@@ -309,6 +309,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     priceGroup.querySelector('input').placeholder = '';
                 }
             });
+        });
+    }
+});
+
+// Add event listener to Marketplace button
+document.addEventListener('DOMContentLoaded', function() {
+    const marketplaceBtn = document.querySelector('.form-actions .btn-primary:last-child');
+    if (marketplaceBtn) {
+        marketplaceBtn.addEventListener('click', function() {
+            window.location.href = 'marketplace/marketplace.html';
         });
     }
 });

@@ -226,3 +226,32 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Home Button Styles */
+.home-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #4e89ae 0%, #43658b 100%);
+  color: white;
+  padding: 12px 25px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 500;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.home-btn:hover {
+  background: linear-gradient(135deg, #43658b 0%, #3a5a78 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.home-btn-container {
+  text-align: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}

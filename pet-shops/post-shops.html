@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Your Shop | Pet Owners Hub</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="shops.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <header class="shops-header">
+        <nav>
+            <div class="logo">
+                <h1>Pet Owners Hub</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../vet-clinics/clinics.html">Vet Clinics</a></li>
+                <li><a href="../../pet-shops/shops.html">Pet Shops</a></li>
+                <li><a href="marketplace.html">Marketplace</a></li>
+                <li><a href="../../user-authentication/profile/profile.html">Profile</a></li>
+                <li><a href="../../user-authentication/login.html" id="logout-link">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="post-listing-container">
+        <h1>Add Your Pet Shop</h1>
+        <p>Fill out the form below to list your pet shop on our platform</p>
+        
+        <form class="listing-form" id="shopForm">
+            <div class="form-section">
+                <h2>Shop Information</h2>
+                <div class="form-group">
+                    <label for="shop-name">Shop Name</label>
+                    <input type="text" id="shop-name" required placeholder="Enter your shop name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="shop-description">Description</label>
+                    <textarea id="shop-description" rows="4" required placeholder="Describe your shop, products, and services..."></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="shop-category">Shop Category</label>
+                        <select id="shop-category" required>
+                            <option value="">Select Category</option>
+                            <option value="pet-food">Pet Food & Supplies</option>
+                            <option value="pet-accessories">Pet Accessories</option>
+                            <option value="pet-grooming">Grooming Services</option>
+                            <option value="pet-training">Training Services</option>
+                            <option value="pet-boarding">Boarding & Daycare</option>
+                            <option value="comprehensive">Comprehensive Pet Store</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="shop-years">Years in Business</label>
+                        <input type="number" id="shop-years" min="0" placeholder="0">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Contact Information</h2>
+                <div class="form-group">
+                    <label for="shop-email">Email Address</label>
+                    <input type="email" id="shop-email" required placeholder="your.shop@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="shop-phone">Phone Number</label>
+                    <input type="tel" id="shop-phone" placeholder="+1 (555) 123-4567">
+                </div>
+                
+                <div class="form-group">
+                    <label for="shop-website">Website (optional)</label>
+                    <input type="url" id="shop-website" placeholder="https://your-shop.com">
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Location Details</h2>
+                <div class="form-group">
+                    <label for="shop-address">Street Address</label>
+                    <input type="text" id="shop-address" required placeholder="123 Main Street">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="shop-city">City</label>
+                        <input type="text" id="shop-city" required placeholder="New York">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="shop-state">State/Province</label>
+                        <input type="text" id="shop-state" required placeholder="NY">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="shop-zip">ZIP/Postal Code</label>
+                        <input type="text" id="shop-zip" required placeholder="10001">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="shop-country">Country</label>
+                        <input type="text" id="shop-country" required placeholder="United States">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Business Hours</h2>
+                <div class="form-group">
+                    <label>Operating Days</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="days" value="monday" checked> Monday</label>
+                        <label><input type="checkbox" name="days" value="tuesday" checked> Tuesday</label>
+                        <label><input type="checkbox" name="days" value="wednesday" checked> Wednesday</label>
+                        <label><input type="checkbox" name="days" value="thursday" checked> Thursday</label>
+                        <label><input type="checkbox" name="days" value="friday" checked> Friday</label>
+                        <label><input type="checkbox" name="days" value="saturday"> Saturday</label>
+                        <label><input type="checkbox" name="days" value="sunday"> Sunday</label>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="opening-time">Opening Time</label>
+                        <input type="time" id="opening-time" value="09:00">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="closing-time">Closing Time</label>
+                        <input type="time" id="closing-time" value="18:00">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Shop Photos</h2>
+                <div class="photo-upload">
+                    <div class="upload-area" id="shopUploadArea">
+                        <i class="fas fa-camera"></i>
+                        <p>Click to upload shop photos or drag and drop</p>
+                        <p class="small">Upload up to 8 photos showing your shop (max 5MB each)</p>
+                        <input type="file" id="shop-photos" multiple accept="image/*" style="display: none;">
+                    </div>
+                    <div class="upload-preview" id="shopUploadPreview">
+                        <!-- Preview thumbnails will appear here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Services & Products</h2>
+                <div class="form-group">
+                    <label>What do you offer?</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="services" value="food"> Pet Food</label>
+                        <label><input type="checkbox" name="services" value="toys"> Toys & Accessories</label>
+                        <label><input type="checkbox" name="services" value="grooming"> Grooming</label>
+                        <label><input type="checkbox" name="services" value="training"> Training</label>
+                        <label><input type="checkbox" name="services" value="boarding"> Boarding</label>
+                        <label><input type="checkbox" name="services" value="vet"> Veterinary Products</label>
+                        <label><input type="checkbox" name="services" value="delivery"> Delivery Service</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="specialties">Specialties (optional)</label>
+                    <textarea id="specialties" rows="3" placeholder="Any special products, breeds you specialize in, or unique services..."></textarea>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <div class="left-buttons">
+                    <button type="button" class="btn btn-outline">Save Draft</button>
+                    <button type="submit" class="btn btn-primary">Add Shop</button>
+                </div>
+                <div class="right-buttons">
+                    <button type="button" class="btn btn-primary" onclick="window.location.href='shops.html'">View Shops</button>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Pet Owners Hub</h3>
+                <p>Your one-stop solution for all pet care needs, connecting pet lovers with quality services.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="../../vet-clinics/clinics.html">Vet Clinics</a></li>
+                    <li><a href="../../pet-shops/shops.html">Pet Shops</a></li>
+                    <li><a href="marketplace.html">Marketplace</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="../../support/support.html#contact">Contact Us</a></li>
+                    <li><a href="../../support/support.html#faqs">FAQs</a></li>
+                    <li><a href="../../support/support.html#privacy">Privacy Policy</a></li>
+                    <li><a href="../../support/support.html#terms">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Pet Owners Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="shop.js"></script>
+</body>
+</html>

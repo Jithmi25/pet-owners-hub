@@ -7,7 +7,83 @@
   height: 60vh;
   min-height: 400px;
 }
+/* Header Styles */
+.marketplace-header {
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  top: 0;
+  z-index: 100;
+}
 
+.marketplace-header nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.marketplace-header .logo h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(to right, #00c6ff, #0072ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.marketplace-header .nav-links {
+  display: flex;
+  list-style: none;
+}
+
+.marketplace-header .nav-links li {
+  margin-left: 1.2rem;
+}
+
+.marketplace-header .nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.marketplace-header .nav-links a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.marketplace-header .nav-links a.active {
+  background-color: rgba(255, 255, 255, 0.25);
+  font-weight: 600;
+}
+
+/* Responsive Design for Header */
+@media (max-width: 768px) {
+  .marketplace-header nav {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .marketplace-header .logo {
+    margin-bottom: 1rem;
+  }
+
+  .marketplace-header .nav-links {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .marketplace-header .nav-links li {
+    margin: 0.3rem;
+  }
+}
 .marketplace-container {
   max-width: 1200px;
   margin: 2rem auto;
@@ -400,14 +476,7 @@
   border-radius: 4px;
 }
 
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-/* Buttons */
+/* Buttons - Blue Style */
 .btn {
   display: inline-block;
   padding: 10px 20px;
@@ -439,4 +508,75 @@
 .btn-outline:hover {
   background: var(--light);
   transform: translateY(-2px);
+}
+
+/* Search button specific style */
+.search-filter .btn {
+  min-width: auto;
+  padding: 10px 20px;
+}
+
+/* Form actions */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Specific style for the Marketplace button */
+.form-actions .btn-primary:last-child {
+  margin-left: auto;
+}
+
+/* Pet actions */
+.pet-actions .btn {
+  min-width: 140px;
+}
+
+/* Pagination buttons */
+.pagination button {
+  padding: 8px 15px;
+  min-width: auto;
+  background: white;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.pagination button.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.pagination button:hover:not(:disabled) {
+  background: #f5f5f5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .btn {
+    padding: 10px 18px;
+    min-width: 100px;
+    font-size: 0.9rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  .pet-actions {
+    flex-direction: column;
+  }
+
+  .pet-actions .btn {
+    width: 100%;
+  }
 }
