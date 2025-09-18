@@ -6,360 +6,14 @@
      <link href="admin/assets/css/admin.css" rel="stylesheet">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Manage Pet Shops - Admin Panel</title>
-    <style>
-        /* Same base styles as manage-users.html */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-
-        body {
-            background-color: #f8f9fa;
-            color: #343a40;
-            line-height: 1.6;
-        }
-
-        header {
-            background: linear-gradient(135deg, #2c3e50 0%, #4b6cb7 100%);
-            color: white;
-            padding: 1rem 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .logo h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(to right, #00c6ff, #0072ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-
-        .nav-links li {
-            margin-left: 1.2rem;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
-        }
-
-        .nav-links a:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .nav-links a.active {
-            background-color: rgba(255, 255, 255, 0.25);
-            font-weight: 600;
-        }
-
-        .admin-container {
-            max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        .admin-container h2 {
-            font-size: 2rem;
-            color: #2c3e50;
-            margin-bottom: 1rem;
-        }
-
-        .admin-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .search-bar {
-            flex: 1;
-            min-width: 300px;
-            position: relative;
-        }
-
-        .search-bar input {
-            width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.5rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-
-        .search-bar::before {
-            content: "🔍";
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .filter-options {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .filter-select {
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-            min-width: 150px;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 4px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #4b6cb7 0%, #2c3e50 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .shops-table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .shops-table th, .shops-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-
-        .shops-table th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .shops-table tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .shop-type {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .type-premium {
-            background-color: #fff3e0;
-            color: #ffa000;
-        }
-
-        .type-budget {
-            background-color: #e8f5e9;
-            color: #388e3c;
-        }
-
-        .status-verified {
-            color: #2ecc71;
-            font-weight: 500;
-        }
-
-        .status-pending {
-            color: #f39c12;
-            font-weight: 500;
-        }
-
-        .action-icon {
-            cursor: pointer;
-            margin: 0 0.5rem;
-            transition: all 0.2s ease;
-        }
-
-        .action-icon:hover {
-            transform: scale(1.2);
-        }
-
-        .edit-icon {
-            color: #3498db;
-        }
-
-        .delete-icon {
-            color: #e74c3c;
-        }
-
-        .verify-icon {
-            color: #2ecc71;
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-            gap: 0.5rem;
-        }
-
-        .page-item {
-            padding: 0.5rem 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .page-item.active {
-            background: linear-gradient(135deg, #4b6cb7 0%, #2c3e50 100%);
-            color: white;
-            border-color: transparent;
-        }
-
-        .page-item:hover:not(.active) {
-            background-color: #f8f9fa;
-        }
-
-        .dark-mode-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #2c3e50;
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            z-index: 100;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            nav {
-                flex-direction: column;
-                padding: 1rem;
-            }
-
-            .logo {
-                margin-bottom: 1rem;
-            }
-
-            .nav-links {
-                width: 100%;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .nav-links li {
-                margin: 0.3rem;
-            }
-
-            .shops-table {
-                display: block;
-                overflow-x: auto;
-            }
-
-            .filter-options {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .filter-select {
-                width: 100%;
-            }
-        }
-
-        /* Dark mode styles */
-        body.dark-mode {
-            background-color: #343a40;
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .admin-container h2 {
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .shops-table {
-            background-color: #495057;
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .shops-table th {
-            background-color: #343a40;
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .shops-table tr:hover {
-            background-color: #343a40;
-        }
-        
-        body.dark-mode .search-bar input,
-        body.dark-mode .filter-select {
-            background-color: #495057;
-            border-color: #6c757d;
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .page-item:not(.active) {
-            background-color: #495057;
-            border-color: #6c757d;
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .type-premium {
-            background-color: #e65100;
-            color: #ffe0b2;
-        }
-        
-        body.dark-mode .type-budget {
-            background-color: #1b5e20;
-            color: #c8e6c9;
-        }
-    </style>
+    <link rel="stylesheet" href="../admin/assets/css/admin.css">
 </head>
 <body>
     <!-- Admin Panel Navigation Bar -->
     <header>
         <nav>
             <div class="logo">
-                <h1>Admin Panel</h1>
+                <h1>Pet Owners Hub</h1>
             </div>
            <ul class="nav-links">
                 <li><a href="dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
@@ -415,8 +69,8 @@
                     <td>4001</td>
                     <td>City Pets</td>
                     <td><span class="shop-type type-premium">Premium</span></td>
-                    <td>456 City Center, Pet Street</td>
-                    <td>011-2233445</td>
+                    <td>456 Kandy City Center</td>
+                    <td>081-2233445</td>
                     <td>9 AM - 9 PM</td>
                     <td class="status-verified">Verified</td>
                     <td>
@@ -428,7 +82,7 @@
                     <td>4002</td>
                     <td>Pet Essentials</td>
                     <td><span class="shop-type type-budget">Budget</span></td>
-                    <td>123 Suburb Road, Pet Corner</td>
+                    <td>Galle</td>
                     <td>011-6677889</td>
                     <td>8 AM - 8 PM</td>
                     <td class="status-verified">Verified</td>
@@ -441,7 +95,7 @@
                     <td>4003</td>
                     <td>Paw Palace</td>
                     <td><span class="shop-type type-premium">Premium</span></td>
-                    <td>789 Uptown Avenue, Paw Lane</td>
+                    <td>Colombo 07</td>
                     <td>011-5566778</td>
                     <td>10 AM - 6 PM</td>
                     <td class="status-pending">Pending</td>
@@ -455,8 +109,8 @@
                     <td>4004</td>
                     <td>Animal World</td>
                     <td><span class="shop-type type-budget">Budget</span></td>
-                    <td>321 Market Street, Animal Zone</td>
-                    <td>011-3344556</td>
+                    <td>Mathale Road, Akurana</td>
+                    <td>032-3344556</td>
                     <td>7 AM - 7 PM</td>
                     <td class="status-verified">Verified</td>
                     <td>
@@ -468,8 +122,8 @@
                     <td>4005</td>
                     <td>Pet Paradise</td>
                     <td><span class="shop-type type-premium">Premium</span></td>
-                    <td>555 Luxury Avenue, Pet District</td>
-                    <td>011-7788990</td>
+                    <td>Kandy , Dalada Vidiya</td>
+                    <td>081-7788990</td>
                     <td>10 AM - 8 PM</td>
                     <td class="status-pending">Pending</td>
                     <td>

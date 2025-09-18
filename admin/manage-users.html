@@ -6,315 +6,107 @@
      <link href="admin/assets/css/admin.css" rel="stylesheet">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Manage Users - Admin Panel</title>
-    <style>
-        /* CSS Styles - Same as dashboard */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-
-        body {
-            background-color: #f8f9fa;
-            color: #343a40;
-            line-height: 1.6;
-        }
-
-        header {
-            background: linear-gradient(135deg, #2c3e50 0%, #4b6cb7 100%);
-            color: white;
-            padding: 1rem 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            position: sticky;
+   <link rel="stylesheet" href="../admin/assets/css/admin.css">
+   <style>
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
             top: 0;
-            z-index: 100;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .logo h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(to right, #00c6ff, #0072ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-
-        .nav-links li {
-            margin-left: 1.2rem;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
-        }
-
-        .nav-links a:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .nav-links a.active {
-            background-color: rgba(255, 255, 255, 0.25);
-            font-weight: 600;
-        }
-
-        .admin-container {
-            max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        .admin-container h2 {
-            font-size: 2rem;
-            color: #2c3e50;
-            margin-bottom: 1rem;
-        }
-
-        .admin-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .search-bar {
-            flex: 1;
-            min-width: 300px;
-            position: relative;
-        }
-
-        .search-bar input {
             width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            max-width: 80%;
+        }
+
+        .dark-mode .modal-content {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .dark-mode .close:hover {
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            font-size: 1rem;
+            box-sizing: border-box;
         }
 
-        .search-bar::before {
-            content: "🔍";
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
+        .dark-mode .form-group input, 
+        .dark-mode .form-group select {
+            background-color: #34495e;
+            color: #ecf0f1;
+            border-color: #2c3e50;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
+        .form-actions {
+            text-align: right;
+            margin-top: 20px;
         }
 
         .btn {
-            padding: 0.75rem 1.5rem;
+            padding: 8px 16px;
             border: none;
             border-radius: 4px;
-            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            font-weight: bold;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #4b6cb7 0%, #2c3e50 100%);
+            background-color: #3498db;
             color: white;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        .btn-secondary {
+            background-color: #95a5a6;
             color: white;
+            margin-right: 10px;
         }
-
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .users-table th, .users-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-
-        .users-table th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .users-table tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .status-active {
-            color: #2ecc71;
-            font-weight: 500;
-        }
-
-        .status-inactive {
-            color: #e74c3c;
-            font-weight: 500;
-        }
-
-        .action-icon {
-            cursor: pointer;
-            margin: 0 0.5rem;
-            transition: all 0.2s ease;
-        }
-
-        .action-icon:hover {
-            transform: scale(1.2);
-        }
-
-        .edit-icon {
-            color: #3498db;
-        }
-
-        .delete-icon {
-            color: #e74c3c;
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-            gap: 0.5rem;
-        }
-
-        .page-item {
-            padding: 0.5rem 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .page-item.active {
-            background: linear-gradient(135deg, #4b6cb7 0%, #2c3e50 100%);
-            color: white;
-            border-color: transparent;
-        }
-
-        .page-item:hover:not(.active) {
-            background-color: #f8f9fa;
-        }
-
-        .dark-mode-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #2c3e50;
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            z-index: 100;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            nav {
-                flex-direction: column;
-                padding: 1rem;
-            }
-
-            .logo {
-                margin-bottom: 1rem;
-            }
-
-            .nav-links {
-                width: 100%;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .nav-links li {
-                margin: 0.3rem;
-            }
-
-            .users-table {
-                display: block;
-                overflow-x: auto;
-            }
-        }
-
-        /* Dark mode styles */
-        body.dark-mode {
-            background-color: #343a40;
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .admin-container h2 {
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .users-table {
-            background-color: #495057;
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .users-table th {
-            background-color: #343a40;
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .users-table tr:hover {
-            background-color: #343a40;
-        }
-        
-        body.dark-mode .search-bar input {
-            background-color: #495057;
-            border-color: #6c757d;
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .page-item:not(.active) {
-            background-color: #495057;
-            border-color: #6c757d;
-            color: #f8f9fa;
-        }
-    </style>
+   </style>
 </head>
 <body>
     <!-- Admin Panel Navigation Bar -->
     <header>
         <nav>
             <div class="logo">
-                <h1>Admin Panel</h1>
+                <h1>Pet Owners Hub</h1>
             </div>
             <ul class="nav-links">
                 <li><a href="dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
@@ -352,17 +144,19 @@
                     <th>Role</th>
                     <th>Status</th>
                     <th>Joined</th>
+                    <th>Last Login</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>1001</td>
-                    <td>John Doe</td>
-                    <td>john@example.com</td>
+                    <td>Nimal Perera</td>
+                    <td>nimal.perera@example.com</td>
                     <td>User</td>
                     <td class="status-active">Active</td>
                     <td>2023-05-15</td>
+                    <td>2023-10-28</td>
                     <td>
                         <span class="action-icon edit-icon">✏️</span>
                         <span class="action-icon delete-icon">🗑️</span>
@@ -370,11 +164,12 @@
                 </tr>
                 <tr>
                     <td>1002</td>
-                    <td>Jane Smith</td>
-                    <td>jane@example.com</td>
+                    <td>Kamala Silva</td>
+                    <td>kamala.silva@example.com</td>
                     <td>Admin</td>
                     <td class="status-active">Active</td>
                     <td>2023-04-22</td>
+                    <td>2023-10-29</td>
                     <td>
                         <span class="action-icon edit-icon">✏️</span>
                         <span class="action-icon delete-icon">🗑️</span>
@@ -382,11 +177,12 @@
                 </tr>
                 <tr>
                     <td>1003</td>
-                    <td>Robert Johnson</td>
-                    <td>robert@example.com</td>
+                    <td>Sunil Fernando</td>
+                    <td>sunil.fernando@example.com</td>
                     <td>User</td>
                     <td class="status-inactive">Inactive</td>
                     <td>2023-06-10</td>
+                    <td>2023-10-20</td>
                     <td>
                         <span class="action-icon edit-icon">✏️</span>
                         <span class="action-icon delete-icon">🗑️</span>
@@ -394,11 +190,12 @@
                 </tr>
                 <tr>
                     <td>1004</td>
-                    <td>Emily Davis</td>
-                    <td>emily@example.com</td>
+                    <td>Priyanka Rathnayake</td>
+                    <td>priyanka.r@example.com</td>
                     <td>User</td>
                     <td class="status-active">Active</td>
                     <td>2023-07-05</td>
+                    <td>2023-10-29</td>
                     <td>
                         <span class="action-icon edit-icon">✏️</span>
                         <span class="action-icon delete-icon">🗑️</span>
@@ -406,11 +203,12 @@
                 </tr>
                 <tr>
                     <td>1005</td>
-                    <td>Michael Wilson</td>
-                    <td>michael@example.com</td>
-                    <td>Vet</td>
+                    <td>Dinesh Bandara</td>
+                    <td>dinesh.b@example.com</td>
+                    <td>Admin</td>
                     <td class="status-active">Active</td>
                     <td>2023-03-18</td>
+                    <td>2023-10-28</td>
                     <td>
                         <span class="action-icon edit-icon">✏️</span>
                         <span class="action-icon delete-icon">🗑️</span>
@@ -425,6 +223,43 @@
             <div class="page-item">3</div>
             <div class="page-item">4</div>
             <div class="page-item">5</div>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New User</h2>
+            <form id="addUserForm">
+                <div class="form-group">
+                    <label for="userName">Full Name</label>
+                    <input type="text" id="userName" name="userName" required>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Email Address</label>
+                    <input type="email" id="userEmail" name="userEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="userRole">Role</label>
+                    <select id="userRole" name="userRole" required>
+                        <option value="">Select Role</option>
+                        <option value="User">User</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="userStatus">Status</label>
+                    <select id="userStatus" name="userStatus" required>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelAddUser">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add User</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -444,6 +279,47 @@
                 }
             });
 
+            // Modal functionality
+            const modal = document.getElementById('addUserModal');
+            const addUserBtn = document.getElementById('addUserBtn');
+            const closeModal = document.querySelector('.close');
+            const cancelBtn = document.getElementById('cancelAddUser');
+
+            addUserBtn.addEventListener('click', function() {
+                modal.style.display = 'block';
+            });
+
+            closeModal.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+
+            cancelBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Add user form submission
+            document.getElementById('addUserForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('userName').value;
+                const email = document.getElementById('userEmail').value;
+                const role = document.getElementById('userRole').value;
+                const status = document.getElementById('userStatus').value;
+                
+                // In a real application, this would send data to the server
+                alert(`User ${name} (${email}) with role ${role} would be created in a real application`);
+                
+                // Reset form and close modal
+                this.reset();
+                modal.style.display = 'none';
+            });
+
             // Search functionality
             const userSearch = document.getElementById('userSearch');
             userSearch.addEventListener('input', function() {
@@ -454,12 +330,6 @@
                     const text = row.textContent.toLowerCase();
                     row.style.display = text.includes(searchTerm) ? '' : 'none';
                 });
-            });
-
-            // Add user button
-            document.getElementById('addUserBtn').addEventListener('click', function() {
-                alert('Add new user functionality would open a modal form in a real application');
-                // In a real app, this would open a modal with a user creation form
             });
 
             // Export to CSV

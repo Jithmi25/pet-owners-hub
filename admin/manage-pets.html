@@ -6,367 +6,108 @@
     <link href="admin/assets/css/admin.css" rel="stylesheet">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Manage Pets - Admin Panel</title>
+    <link rel="stylesheet" href="../admin/assets/css/admin.css">
     <style>
-        /* Same base styles as manage-users.html */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+        /* Image thumbnail styling */
+        .pet-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #ddd;
         }
-
-        body {
-            background-color: #f8f9fa;
-            color: #343a40;
-            line-height: 1.6;
-        }
-
-        header {
-            background: linear-gradient(135deg, #2c3e50 0%, #4b6cb7 100%);
-            color: white;
-            padding: 1rem 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            position: sticky;
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
             top: 0;
-            z-index: 100;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .logo h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(to right, #00c6ff, #0072ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-
-        .nav-links li {
-            margin-left: 1.2rem;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
-        }
-
-        .nav-links a:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .nav-links a.active {
-            background-color: rgba(255, 255, 255, 0.25);
-            font-weight: 600;
-        }
-
-        .admin-container {
-            max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        .admin-container h2 {
-            font-size: 2rem;
-            color: #2c3e50;
-            margin-bottom: 1rem;
-        }
-
-        .admin-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .search-bar {
-            flex: 1;
-            min-width: 300px;
-            position: relative;
-        }
-
-        .search-bar input {
             width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            max-width: 80%;
+        }
+
+        .dark-mode .modal-content {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .dark-mode .close:hover {
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            font-size: 1rem;
+            box-sizing: border-box;
         }
 
-        .search-bar::before {
-            content: "🔍";
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
+        .dark-mode .form-group input, 
+        .dark-mode .form-group select,
+        .dark-mode .form-group textarea {
+            background-color: #34495e;
+            color: #ecf0f1;
+            border-color: #2c3e50;
         }
 
-        .filter-options {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .filter-select {
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-            min-width: 150px;
+        .form-actions {
+            text-align: right;
+            margin-top: 20px;
         }
 
         .btn {
-            padding: 0.75rem 1.5rem;
+            padding: 8px 16px;
             border: none;
             border-radius: 4px;
-            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            font-weight: bold;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #4b6cb7 0%, #2c3e50 100%);
+            background-color: #3498db;
             color: white;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .pets-table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .pets-table th, .pets-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-
-        .pets-table th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .pets-table tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .pet-type {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .type-dog {
-            background-color: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .type-cat {
-            background-color: #e8f5e9;
-            color: #388e3c;
-        }
-
-        .type-bird {
-            background-color: #fff3e0;
-            color: #ffa000;
-        }
-
-        .type-other {
-            background-color: #f3e5f5;
-            color: #8e24aa;
-        }
-
-        .status-available {
-            color: #2ecc71;
-            font-weight: 500;
-        }
-
-        .status-sold {
-            color: #e74c3c;
-            font-weight: 500;
-        }
-
-        .action-icon {
-            cursor: pointer;
-            margin: 0 0.5rem;
-            transition: all 0.2s ease;
-        }
-
-        .action-icon:hover {
-            transform: scale(1.2);
-        }
-
-        .edit-icon {
-            color: #3498db;
-        }
-
-        .delete-icon {
-            color: #e74c3c;
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-            gap: 0.5rem;
-        }
-
-        .page-item {
-            padding: 0.5rem 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .page-item.active {
-            background: linear-gradient(135deg, #4b6cb7 0%, #2c3e50 100%);
+        .btn-secondary {
+            background-color: #95a5a6;
             color: white;
-            border-color: transparent;
-        }
-
-        .page-item:hover:not(.active) {
-            background-color: #f8f9fa;
-        }
-
-        .dark-mode-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #2c3e50;
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            z-index: 100;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            nav {
-                flex-direction: column;
-                padding: 1rem;
-            }
-
-            .logo {
-                margin-bottom: 1rem;
-            }
-
-            .nav-links {
-                width: 100%;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .nav-links li {
-                margin: 0.3rem;
-            }
-
-            .pets-table {
-                display: block;
-                overflow-x: auto;
-            }
-
-            .filter-options {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .filter-select {
-                width: 100%;
-            }
-        }
-
-        /* Dark mode styles */
-        body.dark-mode {
-            background-color: #343a40;
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .admin-container h2 {
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .pets-table {
-            background-color: #495057;
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .pets-table th {
-            background-color: #343a40;
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .pets-table tr:hover {
-            background-color: #343a40;
-        }
-        
-        body.dark-mode .search-bar input,
-        body.dark-mode .filter-select {
-            background-color: #495057;
-            border-color: #6c757d;
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .page-item:not(.active) {
-            background-color: #495057;
-            border-color: #6c757d;
-            color: #f8f9fa;
-        }
-        
-        body.dark-mode .type-dog {
-            background-color: #0d47a1;
-            color: #bbdefb;
-        }
-        
-        body.dark-mode .type-cat {
-            background-color: #1b5e20;
-            color: #c8e6c9;
-        }
-        
-        body.dark-mode .type-bird {
-            background-color: #e65100;
-            color: #ffe0b2;
-        }
-        
-        body.dark-mode .type-other {
-            background-color: #4a148c;
-            color: #e1bee7;
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -375,7 +116,7 @@
     <header>
         <nav>
             <div class="logo">
-                <h1>Admin Panel</h1>
+                <h1>Pet Owners Hub</h1>
             </div>
             <ul class="nav-links">
                 <li><a href="dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
@@ -411,6 +152,14 @@
                     <option value="available">Available</option>
                     <option value="sold">Sold</option>
                 </select>
+                <select class="filter-select" id="locationFilter">
+                    <option value="all">All Locations</option>
+                    <option value="colombo">Colombo</option>
+                    <option value="kandy">Kandy</option>
+                    <option value="galle">Galle</option>
+                    <option value="jaffna">Jaffna</option>
+                    <option value="anuradhapura">Anuradhapura</option>
+                </select>
                 <button class="btn btn-primary" id="addPetBtn">Add New Pet</button>
             </div>
         </div>
@@ -418,12 +167,14 @@
         <table class="pets-table">
             <thead>
                 <tr>
+                    <th>Image</th>
                     <th>ID</th>
                     <th>Name</th>
                     <th>Type</th>
                     <th>Breed</th>
                     <th>Age</th>
-                    <th>Price</th>
+                    <th>Price (Rs.)</th>
+                    <th>Location</th>
                     <th>Status</th>
                     <th>Owner</th>
                     <th>Actions</th>
@@ -431,70 +182,80 @@
             </thead>
             <tbody>
                 <tr>
+                    <td><img src="https://placehold.co/50x50?text=Dog" alt="Golden Retriever" class="pet-image"></td>
                     <td>2001</td>
-                    <td>Max</td>
+                    <td>Raja</td>
                     <td><span class="pet-type type-dog">Dog</span></td>
                     <td>Golden Retriever</td>
                     <td>2 years</td>
-                    <td>$500</td>
+                    <td>Rs. 50,000</td>
+                    <td>Colombo</td>
                     <td class="status-available">Available</td>
-                    <td>John Doe</td>
+                    <td>Nimal Perera</td>
                     <td>
                         <span class="action-icon edit-icon">✏️</span>
                         <span class="action-icon delete-icon">🗑️</span>
                     </td>
                 </tr>
                 <tr>
+                    <td><img src="https://placehold.co/50x50?text=Cat" alt="Persian Cat" class="pet-image"></td>
                     <td>2002</td>
-                    <td>Luna</td>
+                    <td>Mimi</td>
                     <td><span class="pet-type type-cat">Cat</span></td>
                     <td>Persian</td>
                     <td>1 year</td>
-                    <td>$300</td>
+                    <td>Rs. 30,000</td>
+                    <td>Kandy</td>
                     <td class="status-available">Available</td>
-                    <td>Jane Smith</td>
+                    <td>Kamala Silva</td>
                     <td>
                         <span class="action-icon edit-icon">✏️</span>
                         <span class="action-icon delete-icon">🗑️</span>
                     </td>
                 </tr>
                 <tr>
+                    <td><img src="https://placehold.co/50x50?text=Bird" alt="African Grey" class="pet-image"></td>
                     <td>2003</td>
-                    <td>Charlie</td>
+                    <td>Kiki</td>
                     <td><span class="pet-type type-bird">Bird</span></td>
                     <td>African Grey</td>
                     <td>3 years</td>
-                    <td>$200</td>
+                    <td>Rs. 20,000</td>
+                    <td>Galle</td>
                     <td class="status-sold">Sold</td>
-                    <td>Robert Johnson</td>
+                    <td>Sunil Fernando</td>
                     <td>
                         <span class="action-icon edit-icon">✏️</span>
                         <span class="action-icon delete-icon">🗑️</span>
                     </td>
                 </tr>
                 <tr>
+                    <td><img src="https://placehold.co/50x50?text=Dog" alt="Pug" class="pet-image"></td>
                     <td>2004</td>
-                    <td>Bella</td>
+                    <td>Bindu</td>
                     <td><span class="pet-type type-dog">Dog</span></td>
                     <td>Pug</td>
                     <td>4 months</td>
-                    <td>$450</td>
+                    <td>Rs. 45,000</td>
+                    <td>Jaffna</td>
                     <td class="status-available">Available</td>
-                    <td>Emily Davis</td>
+                    <td>Priyanka Rathnayake</td>
                     <td>
                         <span class="action-icon edit-icon">✏️</span>
                         <span class="action-icon delete-icon">🗑️</span>
                     </td>
                 </tr>
                 <tr>
+                    <td><img src="https://placehold.co/50x50?text=Rabbit" alt="Rabbit" class="pet-image"></td>
                     <td>2005</td>
-                    <td>Oreo</td>
+                    <td>Loku</td>
                     <td><span class="pet-type type-other">Other</span></td>
                     <td>Rabbit</td>
                     <td>6 months</td>
-                    <td>$150</td>
+                    <td>Rs. 15,000</td>
+                    <td>Anuradhapura</td>
                     <td class="status-available">Available</td>
-                    <td>Michael Wilson</td>
+                    <td>Dinesh Bandara</td>
                     <td>
                         <span class="action-icon edit-icon">✏️</span>
                         <span class="action-icon delete-icon">🗑️</span>
@@ -509,6 +270,72 @@
             <div class="page-item">3</div>
             <div class="page-item">4</div>
             <div class="page-item">5</div>
+        </div>
+    </div>
+
+    <!-- Add Pet Modal -->
+    <div id="addPetModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New Pet</h2>
+            <form id="addPetForm">
+                <div class="form-group">
+                    <label for="petName">Pet Name</label>
+                    <input type="text" id="petName" name="petName" required>
+                </div>
+                <div class="form-group">
+                    <label for="petType">Type</label>
+                    <select id="petType" name="petType" required>
+                        <option value="">Select Type</option>
+                        <option value="dog">Dog</option>
+                        <option value="cat">Cat</option>
+                        <option value="bird">Bird</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="petBreed">Breed</label>
+                    <input type="text" id="petBreed" name="petBreed" required>
+                </div>
+                <div class="form-group">
+                    <label for="petAge">Age</label>
+                    <input type="text" id="petAge" name="petAge" placeholder="e.g., 2 years, 6 months" required>
+                </div>
+                <div class="form-group">
+                    <label for="petPrice">Price (Rs.)</label>
+                    <input type="number" id="petPrice" name="petPrice" required>
+                </div>
+                <div class="form-group">
+                    <label for="petLocation">Location</label>
+                    <select id="petLocation" name="petLocation" required>
+                        <option value="">Select Location</option>
+                        <option value="colombo">Colombo</option>
+                        <option value="kandy">Kandy</option>
+                        <option value="galle">Galle</option>
+                        <option value="jaffna">Jaffna</option>
+                        <option value="anuradhapura">Anuradhapura</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="petStatus">Status</label>
+                    <select id="petStatus" name="petStatus" required>
+                        <option value="available">Available</option>
+                        <option value="sold">Sold</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="petOwner">Owner Name</label>
+                    <input type="text" id="petOwner" name="petOwner" required>
+                </div>
+                <div class="form-group">
+                    <label for="petImage">Image URL</label>
+                    <input type="text" id="petImage" name="petImage" placeholder="Enter image URL">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelAddPet">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Pet</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -528,6 +355,46 @@
                 }
             });
 
+            // Modal functionality
+            const modal = document.getElementById('addPetModal');
+            const addPetBtn = document.getElementById('addPetBtn');
+            const closeModal = document.querySelector('.close');
+            const cancelBtn = document.getElementById('cancelAddPet');
+
+            addPetBtn.addEventListener('click', function() {
+                modal.style.display = 'block';
+            });
+
+            closeModal.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+
+            cancelBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Add pet form submission
+            document.getElementById('addPetForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('petName').value;
+                const type = document.getElementById('petType').value;
+                const breed = document.getElementById('petBreed').value;
+                
+                // In a real application, this would send data to the server
+                alert(`Pet ${name} (${breed} ${type}) would be created in a real application`);
+                
+                // Reset form and close modal
+                this.reset();
+                modal.style.display = 'none';
+            });
+
             // Search functionality
             const petSearch = document.getElementById('petSearch');
             petSearch.addEventListener('input', function() {
@@ -543,44 +410,44 @@
             // Filter functionality
             const typeFilter = document.getElementById('typeFilter');
             const statusFilter = document.getElementById('statusFilter');
+            const locationFilter = document.getElementById('locationFilter');
             
             function applyFilters() {
                 const typeValue = typeFilter.value;
                 const statusValue = statusFilter.value;
+                const locationValue = locationFilter.value;
                 const rows = document.querySelectorAll('.pets-table tbody tr');
                 
                 rows.forEach(row => {
                     const typeClass = row.querySelector('.pet-type').classList[1];
-                    const statusClass = row.querySelector('td:nth-child(7)').classList[0];
+                    const statusClass = row.querySelector('td:nth-child(9)').classList[0];
+                    const locationText = row.querySelector('td:nth-child(8)').textContent.toLowerCase();
                     
                     const typeMatch = typeValue === 'all' || typeClass.includes(typeValue);
                     const statusMatch = statusValue === 'all' || 
                                       (statusValue === 'available' && statusClass === 'status-available') ||
                                       (statusValue === 'sold' && statusClass === 'status-sold');
+                    const locationMatch = locationValue === 'all' || locationText.includes(locationValue);
                     
-                    row.style.display = typeMatch && statusMatch ? '' : 'none';
+                    row.style.display = typeMatch && statusMatch && locationMatch ? '' : 'none';
                 });
             }
             
             typeFilter.addEventListener('change', applyFilters);
             statusFilter.addEventListener('change', applyFilters);
-
-            // Add pet button
-            document.getElementById('addPetBtn').addEventListener('click', function() {
-                alert('Add new pet functionality would open a modal form in a real application');
-            });
+            locationFilter.addEventListener('change', applyFilters);
 
             // Edit/Delete actions
             document.querySelectorAll('.edit-icon').forEach(icon => {
                 icon.addEventListener('click', function() {
-                    const petId = this.closest('tr').querySelector('td').textContent;
+                    const petId = this.closest('tr').querySelector('td:nth-child(2)').textContent;
                     alert(`Edit pet ${petId} - would open edit form in a real application`);
                 });
             });
 
             document.querySelectorAll('.delete-icon').forEach(icon => {
                 icon.addEventListener('click', function() {
-                    const petId = this.closest('tr').querySelector('td').textContent;
+                    const petId = this.closest('tr').querySelector('td:nth-child(2)').textContent;
                     if (confirm(`Are you sure you want to delete pet ${petId}?`)) {
                         alert(`Pet ${petId} would be deleted in a real application`);
                     }
