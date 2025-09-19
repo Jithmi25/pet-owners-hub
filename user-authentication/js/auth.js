@@ -530,7 +530,7 @@ document.addEventListener('DOMContentLoaded', function() {
         logoutBtn.addEventListener('click', function(e) {
             e.preventDefault();
             localStorage.removeItem('petcareAuthToken');
-            window.location.href = '../login.html';
+            window.location.href = '../../index.html';
         });
     }
 });

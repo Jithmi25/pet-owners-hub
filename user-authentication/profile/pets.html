@@ -262,7 +262,7 @@
                 <a href="saved.html"><i class="fas fa-heart"></i> Saved Items</a>
                 <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
                 <a href="../../index.html"><i class="fas fa-home"></i> Home</a>
-                <a href="../../user-authentication/login.html" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="../../index.html" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </nav>
         </aside>
 
@@ -545,7 +545,7 @@
             document.getElementById('logoutBtn').addEventListener('click', function(e) {
                 e.preventDefault();
                 localStorage.removeItem('petcareAuthToken');
-                window.location.href = '../../user-authentication/login.html';
+                window.location.href = '../../index.html';
             });
             
             // Initial render
