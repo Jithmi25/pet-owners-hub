@@ -13,7 +13,7 @@
             align-items: center;
             min-height: 100vh;
             background-color: #f8f9fa;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
+            background-image: ( rgba(255, 255, 255, 0.9)), 
                               url("../assets/images/pet-background.jpg");
             background-size: cover;
             background-position: center;
@@ -437,14 +437,6 @@
         ];
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if user is already logged in
-            const authToken = localStorage.getItem('petcareAuthToken');
-            const userRole = localStorage.getItem('userRole');
-            
-            if (authToken && userRole) {
-                redirectBasedOnRole(userRole);
-            }
-
             // Password visibility toggle
             const passwordToggle = document.getElementById('password-toggle');
             const passwordInput = document.getElementById('login-password');

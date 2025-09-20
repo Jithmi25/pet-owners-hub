@@ -504,6 +504,10 @@
   color: var(--primary);
   border: 1px solid var(--primary);
 }
+.btn-outline a {
+  color: var(--primary);
+  text-decoration: none;
+}
 
 .btn-outline:hover {
   background: var(--light);
