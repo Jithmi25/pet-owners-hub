@@ -8,6 +8,78 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/main.css">
     <style>
+        /* Header Styles */
+        .clinics-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)),
+                url("../../assets/images/clinic-b.webp");
+            background-size: cover;
+            background-position: center;
+            height: 60vh;
+            min-height: 400px;
+            color: white;
+            padding: 1rem 0;
+        }
+
+        .clinics-header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .clinics-header .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .clinics-header .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        .clinics-header .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .clinics-header .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .clinics-header .nav-links a.active {
+            background-color: rgba(255, 255, 255, 0.25);
+            font-weight: 600;
+        }
+
+        .clinics-header .hero-content {
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .clinics-header .hero-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .clinics-header .hero-content p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
         /* Clinic Listing Page */
         :root {
             --primary: #4a6fa5;
@@ -59,25 +131,24 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
-        .clinics-header {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
-                url(../../assets/images/clinic-b.webp);
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             padding: 3rem 0;
             color: white;
             text-align: center;
-            min-height: 300px;
+            min-height: 100px;
             display: flex;
             align-items: center;
         }
         
-        .clinics-header .container {
+        .hero-section .container {
             width: 100%;
         }
 
-        .clinics-header h1 {
+        .hero-section h1 {
             font-size: 2.5rem;
             margin-bottom: 1.5rem;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
@@ -502,13 +573,47 @@
                 flex-direction: column;
                 gap: 0.5rem;
             }
+            
+            /* Header responsive adjustments */
+            .clinics-header nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .clinics-header .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .clinics-header .hero-content h2 {
+                font-size: 2rem;
+            }
+            
+            .clinics-header .hero-content p {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <header class="clinics-header">
+        <nav>
+            <div class="logo">
+                <h1>Pet Owners Hub</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../vet-clinics/clinics.html" class="active">Vet Clinics</a></li>
+                <li><a href="../../pet-shops/shops.html">Pet Shops</a></li>
+                <li><a href="../../marketplace/marketplace.html">Marketplace</a></li>
+                <li><a href="../../user-authentication/profile/profile.html">Profile</a></li>
+                <li><a href="../../index.html">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero-section">
         <div class="container">
-            <h1>Veterinary Clinics in Sri Lanka</h1>
             <div class="clinic-filters">
                 <div class="filter-group">
                     <label for="search-input">Search Clinics:</label>
@@ -544,7 +649,7 @@
                 <button id="emergency-btn"><i class="fas fa-bell"></i> Emergency Clinics</button>
             </div>
         </div>
-    </header>
+    </div>
 
     <main class="clinics-container">
         <div class="clinics-map" id="clinics-map"></div>
@@ -878,45 +983,10 @@
                     modal.classList.remove('active');
                 }
             });
-             moreModal.addEventListener('click', function() {
-            const clinicId = 1; 
-            window.location.href = `clinic-details.html`;
-        });
             
-          
-            // Close modal when clicking outside
-            window.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                }
+            moreModal.addEventListener('click', function() {
+                alert('More details would be shown here!');
             });
-            
-            // Sort functionality
-            document.getElementById('sort-by').addEventListener('change', function() {
-                const sortBy = this.value;
-                const clinicsList = document.querySelector('.clinics-list');
-                const clinicCardsArray = Array.from(clinicCards);
-                
-                clinicCardsArray.sort((a, b) => {
-                    if (sortBy === 'name') {
-                        return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
-                    } else if (sortBy === 'location') {
-                        return a.getAttribute('data-location').localeCompare(b.getAttribute('data-location'));
-                    } else if (sortBy === 'type') {
-                        return a.getAttribute('data-type').localeCompare(b.getAttribute('data-type'));
-                    }
-                    return 0;
-                });
-                
-                // Remove all cards and re-add in sorted order
-                clinicCardsArray.forEach(card => {
-                    clinicsList.appendChild(card);
-                });
-            });
-            
-            // Initialize map to show all markers
-            const group = new L.featureGroup(markers);
-            map.fitBounds(group.getBounds().pad(0.1));
         });
     </script>
 </body>
