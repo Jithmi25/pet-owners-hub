@@ -1,7 +1,7 @@
 /* Pet Shops Main Styles */
 .shops-header {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)),
-    url("../../assets/images/shops-bg.jpg");
+    url("../../assets/images/header-bg.jpg");
   background-size: cover;
   background-position: center;
   height: 60vh;

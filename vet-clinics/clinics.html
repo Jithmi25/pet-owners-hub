@@ -11,7 +11,7 @@
         /* Header Styles */
         .clinics-header {
             background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)),
-                url("../../assets/images/clinic-b.webp");
+                    url("../../assets/images/header-bg.jpg");
             background-size: cover;
             background-position: center;
             height: 60vh;
@@ -20,79 +20,86 @@
             padding: 1rem 0;
         }
 
-        .clinics-header nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .hero-section {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 2rem auto;
             padding: 0 20px;
         }
 
-        .clinics-header .logo h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(to right, #00c6ff, #0072ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .clinics-header .nav-links {
+        .hero-section .container {
             display: flex;
-            list-style: none;
-            gap: 1.5rem;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
-        .clinics-header .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
+        .clinic-filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
             border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+
+        .filter-group:last-of-type {
+            flex: 1;
+            min-width: 260px;
+        }
+
+        .filter-group button {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .clinics-header .nav-links a:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .clinics-header .nav-links a.active {
-            background-color: rgba(255, 255, 255, 0.25);
-            font-weight: 600;
-        }
-
-        .clinics-header .hero-content {
+        #emergency-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 500;
             text-align: center;
-            margin-top: 4rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--primary);
+            color: white;
+            border: none;
         }
 
-        .clinics-header .hero-content h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        #emergency-btn:hover {
+            background: linear-gradient(135deg, #ff5a5a, #ff2e2e);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(255, 75, 75, 0.45);
         }
-
-        .clinics-header .hero-content p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-        }
-        
-        /* Clinic Listing Page */
-        :root {
-            --primary: #4a6fa5;
-            --secondary: #166088;
-            --accent: #4caf50;
-            --danger: #ff4444;
-            --warning: #ff9800;
-            --light: #f8f9fa;
-            --dark: #343a40;
-            --gov-color: #4caf50;
-            --private-color: #2196f3;
-        }
-        
         * {
             box-sizing: border-box;
             margin: 0;
@@ -131,86 +138,6 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
-        .hero-section {
-            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            padding: 3rem 0;
-            color: white;
-            text-align: center;
-            min-height: 100px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .hero-section .container {
-            width: 100%;
-        }
-
-        .hero-section h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .clinic-filters {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: 2rem auto;
-            max-width: 900px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1.5rem;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .filter-group label {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .filter-group select {
-            padding: 0.7rem;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            background: white;
-            min-width: 180px;
-        }
-        
-        #search-input {
-            padding: 0.7rem;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            min-width: 250px;
-        }
-
-        #emergency-btn {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 0.7rem 1.5rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            align-self: flex-end;
-            transition: all 0.3s ease;
-        }
-        
-        #emergency-btn:hover {
-            background: #ff2222;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
         .clinics-container {
             display: grid;
             grid-template-columns: 1fr 2fr;
@@ -616,11 +543,9 @@
         <div class="container">
             <div class="clinic-filters">
                 <div class="filter-group">
-                    <label for="search-input">Search Clinics:</label>
                     <input type="text" id="search-input" placeholder="Enter clinic name or area...">
                 </div>
                 <div class="filter-group">
-                    <label for="clinic-type">Clinic Type:</label>
                     <select id="clinic-type">
                         <option value="all">All Clinics</option>
                         <option value="government">Government Hospitals</option>
@@ -628,7 +553,6 @@
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label for="location">Location:</label>
                     <select id="location">
                         <option value="all">All Districts</option>
                         <option value="colombo">Colombo</option>
@@ -645,9 +569,10 @@
                         <option value="anuradhapura">Anuradhapura</option>
                         <option value="badulla">Badulla</option>
                     </select>
+                    <button class="btn" id="searchBtn">Search</button>
                 </div>
-                <button id="emergency-btn"><i class="fas fa-bell"></i> Emergency Clinics</button>
             </div>
+              <button id="emergency-btn"><i class="fas fa-bell"></i> Emergency Clinics</button>
         </div>
     </div>
 
@@ -688,7 +613,7 @@
                     <span>Emergency Care</span>
                     <span>Dental</span>
                 </div>
-                <a href="#" class="btn view-details" data-id="1">View Details</a>
+                <a href="clinic-details.html?id=1" class="btn view-details" data-id="1">View Details</a>
             </div>
             
             <!-- Private Clinic -->
@@ -707,7 +632,7 @@
                     <span>Ultrasound</span>
                     <span>Surgery</span>
                 </div>
-                <a href="#" class="btn view-details" data-id="2">View Details</a>
+                <a href="clinic-details.html?id=2" class="btn view-details" data-id="2">View Details</a>
             </div>
             
             <!-- Government Hospital -->
@@ -726,7 +651,7 @@
                     <span>Livestock Care</span>
                     <span>Emergency Care</span>
                 </div>
-                <a href="#" class="btn view-details" data-id="3">View Details</a>
+                <a href="clinic-details.html?id=3" class="btn view-details" data-id="3">View Details</a>
             </div>
             
             <!-- Private Clinic -->
@@ -745,7 +670,7 @@
                     <span>Dental</span>
                     <span>Grooming</span>
                 </div>
-                <a href="#" class="btn view-details" data-id="4">View Details</a>
+                <a href="clinic-details.html?id=4" class="btn view-details" data-id="4">View Details</a>
             </div>
             
             <!-- Government Hospital -->
@@ -764,7 +689,7 @@
                     <span>Basic Surgery</span>
                     <span>Consultation</span>
                 </div>
-                <a href="#" class="btn view-details" data-id="5">View Details</a>
+                <a href="clinic-details.html?id=5" class="btn view-details" data-id="5">View Details</a>
             </div>
         </div>
     </main>
@@ -946,47 +871,7 @@
                 filterClinics();
             });
             
-            // Modal functionality
-            const modal = document.getElementById('clinic-modal');
-            const closeModal = document.getElementById('close-modal');
-            const moreModal = document.getElementById('more-modal');
-            const modalClinicName = document.getElementById('modal-clinic-name');
-            const modalClinicAddress = document.getElementById('modal-clinic-address');
-            const modalClinicPhone = document.getElementById('modal-clinic-phone');
-            const modalClinicHours = document.getElementById('modal-clinic-hours');
-            
-            document.querySelectorAll('.view-details').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const card = this.closest('.clinic-card');
-                    const name = card.querySelector('h2').textContent;
-                    const address = card.querySelector('.clinic-meta span:first-child').textContent;
-                    const phone = card.querySelector('.clinic-meta span:nth-child(2)').textContent;
-                    const hours = card.querySelector('.clinic-meta span:last-child').textContent;
-                    
-                    modalClinicName.textContent = name;
-                    modalClinicAddress.textContent = address;
-                    modalClinicPhone.textContent = phone;
-                    modalClinicHours.textContent = hours;
-                    
-                    modal.classList.add('active');
-                });
-            });
-            
-            closeModal.addEventListener('click', function() {
-                modal.classList.remove('active');
-            });
-            
-            // Close modal when clicking outside
-            window.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                }
-            });
-            
-            moreModal.addEventListener('click', function() {
-                alert('More details would be shown here!');
-            });
+            // View Details buttons now navigate directly to clinic-details.html
         });
     </script>
 </body>

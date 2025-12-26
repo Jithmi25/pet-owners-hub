@@ -158,34 +158,63 @@
 
         #time-slots {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 0.5rem;
-            margin: 1rem 0;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 0.75rem;
+            margin: 1.5rem 0;
         }
 
         .time-slot {
-            background: var(--light-gray);
-            padding: 0.5rem;
+            background: white;
+            border: 2px solid var(--light-gray);
+            padding: 0.75rem;
             text-align: center;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             transition: var(--transition);
-            font-weight: 500;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 50px;
         }
 
-        .time-slot:hover {
-            background: #d1e7dd;
+        .time-slot:hover:not(.booked) {
+            border-color: var(--primary);
+            background: #e8f5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(76, 175, 80, 0.2);
         }
 
         .time-slot.selected {
             background: var(--primary);
             color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
         }
 
         .time-slot.booked {
-            background: #f8d7da;
+            background: #ffe6e6;
             color: var(--danger-dark);
             cursor: not-allowed;
+            border-color: #ffcccc;
+            opacity: 0.6;
+        }
+
+        .time-slots-placeholder {
+            grid-column: 1 / -1;
+            padding: 2rem;
+            text-align: center;
+            color: var(--gray);
+            background: var(--light);
+            border-radius: 8px;
+            border: 2px dashed var(--light-gray);
+        }
+
+        .time-slots-placeholder i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #b0bec5;
         }
 
         .emergency-banner {
@@ -393,7 +422,7 @@
                 /* Header Styles */
         .clinics-header {
             background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)),
-                url("../../assets/images/clinic-b.webp");
+                url("../../assets/images/header-bg.jpg");
             background-size: cover;
             background-position: center;
             height: 60vh;
@@ -750,12 +779,16 @@
             const timeSlotsContainer = document.getElementById('time-slots');
             
             if (!date) {
-                timeSlotsContainer.innerHTML = '<p>Please select a date first</p>';
+                timeSlotsContainer.innerHTML = '<div class="time-slots-placeholder"><i class="fas fa-calendar"></i><p>Select a date above to see available time slots</p></div>';
                 return;
             }
             
             // Clear previous time slots
             timeSlotsContainer.innerHTML = '';
+            
+            // Get day of week for booked slots simulation
+            const selectedDate = new Date(date);
+            const dayOfWeek = selectedDate.getDay();
             
             // Generate time slots (every 30 minutes from 8AM to 4PM)
             const startHour = 8;
@@ -765,11 +798,14 @@
             for (let hour = startHour; hour < endHour; hour++) {
                 for (let minute = 0; minute < 60; minute += 30) {
                     const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-                    const isBooked = Math.random() < 0.2; // 20% chance a slot is booked
+                    
+                    // Simulate some booked slots based on time and day
+                    const isBooked = (hour === 9 || hour === 14 || (dayOfWeek === 5 && hour > 14)) && Math.random() < 0.5;
                     
                     const slotElement = document.createElement('div');
                     slotElement.className = `time-slot ${isBooked ? 'booked' : ''}`;
-                    slotElement.textContent = timeString;
+                    slotElement.title = isBooked ? 'This slot is booked' : 'Available - Click to select';
+                    slotElement.innerHTML = `<span>${timeString}</span>`;
                     
                     if (!isBooked) {
                         slotElement.addEventListener('click', function() {
