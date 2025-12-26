@@ -64,12 +64,12 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-outline">Contact Owner</button>
+                    <button class="btn btn-outline" id="contactOwnerBtn"><i class="fas fa-envelope"></i> Contact Owner</button>
                 </div>
 
                 <div class="shop-actions">
-                    <button class="btn btn-primary"><i class="fas fa-directions"></i> Get Directions</button>
-                    <button class="btn btn-outline"><i class="fas fa-heart"></i> Save Shop</button>
+                    <button class="btn btn-primary" id="getDirectionsBtn"><i class="fas fa-directions"></i> Get Directions</button>
+                    <button class="btn btn-outline" id="saveShopBtn"><i class="fas fa-heart"></i> Save Shop</button>
                 </div>
             </div>
 
@@ -121,13 +121,72 @@
                 </div>
             </div>
         </div>
-        <br><br><br>
-          <div class="form-actions">
-                <div class="right-buttons">
-                    <button type="button" class="btn btn-primary" onclick="window.location.href='shops.html'">Shops</button>
+    </main>
+
+    <!-- Contact Owner Modal -->
+    <div class="modal" id="contactOwnerModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('contactOwnerModal')">&times;</button>
+            <h2><i class="fas fa-user-circle"></i> Contact Shop Owner</h2>
+            <div class="owner-contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <h4>Email</h4>
+                        <a href="mailto:mkwickrama@petshop.lk">mkwickrama@petshop.lk</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <div>
+                        <h4>Phone</h4>
+                        <a href="tel:+94815551234">+94 81 555 1234</a>
+                    </div>
+                </div>
+                <div class="social-media-links">
+                    <h4>Follow on Social Media</h4>
+                    <div class="social-buttons">
+                        <a href="#" class="social-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</a>
+                        <a href="#" class="social-btn instagram"><i class="fab fa-instagram"></i> Instagram</a>
+                        <a href="#" class="social-btn whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                        <a href="#" class="social-btn twitter"><i class="fab fa-twitter"></i> Twitter</a>
+                    </div>
                 </div>
             </div>
-    </main>
+        </div>
+    </div>
+
+    <!-- Map Modal -->
+    <div class="modal" id="mapModal">
+        <div class="modal-content map-modal-content">
+            <button class="modal-close" onclick="closeModal('mapModal')">&times;</button>
+            <h2><i class="fas fa-map-marked-alt"></i> Shop Location</h2>
+            <div class="map-info">
+                <p><i class="fas fa-map-marker-alt"></i> Kandy, Dalada Vidiya</p>
+                <p><i class="fas fa-phone"></i> 081 555-1234</p>
+            </div>
+            <div id="shopMap" style="height: 400px; border-radius: 8px; margin-top: 1rem;"></div>
+            <div class="map-actions">
+                <a href="https://www.google.com/maps/dir/?api=1&destination=7.2906,80.6337" target="_blank" class="btn btn-primary">
+                    <i class="fas fa-directions"></i> Open in Google Maps
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Confirmation Modal -->
+    <div class="modal" id="saveShopModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('saveShopModal')">&times;</button>
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Shop Saved!</h2>
+            <p>Paws & Claws Pet Store has been added to your saved shops.</p>
+            <p>You can view all your saved shops in your <a href="../../user-authentication/profile/profile.html">profile</a>.</p>
+            <button class="btn btn-primary" onclick="closeModal('saveShopModal')">Done</button>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer>
@@ -166,5 +225,372 @@
     </footer>
 
     <script src="shops.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+
+        .map-modal-content {
+            max-width: 700px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #666;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .modal h2 {
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .owner-contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 8px;
+        }
+
+        .contact-item i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-top: 0.25rem;
+        }
+
+        .contact-item h4 {
+            margin: 0 0 0.25rem 0;
+            color: var(--dark);
+        }
+
+        .contact-item a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
+        .social-media-links {
+            margin-top: 1rem;
+        }
+
+        .social-media-links h4 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .social-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-btn.facebook {
+            background: #1877f2;
+        }
+
+        .social-btn.instagram {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+        }
+
+        .social-btn.whatsapp {
+            background: #25d366;
+        }
+
+        .social-btn.twitter {
+            background: #1da1f2;
+        }
+
+        .map-info {
+            background: var(--light);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .map-info p {
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .map-info i {
+            color: var(--primary);
+        }
+
+        .map-actions {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .modal-icon.success {
+            text-align: center;
+            font-size: 4rem;
+            color: #4caf50;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content p {
+            text-align: center;
+            margin: 0.5rem 0;
+            color: var(--text);
+        }
+
+        .modal-content p a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .modal-content p a:hover {
+            text-decoration: underline;
+        }
+
+        .modal-content button.btn {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .social-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script>
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                closeModal(e.target.id);
+            }
+        });
+
+        // Image swap functionality for shop details page
+        document.addEventListener('DOMContentLoaded', function() {
+            const thumbnails = document.querySelectorAll('.thumbnail-images img');
+            const mainImage = document.getElementById('mainShopImage');
+            
+            if (thumbnails.length > 0 && mainImage) {
+                thumbnails.forEach(thumb => {
+                    thumb.addEventListener('click', function() {
+                        // Store the current main image source and alt
+                        const currentMainSrc = mainImage.src;
+                        const currentMainAlt = mainImage.alt;
+                        
+                        // Store the clicked thumbnail source and alt
+                        const clickedThumbSrc = this.src;
+                        const clickedThumbAlt = this.alt;
+                        
+                        // Swap: Set main image to clicked thumbnail
+                        mainImage.src = clickedThumbSrc;
+                        mainImage.alt = clickedThumbAlt;
+                        
+                        // Swap: Set clicked thumbnail to previous main image
+                        this.src = currentMainSrc;
+                        this.alt = currentMainAlt;
+                        
+                        // Add visual feedback with a subtle animation
+                        mainImage.style.opacity = '0.7';
+                        setTimeout(() => {
+                            mainImage.style.opacity = '1';
+                        }, 150);
+                    });
+                    
+                    // Add hover effect styling
+                    thumb.style.cursor = 'pointer';
+                    thumb.style.transition = 'all 0.3s ease';
+                    
+                    thumb.addEventListener('mouseenter', function() {
+                        this.style.transform = 'scale(1.1)';
+                        this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+                    });
+                    
+                    thumb.addEventListener('mouseleave', function() {
+                        this.style.transform = 'scale(1)';
+                        this.style.boxShadow = 'none';
+                    });
+                });
+            }
+
+            // Contact Owner Button
+            document.getElementById('contactOwnerBtn').addEventListener('click', function() {
+                openModal('contactOwnerModal');
+            });
+
+            // Get Directions Button
+            document.getElementById('getDirectionsBtn').addEventListener('click', function() {
+                openModal('mapModal');
+                // Initialize map after modal opens
+                setTimeout(initializeMap, 300);
+            });
+
+            // Save Shop Button
+            document.getElementById('saveShopBtn').addEventListener('click', function() {
+                const shopName = 'Paws & Claws Pet Store';
+                const shopId = '1'; // This would come from URL params or data attribute
+                
+                // Save to localStorage (Backend integration point)
+                let savedShops = JSON.parse(localStorage.getItem('savedShops') || '[]');
+                
+                // Check if already saved
+                if (!savedShops.includes(shopId)) {
+                    savedShops.push(shopId);
+                    localStorage.setItem('savedShops', JSON.stringify(savedShops));
+                    
+                    // Update button
+                    this.innerHTML = '<i class="fas fa-heart"></i> Saved';
+                    this.style.background = '#4caf50';
+                    this.style.color = 'white';
+                    
+                    // Show success modal
+                    openModal('saveShopModal');
+                } else {
+                    alert('This shop is already in your saved list!');
+                }
+            });
+
+            // Check if shop is already saved
+            const shopId = '1';
+            let savedShops = JSON.parse(localStorage.getItem('savedShops') || '[]');
+            if (savedShops.includes(shopId)) {
+                const saveBtn = document.getElementById('saveShopBtn');
+                saveBtn.innerHTML = '<i class="fas fa-heart"></i> Saved';
+                saveBtn.style.background = '#4caf50';
+                saveBtn.style.color = 'white';
+            }
+        });
+
+        // Initialize map for shop location
+        function initializeMap() {
+            // Check if map already exists
+            if (document.getElementById('shopMap')._leaflet_id) {
+                return;
+            }
+
+            // Shop coordinates (Kandy, Dalada Vidiya)
+            const shopLat = 7.2906;
+            const shopLng = 80.6337;
+            
+            // Create map
+            const map = L.map('shopMap').setView([shopLat, shopLng], 15);
+            
+            // Add tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            
+            // Add marker
+            const marker = L.marker([shopLat, shopLng]).addTo(map);
+            marker.bindPopup('<b>Paws & Claws Pet Store</b><br>Kandy, Dalada Vidiya').openPopup();
+        }
+    </script>
 </body>
 </html>

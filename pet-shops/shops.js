@@ -1,4 +1,86 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // All available shops data
+    const allShops = [
+        {
+            id: 1,
+            name: "Paws & Claws Pet Store",
+            rating: 4.7,
+            reviewCount: 128,
+            location: "Kandy, Dalada Vidiya",
+            locationKey: "ny",
+            categories: ["food", "toys", "grooming"],
+            description: "Your one-stop shop for all pet supplies. We offer premium pet food, toys, and grooming services.",
+            image: "../../assets/images/shop1.jpg",
+            hours: "9 AM - 8 PM",
+            phone: "081 555-1234"
+        },
+        {
+            id: 2,
+            name: "Aqua World Fish Store",
+            rating: 4.5,
+            reviewCount: 86,
+            location: "Colombo, Kirulupana",
+            locationKey: "la",
+            categories: ["supplies"],
+            description: "Specializing in aquarium supplies and exotic fish. We have everything for your aquatic pets.",
+            image: "../../assets/images/shop2.jpg",
+            hours: "10 AM - 7 PM",
+            phone: "011 555-5678"
+        },
+        {
+            id: 3,
+            name: "Bark Avenue Boutique",
+            rating: 4.9,
+            reviewCount: 204,
+            location: "Gampaha, Negombo Road",
+            locationKey: "la",
+            categories: ["toys", "grooming"],
+            description: "Luxury pet boutique offering designer accessories, gourmet treats, and spa services.",
+            image: "../../assets/images/shop3.webp",
+            hours: "10 AM - 6 PM",
+            phone: "033 555-9012"
+        },
+        {
+            id: 4,
+            name: "Healthy Pets Nutrition",
+            rating: 4.8,
+            reviewCount: 153,
+            location: "Kurunagala, Kandy Road",
+            locationKey: "ch",
+            categories: ["food", "supplies"],
+            description: "Organic and natural pet foods and supplements. We care about your pet's health.",
+            image: "../../assets/images/shop4.jpg",
+            hours: "9 AM - 7 PM",
+            phone: "081 555-3456"
+        },
+        {
+            id: 5,
+            name: "Pet Paradise",
+            rating: 4.6,
+            reviewCount: 95,
+            location: "Kagalle, Main Street",
+            locationKey: "sf",
+            categories: ["food", "toys"],
+            description: "Complete pet care solutions with a wide range of products for all types of pets.",
+            image: "../../assets/images/shop1.jpg",
+            hours: "8 AM - 8 PM",
+            phone: "081 555-7890"
+        },
+        {
+            id: 6,
+            name: "Grooming Gallery",
+            rating: 4.9,
+            reviewCount: 187,
+            location: "Kandy, Peradeniya Road",
+            locationKey: "ny",
+            categories: ["grooming"],
+            description: "Professional pet grooming services with experienced staff and modern facilities.",
+            image: "../../assets/images/shop2.jpg",
+            hours: "9 AM - 6 PM",
+            phone: "081 555-2468"
+        }
+    ];
+    
     // BACKEND INTEGRATION: Load pet shops from API
     function loadPetShops(page = 1, filters = {}) {
         /*
@@ -22,65 +104,55 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         */
         
-        // Simulated data for demonstration
-        const sampleShops = [
-            {
-                id: 1,
-                name: "Paws & Claws Pet Store",
-                rating: 4.7,
-                reviewCount: 128,
-                location: "Kandy, Dalada Vidiya",
-                categories: ["food", "toys", "grooming"],
-                description: "Your one-stop shop for all pet supplies. We offer premium pet food, toys, and grooming services.",
-                image: "../../assets/images/shop1.jpg",
-                hours: "9 AM - 8 PM",
-                phone: "081 555-1234"
-            },
-            {
-                id: 2,
-                name: "Aqua World Fish Store",
-                rating: 4.5,
-                reviewCount: 86,
-                location: "Colombo, Kirulupana",
-                categories: ["supplies"],
-                description: "Specializing in aquarium supplies and exotic fish. We have everything for your aquatic pets.",
-                image: "../../assets/images/shop2.jpg",
-                hours: "10 AM - 7 PM",
-                phone: "011 555-5678"
-            },
-            {
-                id: 3,
-                name: "Bark Avenue Boutique",
-                rating: 4.9,
-                reviewCount: 204,
-                location: "Gampaha, Negombo Road",
-                categories: ["toys", "grooming"],
-                description: "Luxury pet boutique offering designer accessories, gourmet treats, and spa services.",
-                image: "../../assets/images/shop3.webp",
-                hours: "10 AM - 6 PM",
-                phone: "033 555-9012"
-            },
-            {
-                id: 4,
-                name: "Healthy Pets Nutrition",
-                rating: 4.8,
-                reviewCount: 153,
-                location: "Kurunagala, Kandy Road",
-                categories: ["food", "supplies"],
-                description: "Organic and natural pet foods and supplements. We care about your pet's health.",
-                image: "../../assets/images/shop4.jpg",
-                hours: "9 AM - 7 PM",
-                phone: "081 555-3456"
-            }
-        ];
+        // Filter shops based on search criteria
+        let filteredShops = allShops;
         
-        displayPetShops(sampleShops);
+        // Apply search filter
+        if (filters.search && filters.search.trim() !== '') {
+            const searchTerm = filters.search.toLowerCase();
+            filteredShops = filteredShops.filter(shop => 
+                shop.name.toLowerCase().includes(searchTerm) ||
+                shop.description.toLowerCase().includes(searchTerm) ||
+                shop.location.toLowerCase().includes(searchTerm)
+            );
+        }
+        
+        // Apply category filter
+        if (filters.category && filters.category !== '') {
+            filteredShops = filteredShops.filter(shop => 
+                shop.categories.includes(filters.category)
+            );
+        }
+        
+        // Apply location filter
+        if (filters.location && filters.location !== '') {
+            filteredShops = filteredShops.filter(shop => 
+                shop.locationKey === filters.location
+            );
+        }
+        
+        displayPetShops(filteredShops);
         updatePagination(3, 1);
+        
+        // Update results count
+        const resultsText = filteredShops.length === 1 ? '1 shop' : `${filteredShops.length} shops`;
+        console.log(`Showing ${resultsText}`);
     }
     
     function displayPetShops(shops) {
         const shopsContainer = document.getElementById('shopsListings');
         shopsContainer.innerHTML = '';
+        
+        if (shops.length === 0) {
+            shopsContainer.innerHTML = `
+                <div style="text-align: center; padding: 3rem; grid-column: 1 / -1;">
+                    <i class="fas fa-search" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                    <h3 style="color: var(--gray);">No shops found</h3>
+                    <p style="color: var(--gray);">Try adjusting your search filters</p>
+                </div>
+            `;
+            return;
+        }
         
         shops.forEach(shop => {
             const shopCard = document.createElement('div');
@@ -139,7 +211,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Search functionality
-    document.getElementById('searchBtn').addEventListener('click', function() {
+    document.getElementById('searchBtn').addEventListener('click', performSearch);
+    
+    // Allow Enter key to trigger search
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+    
+    // Real-time filtering on input change
+    document.getElementById('searchInput').addEventListener('input', performSearch);
+    document.getElementById('categoryFilter').addEventListener('change', performSearch);
+    document.getElementById('locationFilter').addEventListener('change', performSearch);
+    
+    function performSearch() {
         const searchTerm = document.getElementById('searchInput').value;
         const categoryFilter = document.getElementById('categoryFilter').value;
         const locationFilter = document.getElementById('locationFilter').value;
@@ -150,43 +236,111 @@ document.addEventListener('DOMContentLoaded', function() {
             category: categoryFilter,
             location: locationFilter
         });
-    });
-    
-    // Add shop button
-    document.getElementById('addShopBtn').addEventListener('click', function() {
-        // BACKEND INTEGRATION: Redirect to shop registration
-        /*
-        if (userIsLoggedIn) {
-            window.location.href = 'add-shop.html';
-        } else {
-            window.location.href = '../../user-authentication/login.html';
-        }
-        */
-        
-        alert('This would redirect to shop registration page');
-    });
+    }
     
     // Load initial shops
     loadPetShops();
     
-    // Thumbnail image click handler for shop details
+    // Thumbnail image click handler for shop details - Swap functionality
     const thumbnails = document.querySelectorAll('.thumbnail-images img');
     const mainImage = document.getElementById('mainShopImage');
     
-    if (thumbnails && mainImage) {
+    if (thumbnails.length > 0 && mainImage) {
         thumbnails.forEach(thumb => {
             thumb.addEventListener('click', function() {
-                // This would be more dynamic with real data
-                const newSrc = this.src.replace('-thumb', '-large');
-                mainImage.src = newSrc;
+                // Store the current main image source
+                const currentMainSrc = mainImage.src;
+                const currentMainAlt = mainImage.alt;
                 
-                // Update active thumbnail
-                thumbnails.forEach(t => t.style.borderColor = 'transparent');
-                this.style.borderColor = '#6C63FF';
+                // Store the clicked thumbnail source
+                const clickedThumbSrc = this.src;
+                const clickedThumbAlt = this.alt;
+                
+                // Swap: Set main image to clicked thumbnail
+                mainImage.src = clickedThumbSrc;
+                mainImage.alt = clickedThumbAlt;
+                
+                // Swap: Set clicked thumbnail to previous main image
+                this.src = currentMainSrc;
+                this.alt = currentMainAlt;
+                
+                // Add visual feedback with a subtle animation
+                mainImage.style.opacity = '0.7';
+                setTimeout(() => {
+                    mainImage.style.opacity = '1';
+                }, 150);
+            });
+            
+            // Add hover effect styling
+            thumb.style.cursor = 'pointer';
+            thumb.style.transition = 'all 0.3s ease';
+            
+            thumb.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.1)';
+                this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+            });
+            
+            thumb.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+                this.style.boxShadow = 'none';
             });
         });
     }
 });
+
+
+                    // Back to top button
+            const backToTopButton = document.createElement('button');
+            backToTopButton.innerHTML = '↑';
+            backToTopButton.className = 'back-to-top';
+            backToTopButton.style.display = 'none';
+            document.body.appendChild(backToTopButton);
+
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.style.display = 'block';
+                } else {
+                    backToTopButton.style.display = 'none';
+                }
+            });
+
+            backToTopButton.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+        // Add styles for back-to-top button
+        const style = document.createElement('style');
+        style.textContent = `
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        `;
+        document.head.appendChild(style);
 
 // // JavaScript for Shop Form
 // document.addEventListener('DOMContentLoaded', function() {

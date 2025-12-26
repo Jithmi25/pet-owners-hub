@@ -63,6 +63,185 @@
         </div>
     </main>
 
+    <!-- Add Shop Modal -->
+    <div class="modal" id="addShopModal">
+        <div class="modal-content add-shop-modal">
+            <button class="modal-close" onclick="closeAddShopModal()">&times;</button>
+            <h2><i class="fas fa-store"></i> Add Your Pet Shop</h2>
+            <p class="modal-subtitle">Fill in the details to list your shop on our platform</p>
+            
+            <form id="addShopForm">
+                <!-- Shop Basic Information -->
+                <div class="form-section">
+                    <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="shopName">Shop Name <span class="required">*</span></label>
+                        <input type="text" id="shopName" name="shopName" placeholder="Enter your shop name" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="shopPhone">Phone Number <span class="required">*</span></label>
+                            <input type="tel" id="shopPhone" name="shopPhone" placeholder="081 555-1234" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="shopEmail">Email Address <span class="required">*</span></label>
+                            <input type="email" id="shopEmail" name="shopEmail" placeholder="shop@example.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shopAddress">Address <span class="required">*</span></label>
+                        <input type="text" id="shopAddress" name="shopAddress" placeholder="Street address" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="shopLocation">District <span class="required">*</span></label>
+                            <select id="shopLocation" name="shopLocation" required>
+                                <option value="">Select District</option>
+                                <option value="ny">Kandy</option>
+                                <option value="la">Gampaha</option>
+                                <option value="ch">Kurunagala</option>
+                                <option value="sf">Kagalle</option>
+                                <option value="colombo">Colombo</option>
+                                <option value="galle">Galle</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="shopHours">Operating Hours <span class="required">*</span></label>
+                            <input type="text" id="shopHours" name="shopHours" placeholder="e.g., 9 AM - 8 PM" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div class="form-section">
+                    <h3><i class="fas fa-tags"></i> Categories</h3>
+                    <p class="form-hint">Select all categories that apply to your shop</p>
+                    
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="categories" value="food">
+                            <span>Pet Food</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="categories" value="toys">
+                            <span>Toys & Accessories</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="categories" value="grooming">
+                            <span>Grooming Services</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="categories" value="supplies">
+                            <span>Pet Supplies</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Shop Images -->
+                <div class="form-section">
+                    <h3><i class="fas fa-images"></i> Shop Images</h3>
+                    <p class="form-hint">Upload photos of your shop (Max 5 images, 5MB each)</p>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload or drag and drop</p>
+                        <small>PNG, JPG or JPEG (MAX. 5MB)</small>
+                        <input type="file" id="shopImages" name="shopImages" accept="image/*" multiple hidden>
+                    </div>
+                    <div class="image-preview" id="imagePreview"></div>
+                </div>
+
+                <!-- Owner Information -->
+                <div class="form-section">
+                    <h3><i class="fas fa-user"></i> Owner Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="ownerName">Owner Name <span class="required">*</span></label>
+                        <input type="text" id="ownerName" name="ownerName" placeholder="Full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ownerSince">Owner Since</label>
+                        <input type="number" id="ownerSince" name="ownerSince" placeholder="e.g., 2018" min="1900" max="2025">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ownerPhoto">Owner Photo</label>
+                        <input type="file" id="ownerPhoto" name="ownerPhoto" accept="image/*">
+                    </div>
+                </div>
+
+                <!-- Description & Services -->
+                <div class="form-section">
+                    <h3><i class="fas fa-align-left"></i> About Your Shop</h3>
+                    
+                    <div class="form-group">
+                        <label for="shopDescription">Description <span class="required">*</span></label>
+                        <textarea id="shopDescription" name="shopDescription" rows="4" placeholder="Tell customers about your shop, what makes it special..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="services">Services Offered</label>
+                        <textarea id="services" name="services" rows="3" placeholder="e.g., Pet grooming, Nutritional counseling, Delivery services (one per line)"></textarea>
+                        <small>Enter each service on a new line</small>
+                    </div>
+                </div>
+
+                <!-- Social Media -->
+                <div class="form-section">
+                    <h3><i class="fas fa-share-alt"></i> Social Media (Optional)</h3>
+                    
+                    <div class="form-group">
+                        <label for="facebook"><i class="fab fa-facebook"></i> Facebook</label>
+                        <input type="url" id="facebook" name="facebook" placeholder="https://facebook.com/yourshop">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="instagram"><i class="fab fa-instagram"></i> Instagram</label>
+                        <input type="url" id="instagram" name="instagram" placeholder="https://instagram.com/yourshop">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</label>
+                        <input type="tel" id="whatsapp" name="whatsapp" placeholder="+94 77 123 4567">
+                    </div>
+                </div>
+
+                <!-- Terms & Submit -->
+                <div class="form-section">
+                    <label class="checkbox-label terms-checkbox">
+                        <input type="checkbox" name="terms" required>
+                        <span>I agree to the <a href="../../support/support.html#terms" target="_blank">Terms of Service</a> and <a href="../../support/support.html#privacy" target="_blank">Privacy Policy</a></span>
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeAddShopModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Submit for Review
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Shop Submitted Successfully!</h2>
+            <p>Thank you for submitting your shop details. Our team will review your submission and get back to you within 2-3 business days.</p>
+            <p>You will receive a confirmation email at the address you provided.</p>
+            <button class="btn btn-primary" onclick="closeSuccessModal()">Done</button>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <div class="footer-content">
@@ -99,6 +278,458 @@
         </div>
     </footer>
 
+    <style>
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+            padding: 2rem 0;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: slideUp 0.3s ease;
+            margin: auto;
+        }
+
+        .add-shop-modal {
+            max-width: 700px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #666;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .modal h2 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-subtitle {
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .form-section:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .form-section h3 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .form-hint {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        .form-group label i {
+            margin-right: 0.5rem;
+            color: var(--primary);
+        }
+
+        .required {
+            color: #ff4444;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 0.25rem;
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .checkbox-label:hover {
+            border-color: var(--primary);
+            background: rgba(108, 99, 255, 0.05);
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            margin-right: 0.5rem;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-label input[type="checkbox"]:checked + span {
+            color: var(--primary);
+        }
+
+        .terms-checkbox {
+            border: none;
+            padding: 0;
+        }
+
+        .terms-checkbox a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .terms-checkbox a:hover {
+            text-decoration: underline;
+        }
+
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(108, 99, 255, 0.05);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .upload-area p {
+            margin: 0.5rem 0;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .upload-area small {
+            color: #666;
+        }
+
+        .image-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .image-preview-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-item .remove-btn {
+            position: absolute;
+            top: 0.25rem;
+            right: 0.25rem;
+            background: rgba(255, 68, 68, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .form-actions button {
+            flex: 1;
+        }
+
+        .modal-icon.success {
+            text-align: center;
+            font-size: 4rem;
+            color: #4caf50;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content p {
+            text-align: center;
+            margin: 0.75rem 0;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-row,
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
     <script src="shops.js"></script>
+    <script>
+        // Modal functions
+        function openAddShopModal() {
+            document.getElementById('addShopModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAddShopModal() {
+            document.getElementById('addShopModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.getElementById('addShopForm').reset();
+            document.getElementById('imagePreview').innerHTML = '';
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                if (e.target.id === 'addShopModal') {
+                    closeAddShopModal();
+                } else if (e.target.id === 'successModal') {
+                    closeSuccessModal();
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add Shop Button - Update in shops.js
+            const addShopBtn = document.getElementById('addShopBtn');
+            if (addShopBtn) {
+                addShopBtn.addEventListener('click', function() {
+                    openAddShopModal();
+                });
+            }
+
+            // Image upload functionality
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('shopImages');
+            const imagePreview = document.getElementById('imagePreview');
+            let uploadedFiles = [];
+
+            uploadArea.addEventListener('click', () => fileInput.click());
+
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = 'var(--primary)';
+                uploadArea.style.backgroundColor = 'rgba(108, 99, 255, 0.1)';
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.style.borderColor = '#ddd';
+                uploadArea.style.backgroundColor = 'transparent';
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#ddd';
+                uploadArea.style.backgroundColor = 'transparent';
+                handleFiles(e.dataTransfer.files);
+            });
+
+            fileInput.addEventListener('change', () => {
+                handleFiles(fileInput.files);
+            });
+
+            function handleFiles(files) {
+                if (uploadedFiles.length + files.length > 5) {
+                    alert('You can only upload up to 5 images');
+                    return;
+                }
+
+                Array.from(files).forEach(file => {
+                    if (!file.type.match('image.*')) {
+                        alert('Please upload only image files');
+                        return;
+                    }
+
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('File size must be less than 5MB');
+                        return;
+                    }
+
+                    uploadedFiles.push(file);
+
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const previewItem = document.createElement('div');
+                        previewItem.className = 'image-preview-item';
+                        previewItem.innerHTML = `
+                            <img src="${e.target.result}" alt="Preview">
+                            <button class="remove-btn" onclick="removeImage(${uploadedFiles.length - 1})">×</button>
+                        `;
+                        imagePreview.appendChild(previewItem);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            window.removeImage = function(index) {
+                uploadedFiles.splice(index, 1);
+                imagePreview.children[index].remove();
+            };
+
+            // Form submission
+            document.getElementById('addShopForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Get form data
+                const formData = new FormData(this);
+                
+                // Validate categories
+                const categories = formData.getAll('categories');
+                if (categories.length === 0) {
+                    alert('Please select at least one category');
+                    return;
+                }
+
+                // Here you would typically send data to backend
+                console.log('Form submitted:', Object.fromEntries(formData));
+                
+                // Show success modal
+                closeAddShopModal();
+                document.getElementById('successModal').classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>
