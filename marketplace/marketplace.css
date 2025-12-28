@@ -20,9 +20,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 20px;
 }
 
 .marketplace-header .logo h1 {
@@ -38,6 +38,7 @@
 .marketplace-header .nav-links {
   display: flex;
   list-style: none;
+  gap: 1.5rem;
 }
 
 .marketplace-header .nav-links li {
@@ -51,7 +52,6 @@
   padding: 0.5rem 1rem;
   border-radius: 4px;
   transition: all 0.3s ease;
-  font-size: 0.95rem;
 }
 
 .marketplace-header .nav-links a:hover {
@@ -61,6 +61,23 @@
 .marketplace-header .nav-links a.active {
   background-color: rgba(255, 255, 255, 0.25);
   font-weight: 600;
+}
+
+.marketplace-header .hero-content {
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.marketplace-header .hero-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.marketplace-header .hero-content p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* Responsive Design for Header */

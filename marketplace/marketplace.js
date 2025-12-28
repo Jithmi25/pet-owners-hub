@@ -1,4 +1,56 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // All available pet listings
+    const allListings = [
+        {
+            id: 1,
+            name: "Golden Retriever Puppy",
+            price: 20000,
+            location: "Kandy, Pilimathalawa",
+            type: "dog",
+            breed: "Golden Retriever",
+            age: "8 weeks",
+            gender: "Male",
+            description: "Beautiful golden retriever puppy from champion bloodline. Vaccinated and vet checked.",
+            image: "../../assets/images/pet1.jpg"
+        },
+        {
+            id: 2,
+            name: "Siamese Cat",
+            price: 45000,
+            location: "Gampaha, Nittabuwa",
+            type: "cat",
+            breed: "Siamese",
+            age: "6 months",
+            gender: "Female",
+            description: "Purebred Siamese cat with blue eyes. Litter trained and very affectionate.",
+            image: "../../assets/images/pet2.webp"
+        },
+        {
+            id: 3,
+            name: "African Grey Parrot",
+            price: 20000,
+            location: "Kurunagala, Kuliyapitiya",
+            type: "bird",
+            breed: "African Grey",
+            age: "2 years",
+            gender: "Male",
+            description: "Smart and talkative African Grey. Comes with large cage and toys.",
+            image: "../../assets/images/pet3.webp"
+        },
+        {
+            id: 4,
+            name: "Labrador Retriever",
+            price: 25000,
+            location: "Kagalle, Mawanella",
+            type: "dog",
+            breed: "Labrador",
+            age: "1 year",
+            gender: "Female",
+            description: "Sweet lab looking for a forever home. Spayed and up to date on shots.",
+            image: "../../assets/images/pet4.jpg"
+        }
+    ];
+
     // BACKEND INTEGRATION: Load pet listings from API
     function loadPetListings(page = 1, filters = {}) {
         /*
@@ -22,65 +74,58 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         */
         
-        // Simulated data for demonstration
-        const sampleListings = [
-            {
-                id: 1,
-                name: "Golden Retriever Puppy",
-                price: 20000,
-                location: "Kandy, Pilimathalawa",
-                type: "dog",
-                breed: "Golden Retriever",
-                age: "8 weeks",
-                gender: "Male",
-                description: "Beautiful golden retriever puppy from champion bloodline. Vaccinated and vet checked.",
-                image: "../../assets/images/pet1.jpg"
-            },
-            {
-                id: 2,
-                name: "Siamese Cat",
-                price: 45000,
-                location: "Gampaha, Nittabuwa",
-                type: "cat",
-                breed: "Siamese",
-                age: "6 months",
-                gender: "Female",
-                description: "Purebred Siamese cat with blue eyes. Litter trained and very affectionate.",
-                image: "../../assets/images/pet2.webp"
-            },
-            {
-                id: 3,
-                name: "African Grey Parrot",
-                price: 20000,
-                location: "Kurunagala, Kuliyapitiya",
-                type: "bird",
-                breed: "African Grey",
-                age: "2 years",
-                gender: "Male",
-                description: "Smart and talkative African Grey. Comes with large cage and toys.",
-                image: "../../assets/images/pet3.webp"
-            },
-            {
-                id: 4,
-                name: "Labrador Retriever",
-                price: 25000,
-                location: "Kagalle, Mawanella",
-                type: "dog",
-                breed: "Labrador",
-                age: "1 year",
-                gender: "Female",
-                description: "Sweet lab looking for a forever home. Spayed and up to date on shots.",
-                image: "../../assets/images/pet4.jpg"
-            }
-        ];
+        // Filter listings based on search criteria
+        let filteredListings = allListings;
         
-        displayPetListings(sampleListings);
+        // Apply search filter
+        if (filters.search && filters.search.trim() !== '') {
+            const searchTerm = filters.search.toLowerCase();
+            filteredListings = filteredListings.filter(pet => 
+                pet.name.toLowerCase().includes(searchTerm) ||
+                pet.breed.toLowerCase().includes(searchTerm) ||
+                pet.description.toLowerCase().includes(searchTerm) ||
+                pet.location.toLowerCase().includes(searchTerm)
+            );
+        }
+        
+        // Apply type filter
+        if (filters.type && filters.type !== '') {
+            filteredListings = filteredListings.filter(pet => 
+                pet.type === filters.type
+            );
+        }
+        
+        // Apply location filter
+        if (filters.location && filters.location !== '') {
+            filteredListings = filteredListings.filter(pet => 
+                pet.location.toLowerCase().includes(filters.location.toLowerCase())
+            );
+        }
+        
+        displayPetListings(filteredListings);
         updatePagination(3, 1);
+        
+        // Update results count
+        const resultsText = filteredListings.length === 1 ? '1 pet' : `${filteredListings.length} pets`;
+        const resultsEl = document.getElementById('resultsCount');
+        if (resultsEl) resultsEl.textContent = `Showing ${resultsText}`;
+        console.log(`Showing ${resultsText}`);
     }
     
     function displayPetListings(listings) {
         const listingsContainer = document.getElementById('petListings');
         listingsContainer.innerHTML = '';
+        
+        if (listings.length === 0) {
+            listingsContainer.innerHTML = `
+                <div style="text-align: center; padding: 3rem; grid-column: 1 / -1;">
+                    <i class="fas fa-search" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                    <h3 style="color: var(--gray);">No pets found</h3>
+                    <p style="color: var(--gray);">Try adjusting your search filters</p>
+                </div>
+            `;
+            return;
+        }
         
         listings.forEach(pet => {
             const petCard = document.createElement('div');
@@ -134,37 +179,85 @@ document.addEventListener('DOMContentLoaded', function() {
         paginationContainer.appendChild(nextBtn);
     }
     
-    // Search functionality
-    document.getElementById('searchBtn').addEventListener('click', function() {
-        const searchTerm = document.getElementById('searchInput').value;
-        const typeFilter = document.getElementById('typeFilter').value;
-        const locationFilter = document.getElementById('locationFilter').value;
-        
-        // BACKEND INTEGRATION: Apply filters and reload listings
-        loadPetListings(1, {
-            search: searchTerm,
-            type: typeFilter,
-            location: locationFilter
+    // Marketplace page guards
+    const searchBtnEl = document.getElementById('searchBtn');
+    const searchInputEl = document.getElementById('searchInput');
+    const typeFilterEl = document.getElementById('typeFilter');
+    const locationFilterEl = document.getElementById('locationFilter');
+    const listingsContainerEl = document.getElementById('petListings');
+
+    // Perform search using current filter inputs
+    function performSearch() {
+        const filters = {
+            search: searchInputEl ? searchInputEl.value.trim() : '',
+            type: typeFilterEl ? typeFilterEl.value : '',
+            location: locationFilterEl ? locationFilterEl.value : ''
+        };
+        loadPetListings(1, filters);
+    }
+
+    if (listingsContainerEl && searchBtnEl && searchInputEl && typeFilterEl && locationFilterEl) {
+        // Search functionality
+        searchBtnEl.addEventListener('click', performSearch);
+
+        // Allow Enter key to trigger search
+        searchInputEl.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
         });
-    });
+
+        // Real-time filtering on input change
+        searchInputEl.addEventListener('input', performSearch);
+        typeFilterEl.addEventListener('change', performSearch);
+        locationFilterEl.addEventListener('change', performSearch);
+
+        // Load initial listings
+        loadPetListings();
+    }
     
-    // Load initial listings
-    loadPetListings();
-    
-    // Thumbnail image click handler for pet details
+    // Thumbnail image click handler for pet details - Swap functionality
     const thumbnails = document.querySelectorAll('.thumbnail-images img');
     const mainImage = document.getElementById('mainPetImage');
     
-    if (thumbnails && mainImage) {
+    if (thumbnails.length > 0 && mainImage) {
         thumbnails.forEach(thumb => {
             thumb.addEventListener('click', function() {
-                // This would be more dynamic with real data
-                const newSrc = this.src.replace('-thumb', '-large');
-                mainImage.src = newSrc;
+                // Store the current main image source/alt
+                const currentMainSrc = mainImage.src;
+                const currentMainAlt = mainImage.alt;
                 
-                // Update active thumbnail
-                thumbnails.forEach(t => t.style.borderColor = 'transparent');
-                this.style.borderColor = '#6C63FF';
+                // Store the clicked thumbnail source/alt
+                const clickedThumbSrc = this.src;
+                const clickedThumbAlt = this.alt;
+                
+                // Swap: Set main image to clicked thumbnail
+                mainImage.src = clickedThumbSrc;
+                mainImage.alt = clickedThumbAlt;
+                
+                // Swap: Set clicked thumbnail to previous main image
+                this.src = currentMainSrc;
+                this.alt = currentMainAlt;
+                
+                // Visual feedback on swap
+                mainImage.style.opacity = '0.7';
+                setTimeout(() => {
+                    mainImage.style.opacity = '1';
+                }, 150);
+            });
+            
+            // Hover and cursor feedback
+            thumb.style.cursor = 'pointer';
+            thumb.style.transition = 'all 0.3s ease';
+            
+            thumb.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+                this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.15)';
+            });
+            
+            thumb.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+                this.style.boxShadow = 'none';
             });
         });
     }
@@ -322,3 +415,56 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+ // Back to top button
+            const backToTopButton = document.createElement('button');
+            backToTopButton.innerHTML = '↑';
+            backToTopButton.className = 'back-to-top';
+            backToTopButton.style.display = 'none';
+            document.body.appendChild(backToTopButton);
+
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.style.display = 'block';
+                } else {
+                    backToTopButton.style.display = 'none';
+                }
+            });
+
+            backToTopButton.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+        // Add styles for back-to-top button
+        const style = document.createElement('style');
+        style.textContent = `
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        `;
+        document.head.appendChild(style);

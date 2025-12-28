@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pet Details | Pet Owners Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../assets/css/main.css">
     <link rel="stylesheet" href="marketplace.css">
 </head>
@@ -64,12 +65,12 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-outline"> <a href="../../../user-authentication/profile/chatRoom.html">Contact Seller</a></button>
+                    <button class="btn btn-outline" id="contactSellerBtn">Contact Seller</button>
                 </div>
 
                 <div class="pet-actions">
-                    <button class="btn btn-primary">Make an Offer</button>
-                    <button class="btn btn-outline">Save to Favorites</button>
+                    <button class="btn btn-primary" id="makeOfferBtn">Make an Offer</button>
+                    <button class="btn btn-outline" id="saveFavBtn">Save to Favorites</button>
                 </div>
             </div>
 
@@ -96,9 +97,540 @@
 
     </main>
 
+    <!-- Contact Seller Modal -->
+    <div class="modal" id="contactSellerModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeContactModal()">&times;</button>
+            <h2><i class="fas fa-envelope"></i> Contact Seller</h2>
+            <p class="modal-subtitle">Reach out to John Smith about this pet</p>
+            
+            <div class="contact-options">
+                <div class="contact-method">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <h4>Email</h4>
+                        <p><a href="mailto:john.smith@example.com">john.smith@example.com</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-method">
+                    <i class="fas fa-phone"></i>
+                    <div>
+                        <h4>Phone</h4>
+                        <p><a href="tel:+94771234567">+94 77 123 4567</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-method">
+                    <i class="fab fa-facebook"></i>
+                    <div>
+                        <h4>Facebook</h4>
+                        <p><a href="https://facebook.com/johnsmith" target="_blank">facebook.com/johnsmith</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-method">
+                    <i class="fab fa-instagram"></i>
+                    <div>
+                        <h4>Instagram</h4>
+                        <p><a href="https://instagram.com/johnsmith_pets" target="_blank">@johnsmith_pets</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-method">
+                    <i class="fab fa-whatsapp"></i>
+                    <div>
+                        <h4>WhatsApp</h4>
+                        <p><a href="https://wa.me/94771234567" target="_blank">+94 77 123 4567</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="closeContactModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- Make an Offer Modal -->
+    <div class="modal" id="makeOfferModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeMakeOfferModal()">&times;</button>
+            <h2><i class="fas fa-comments"></i> Message Seller</h2>
+            <p class="modal-subtitle">Send a message to John Smith about Golden Retriever Puppy</p>
+            
+            <div class="seller-preview">
+                <img src="../../assets/images/user1.jpg" alt="Seller">
+                <div>
+                    <h4>John Smith</h4>
+                    <p>Seller</p>
+                </div>
+            </div>
+
+            <form id="messageForm" class="message-form">
+                <div class="form-group">
+                    <label for="offerMessage">Your Message <span class="required">*</span></label>
+                    <textarea id="offerMessage" name="message" rows="5" placeholder="Tell the seller about your offer or ask questions..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="offerPrice">Your Offer Price (Optional)</label>
+                    <input type="number" id="offerPrice" name="price" placeholder="e.g., 45000" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="buyerName">Your Name <span class="required">*</span></label>
+                    <input type="text" id="buyerName" name="name" placeholder="Full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="buyerPhone">Your Phone <span class="required">*</span></label>
+                    <input type="tel" id="buyerPhone" name="phone" placeholder="+94 77 123 4567" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="buyerEmail">Your Email <span class="required">*</span></label>
+                    <input type="email" id="buyerEmail" name="email" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeMakeOfferModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Save to Favorites Modal -->
+    <div class="modal" id="saveFavModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeSaveFavModal()">&times;</button>
+            <div class="modal-icon success">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h2>Added to Favorites!</h2>
+            <p>Golden Retriever Puppy has been saved to your profile</p>
+            <p>You can view all your saved pets in your <a href="../../user-authentication/profile/profile.html">profile</a></p>
+            <button class="btn btn-primary" onclick="closeSaveFavModal()">Done</button>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
      <div class="footer-content">
+    <style>
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+            padding: 2rem 0;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: slideUp 0.3s ease;
+            margin: auto;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #666;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .modal h2 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-subtitle {
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .contact-options {
+            margin: 2rem 0;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-method:hover {
+            border-color: var(--primary);
+            background: rgba(108, 99, 255, 0.05);
+        }
+
+        .contact-method i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .contact-method h4 {
+            margin: 0 0 0.25rem 0;
+            color: var(--dark);
+        }
+
+        .contact-method p {
+            margin: 0;
+            color: var(--text);
+        }
+
+        .contact-method a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .contact-method a:hover {
+            text-decoration: underline;
+        }
+
+        .seller-preview {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f5f5f5;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .seller-preview img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .seller-preview h4 {
+            margin: 0;
+            color: var(--dark);
+        }
+
+        .seller-preview p {
+            margin: 0.25rem 0 0 0;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .message-form {
+            margin: 1.5rem 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        .required {
+            color: #ff4444;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .form-actions button {
+            flex: 1;
+        }
+
+        .modal-icon.success {
+            text-align: center;
+            font-size: 4rem;
+            color: #ff1493;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content p {
+            text-align: center;
+            margin: 0.75rem 0;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .modal-content a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .modal-content a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                max-width: 90vw;
+                padding: 1.5rem;
+            }
+        }
+        /* Similar listings grid */
+        .similar-listings {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <!-- marketplace.js already loaded above -->
+    <script>
+        // Modal functions for Contact Seller
+        function openContactModal() {
+            document.getElementById('contactSellerModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeContactModal() {
+            document.getElementById('contactSellerModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Modal functions for Make an Offer
+        function openMakeOfferModal() {
+            document.getElementById('makeOfferModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMakeOfferModal() {
+            document.getElementById('makeOfferModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.getElementById('messageForm').reset();
+        }
+
+        // Modal functions for Save to Favorites
+        function openSaveFavModal() {
+            document.getElementById('saveFavModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSaveFavModal() {
+            document.getElementById('saveFavModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                if (e.target.id === 'contactSellerModal') {
+                    closeContactModal();
+                } else if (e.target.id === 'makeOfferModal') {
+                    closeMakeOfferModal();
+                } else if (e.target.id === 'saveFavModal') {
+                    closeSaveFavModal();
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Populate Similar Pets by Type
+            const similarContainer = document.querySelector('.similar-listings');
+            if (similarContainer) {
+                const petName = document.querySelector('.pet-info h1')?.innerText || '';
+                const typeEntry = Array.from(document.querySelectorAll('.pet-meta div'))
+                    .find(d => d.textContent.toLowerCase().includes('type:'));
+                const currentType = typeEntry ? typeEntry.textContent.split(':')[1].trim().toLowerCase() : '';
+
+                const allPets = [
+                    { id: 101, name: 'Labrador Retriever', price: 25000, location: 'Colombo, Kirulupana', type: 'dog', age: '1 year', gender: 'Female', description: 'Sweet lab looking for a forever home.', image: '../../assets/images/pet4.jpg' },
+                    { id: 102, name: 'German Shepherd Puppy', price: 60000, location: 'Kandy, Peradeniya', type: 'dog', age: '10 weeks', gender: 'Male', description: 'Energetic and loyal, great family dog.', image: '../../assets/images/pet1.jpg' },
+                    { id: 201, name: 'Siamese Cat', price: 45000, location: 'Gampaha, Nittabuwa', type: 'cat', age: '6 months', gender: 'Female', description: 'Blue-eyed and affectionate Siamese.', image: '../../assets/images/pet2.webp' },
+                    { id: 301, name: 'African Grey Parrot', price: 20000, location: 'Kurunagala, Kuliyapitiya', type: 'bird', age: '2 years', gender: 'Male', description: 'Smart and talkative companion.', image: '../../assets/images/pet3.webp' }
+                ];
+
+                const similar = allPets.filter(p => p.type === currentType && p.name !== petName).slice(0, 3);
+
+                if (similar.length === 0) {
+                    similarContainer.innerHTML = '<p style="color: var(--gray); text-align: center;">No similar pets found.</p>';
+                } else {
+                    similar.forEach(pet => {
+                        const card = document.createElement('div');
+                        card.className = 'pet-card';
+                        card.innerHTML = `
+                            <img src="${pet.image}" alt="${pet.name}">
+                            <div class="pet-info">
+                                <h3>${pet.name}</h3>
+                                <p class="price">RS.${pet.price}</p>
+                                <p class="location"><i class="fas fa-map-marker-alt"></i> ${pet.location}</p>
+                                <div class="pet-meta">
+                                    <span>${pet.type}</span>
+                                    <span>${pet.age}</span>
+                                    <span>${pet.gender}</span>
+                                </div>
+                                <p class="description">${pet.description}</p>
+                                <a href="pet-details.html?id=${pet.id}" class="btn">View Details</a>
+                            </div>
+                        `;
+                        similarContainer.appendChild(card);
+                    });
+                }
+            }
+            // Contact Seller button
+            const contactBtn = document.getElementById('contactSellerBtn');
+            if (contactBtn) {
+                contactBtn.addEventListener('click', openContactModal);
+            }
+
+            // Make an Offer button
+            const makeOfferBtn = document.getElementById('makeOfferBtn');
+            if (makeOfferBtn) {
+                makeOfferBtn.addEventListener('click', openMakeOfferModal);
+            }
+
+            // Save to Favorites button
+            const saveFavBtn = document.getElementById('saveFavBtn');
+            if (saveFavBtn) {
+                saveFavBtn.addEventListener('click', function() {
+                    // Get current pet data
+                    const petName = document.querySelector('.pet-info h1').innerText;
+                    const petId = new URLSearchParams(window.location.search).get('id') || 1;
+                    
+                    // Save to localStorage
+                    let savedPets = JSON.parse(localStorage.getItem('savedPets') || '[]');
+                    
+                    // Check if already saved
+                    if (!savedPets.find(p => p.id == petId)) {
+                        savedPets.push({
+                            id: petId,
+                            name: petName,
+                            savedAt: new Date().toISOString()
+                        });
+                        localStorage.setItem('savedPets', JSON.stringify(savedPets));
+                    }
+                    
+                    openSaveFavModal();
+                    
+                    // Change button appearance
+                    saveFavBtn.innerHTML = '<i class="fas fa-heart"></i> Saved';
+                    saveFavBtn.style.background = '#ff1493';
+                    saveFavBtn.style.color = 'white';
+                    saveFavBtn.style.borderColor = '#ff1493';
+                });
+            }
+
+            // Message form submission
+            const messageForm = document.getElementById('messageForm');
+            if (messageForm) {
+                messageForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(this);
+                    const messageData = {
+                        message: formData.get('message'),
+                        price: formData.get('price'),
+                        name: formData.get('name'),
+                        phone: formData.get('phone'),
+                        email: formData.get('email'),
+                        pet: document.querySelector('.pet-info h1').innerText,
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    // Save to localStorage or send to backend
+                    console.log('Message sent:', messageData);
+                    
+                    alert('Your message has been sent to the seller!');
+                    closeMakeOfferModal();
+                });
+            }
+        });
+    </script>
             <div class="footer-column">
                 <h3>Pet Owners Hub</h3>
                 <p>Your one-stop solution for all pet care needs, connecting pet lovers with quality services.</p>

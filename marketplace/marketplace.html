@@ -40,17 +40,78 @@
                 </select>
                 <select id="locationFilter">
                     <option value="">All Locations</option>
-                    <option value="ny">New York</option>
-                    <option value="la">Los Angeles</option>
-                    <option value="ch">Chicago</option>
+                    <option value="Kandy">Kandy</option>
+                    <option value="Gampaha">Gampaha</option>
+                    <option value="Kurunagala">Kurunagala</option>
                 </select>
                 <button class="btn" id="searchBtn">Search</button>
+                <span id="resultsCount" class="results-count"></span>
             </div>
-            <a href="post-listing.html" class="btn btn-primary">Post a Listing</a>
+            <button class="btn btn-primary" id="postListingBtn">Post a Listing</button>
         </div>
 
         <div class="pet-listings" id="petListings">
-            <!-- Pet listings will be dynamically loaded here -->
+            <!-- Fallback static cards (replaced by JS on load) -->
+            <div class="pet-card">
+                <img src="../../assets/images/pet1.jpg" alt="Golden Retriever Puppy">
+                <div class="pet-info">
+                    <h3>Golden Retriever Puppy</h3>
+                    <p class="price">RS.20000</p>
+                    <p class="location" value="Kandy"><i class="fas fa-map-marker-alt"></i> Kandy, Pilimathalawa</p>
+                    <div class="pet-meta">
+                        <span>dog</span>
+                        <span>8 weeks</span>
+                        <span>Male</span>
+                    </div>
+                    <p class="description">Beautiful golden retriever puppy from champion bloodline.</p>
+                    <a href="pet-details.html?id=1" class="btn">View Details</a>
+                </div>
+            </div>
+            <div class="pet-card">
+                <img src="../../assets/images/pet2.webp" alt="Siamese Cat">
+                <div class="pet-info">
+                    <h3>Siamese Cat</h3>
+                    <p class="price">RS.45000</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Gampaha, Nittabuwa</p>
+                    <div class="pet-meta">
+                        <span>cat</span>
+                        <span>6 months</span>
+                        <span>Female</span>
+                    </div>
+                    <p class="description">Blue-eyed and affectionate Siamese cat.</p>
+                    <a href="pet-details.html?id=2" class="btn">View Details</a>
+                </div>
+            </div>
+            <div class="pet-card">
+                <img src="../../assets/images/pet3.webp" alt="African Grey Parrot">
+                <div class="pet-info">
+                    <h3>African Grey Parrot</h3>
+                    <p class="price">RS.20000</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Kurunagala, Kuliyapitiya</p>
+                    <div class="pet-meta">
+                        <span>bird</span>
+                        <span>2 years</span>
+                        <span>Male</span>
+                    </div>
+                    <p class="description">Smart and talkative companion.</p>
+                    <a href="pet-details.html?id=3" class="btn">View Details</a>
+                </div>
+            </div>
+            <div class="pet-card">
+                <img src="../../assets/images/pet4.jpg" alt="Labrador Retriever">
+                <div class="pet-info">
+                    <h3>Labrador Retriever</h3>
+                    <p class="price">RS.25000</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Kagalle, Mawanella</p>
+                    <div class="pet-meta">
+                        <span>dog</span>
+                        <span>1 year</span>
+                        <span>Female</span>
+                    </div>
+                    <p class="description">Sweet lab looking for a forever home. Spayed and up to date on shots.</p>
+                    <a href="pet-details.html?id=4" class="btn">View Details</a>
+                </div>
+            </div>
         </div>
 
         <div class="pagination" id="pagination">
@@ -61,6 +122,161 @@
             <button id="nextBtn">Next</button>
         </div>
     </main>
+
+    <!-- Post Listing Modal -->
+    <div class="modal" id="postListingModal">
+        <div class="modal-content add-listing-modal">
+            <button class="modal-close" onclick="closePostListingModal()">&times;</button>
+            <h2><i class="fas fa-paw"></i> Post a Pet Listing</h2>
+            <p class="modal-subtitle">Add details about your pet to reach interested buyers</p>
+
+            <form id="postListingForm">
+                <!-- Basic Pet Info -->
+                <div class="form-section">
+                    <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="petName">Pet Name <span class="required">*</span></label>
+                            <input type="text" id="petName" name="petName" placeholder="e.g., Golden Retriever Puppy" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="petType">Type <span class="required">*</span></label>
+                            <select id="petType" name="petType" required>
+                                <option value="">Select type</option>
+                                <option value="dog">Dog</option>
+                                <option value="cat">Cat</option>
+                                <option value="bird">Bird</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="breed">Breed</label>
+                            <input type="text" id="breed" name="breed" placeholder="e.g., Golden Retriever">
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="text" id="age" name="age" placeholder="e.g., 8 weeks">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender" name="gender">
+                                <option value="">Select gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Price (Rs)</label>
+                            <input type="number" id="price" name="price" min="0" placeholder="e.g., 50000">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="form-section">
+                    <h3><i class="fas fa-map-marker-alt"></i> Location</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="district">District <span class="required">*</span></label>
+                            <select id="district" name="district" required>
+                                <option value="">Select District</option>
+                                <option value="Kandy">Kandy</option>
+                                <option value="Gampaha">Gampaha</option>
+                                <option value="Kurunagala">Kurunagala</option>
+                                <option value="Colombo">Colombo</option>
+                                <option value="Galle">Galle</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <input type="text" id="address" name="address" placeholder="Street, city">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Information -->
+                <div class="form-section">
+                    <h3><i class="fas fa-notes-medical"></i> Health Information</h3>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label"><input type="checkbox" name="vaccinated" value="yes"><span>Vaccinations up to date</span></label>
+                        <label class="checkbox-label"><input type="checkbox" name="dewormed" value="yes"><span>Dewormed</span></label>
+                        <label class="checkbox-label"><input type="checkbox" name="neutered" value="yes"><span>Spayed/Neutered</span></label>
+                    </div>
+                </div>
+
+                <!-- Photos -->
+                <div class="form-section">
+                    <h3><i class="fas fa-images"></i> Photos</h3>
+                    <p class="form-hint">Upload up to 5 images (Max 5MB each)</p>
+                    <div class="upload-area" id="listingUploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload or drag and drop</p>
+                        <small>PNG, JPG or JPEG (MAX. 5MB)</small>
+                        <input type="file" id="listingPhotos" name="photos" accept="image/*" multiple hidden>
+                    </div>
+                    <div class="image-preview" id="listingUploadPreview"></div>
+                </div>
+
+                <!-- Description -->
+                <div class="form-section">
+                    <h3><i class="fas fa-align-left"></i> Description</h3>
+                    <div class="form-group">
+                        <label for="description">About Your Pet <span class="required">*</span></label>
+                        <textarea id="description" name="description" rows="4" placeholder="Tell buyers about your pet..." required></textarea>
+                    </div>
+                </div>
+
+                <!-- Seller Info -->
+                <div class="form-section">
+                    <h3><i class="fas fa-user"></i> Seller Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sellerName">Your Name <span class="required">*</span></label>
+                            <input type="text" id="sellerName" name="sellerName" placeholder="Full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sellerPhone">Phone <span class="required">*</span></label>
+                            <input type="tel" id="sellerPhone" name="sellerPhone" placeholder="+94 77 123 4567" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sellerEmail">Email <span class="required">*</span></label>
+                        <input type="email" id="sellerEmail" name="sellerEmail" placeholder="your@email.com" required>
+                    </div>
+                </div>
+
+                <!-- Terms & Submit -->
+                <div class="form-section">
+                    <label class="checkbox-label terms-checkbox">
+                        <input type="checkbox" name="terms" required>
+                        <span>I agree to the <a href="../../support/support.html#terms" target="_blank">Terms of Service</a> and <a href="../../support/support.html#privacy" target="_blank">Privacy Policy</a></span>
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="closePostListingModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Submit Listing</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="postSuccessModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Listing Submitted!</h2>
+            <p>Your pet listing has been submitted for review.</p>
+            <p>We’ll notify you by email when it’s live.</p>
+            <button class="btn btn-primary" onclick="closePostSuccessModal()">Done</button>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer>
@@ -97,6 +313,128 @@
             <p>&copy; 2025 Pet Owners Hub. All rights reserved.</p>
         </div>
     </footer>
+
+    <style>
+        /* Modal Styles */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(5px); overflow-y: auto; padding: 2rem 0; }
+        .modal.active { display: flex; animation: fadeIn 0.3s ease; }
+        .modal-content { background: #fff; padding: 2rem; border-radius: 12px; max-width: 700px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3); position: relative; animation: slideUp 0.3s ease; margin: auto; }
+        .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #666; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; z-index: 10; }
+        .modal-close:hover { background: #f0f0f0; color: #333; }
+        .modal h2 { margin-bottom: 0.5rem; color: var(--dark); display: flex; align-items: center; gap: 0.5rem; }
+        .modal-subtitle { color: var(--text); margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .form-section { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid #e0e0e0; }
+        .form-section:last-of-type { border-bottom: none; padding-bottom: 0; }
+        .form-section h3 { color: var(--dark); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark); font-size: 0.95rem; }
+        .required { color: #ff4444; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; transition: all 0.3s ease; font-family: inherit; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(108,99,255,0.1); }
+        .checkbox-group { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+        .checkbox-label { display: flex; align-items: center; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; font-weight: 500; }
+        .checkbox-label:hover { border-color: var(--primary); background: rgba(108,99,255,0.05); }
+        .upload-area { border: 2px dashed #ddd; border-radius: 8px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s ease; }
+        .upload-area:hover { border-color: var(--primary); background: rgba(108,99,255,0.05); }
+        .upload-area i { font-size: 3rem; color: var(--primary); margin-bottom: 1rem; }
+        .upload-area p { margin: 0.5rem 0; font-weight: 600; color: var(--dark); }
+        .image-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+        .image-preview-item { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 1; }
+        .image-preview-item img { width: 100%; height: 100%; object-fit: cover; }
+        .image-preview-item .remove-btn { position: absolute; top: 0.25rem; right: 0.25rem; background: rgba(255,68,68,0.9); color: #fff; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+        .form-actions { display: flex; gap: 1rem; margin-top: 2rem; }
+        .form-actions button { flex: 1; }
+        .modal-icon.success { text-align: center; font-size: 4rem; color: #4caf50; margin-bottom: 1rem; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 768px) { .form-row, .checkbox-group { grid-template-columns: 1fr; } .modal-content { max-width: 95vw; } }
+    </style>
+
+    <style>
+        /* (Removed custom search-filter CSS per request) */
+    </style>
+
+    <script>
+        // Modal controls
+        function openPostListingModal() {
+            document.getElementById('postListingModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closePostListingModal() {
+            document.getElementById('postListingModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.getElementById('postListingForm').reset();
+            document.getElementById('listingUploadPreview').innerHTML = '';
+        }
+        function closePostSuccessModal() {
+            document.getElementById('postSuccessModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Click outside to close
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                if (e.target.id === 'postListingModal') closePostListingModal();
+                if (e.target.id === 'postSuccessModal') closePostSuccessModal();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const postBtn = document.getElementById('postListingBtn');
+            if (postBtn) postBtn.addEventListener('click', openPostListingModal);
+
+            // Upload preview
+            const uploadArea = document.getElementById('listingUploadArea');
+            const fileInput = document.getElementById('listingPhotos');
+            const previewArea = document.getElementById('listingUploadPreview');
+            let uploadedFiles = [];
+
+            uploadArea.addEventListener('click', () => fileInput.click());
+            uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.style.borderColor = 'var(--primary)'; uploadArea.style.backgroundColor = 'rgba(108,99,255,0.1)'; });
+            uploadArea.addEventListener('dragleave', () => { uploadArea.style.borderColor = '#ddd'; uploadArea.style.backgroundColor = 'transparent'; });
+            uploadArea.addEventListener('drop', (e) => { e.preventDefault(); uploadArea.style.borderColor = '#ddd'; uploadArea.style.backgroundColor = 'transparent'; handleFiles(e.dataTransfer.files); });
+            fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+
+            function handleFiles(files) {
+                if (uploadedFiles.length + files.length > 5) { alert('You can only upload up to 5 images'); return; }
+                Array.from(files).forEach(file => {
+                    if (!file.type.match('image.*')) { alert('Please upload only image files'); return; }
+                    if (file.size > 5 * 1024 * 1024) { alert('File size must be less than 5MB'); return; }
+                    uploadedFiles.push(file);
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const previewItem = document.createElement('div');
+                        previewItem.className = 'image-preview-item';
+                        const index = uploadedFiles.length - 1;
+                        previewItem.innerHTML = `
+                            <img src="${e.target.result}" alt="Preview">
+                            <button class="remove-btn" data-index="${index}">×</button>
+                        `;
+                        previewArea.appendChild(previewItem);
+                        previewItem.querySelector('.remove-btn').addEventListener('click', function() {
+                            const i = parseInt(this.getAttribute('data-index'));
+                            uploadedFiles.splice(i, 1);
+                            previewItem.remove();
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            // Form submission
+            document.getElementById('postListingForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                // Validate required checkbox group? No, optional health
+                const listing = Object.fromEntries(formData);
+                listing.photosCount = uploadedFiles.length;
+                console.log('Listing submitted:', listing);
+                closePostListingModal();
+                document.getElementById('postSuccessModal').classList.add('active');
+            });
+        });
+    </script>
 
     <script src="marketplace.js"></script>
 </body>
