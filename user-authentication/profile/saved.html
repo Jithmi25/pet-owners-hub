@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="../../assets/css/main.css">
     <link rel="stylesheet" href="../css/auth.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .card { background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 16px; margin: 12px 0; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .card-header h3 { margin: 0; font-size: 16px; color: #333; }
+        .card-body { color: #555; font-size: 14px; }
+        .price { font-weight: 600; color: #333; }
+    </style>
 </head>
 <body>
     <div id="authCheck" style="display:none;"></div>
@@ -28,8 +35,10 @@
                 <a href="pets.html"><i class="fas fa-paw"></i> My Pets</a>
                 <a href="appointments.html"><i class="fas fa-calendar-alt"></i> Appointments</a>
                 <a href="saved.html" class="active"><i class="fas fa-heart"></i> Saved Items</a>
+                <a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a>
                 <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
-                <a href="../../index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="../home.html"><i class="fas fa-home"></i> Home</a>
+                <a href="../../index.html" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </nav>
         </aside>
 
@@ -40,7 +49,6 @@
             <div class="saved-tabs">
                 <button class="tab-btn active" data-tab="clinics">Vet Clinics</button>
                 <button class="tab-btn" data-tab="products">Pet Products</button>
-                <button class="tab-btn" data-tab="articles">Care Articles</button>
             </div>
 
             <div class="tab-content active" id="clinics-tab">
@@ -49,7 +57,7 @@
                     <div class="empty-state">
                         <i class="fas fa-hospital-user empty-icon"></i>
                         <p>No saved clinics yet</p>
-                        <a href="../../vet-clinics/clinics.html" class="btn btn-outline">Browse Clinics</a>
+                        <button class="btn btn-outline" disabled>Browse Clinics (in-page only)</button>
                     </div>
                 </div>
             </div>
@@ -60,23 +68,101 @@
                     <div class="empty-state">
                         <i class="fas fa-shopping-bag empty-icon"></i>
                         <p>No saved products yet</p>
-                        <a href="../../marketplace/marketplace.html" class="btn btn-outline">Browse Products</a>
+                        <button class="btn btn-outline" disabled>Browse Products (in-page only)</button>
                     </div>
                 </div>
             </div>
 
-            <div class="tab-content" id="articles-tab">
-                <div class="saved-articles" id="savedArticles">
-                    <!-- Saved articles will appear here -->
-                    <div class="empty-state">
-                        <i class="fas fa-newspaper empty-icon"></i>
-                        <p>No saved articles yet</p>
-                    </div>
-                </div>
-            </div>
+            
         </main>
     </div>
 
     <script src="../js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = {
+                clinics: document.getElementById('clinics-tab'),
+                products: document.getElementById('products-tab')
+            };
+
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const target = this.getAttribute('data-tab');
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    Object.values(tabContents).forEach(el => el.classList.remove('active'));
+                    tabContents[target].classList.add('active');
+                });
+            });
+
+            // Load saved items from localStorage (fallback to empty arrays)
+            const savedClinics = JSON.parse(localStorage.getItem('savedClinics') || '[]');
+            const savedProducts = JSON.parse(localStorage.getItem('savedProducts') || '[]');
+
+            // Provide hardcoded defaults if none saved
+            const defaultProducts = [
+                {
+                    name: 'Premium Dog Food',
+                    price: 2500,
+                    image: '../../assets/images/mypet.png',
+                    description: 'High-protein formula ideal for active dogs.'
+                },
+                {
+                    name: 'Cat Scratching Post',
+                    price: 1800,
+                    description: 'Durable sisal rope with stable base to protect furniture.'
+                },
+                {
+                    name: 'Bird Cage Cleaner',
+                    price: 950,
+                    description: 'Safe, non-toxic cleaner for daily cage maintenance.'
+                }
+            ];
+            if (!savedProducts.length) {
+                savedProducts.push(...defaultProducts);
+                localStorage.setItem('savedProducts', JSON.stringify(savedProducts));
+            }
+
+            function renderClinics() {
+                const container = document.getElementById('savedClinics');
+                if (!savedClinics.length) return;
+                container.innerHTML = savedClinics.map(c => `
+                    <div class="card clinic-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-hospital"></i> ${c.name || 'Clinic'}</h3>
+                            <span class="rating"><i class="fas fa-star"></i> ${c.rating || '—'}</span>
+                        </div>
+                        <div class="card-body">
+                            <p><i class="fas fa-location-dot"></i> ${c.location || 'Location unavailable'}</p>
+                            <p><i class="fas fa-phone"></i> ${c.phone || 'Phone unavailable'}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            function renderProducts() {
+                const container = document.getElementById('savedProducts');
+                if (!savedProducts.length) return;
+                container.innerHTML = savedProducts.map(p => `
+                    <div class="card product-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-box"></i> ${p.name || 'Product'}</h3>
+                            <span class="price">${p.price ? 'Rs ' + p.price : ''}</span>
+                        </div>
+                        <div class="card-body">
+                            ${p.image ? `<img src="${p.image}" alt="${p.name}" style="max-width:150px;border-radius:8px;margin:8px 0;"/>` : ''}
+                            <p>${p.description || ''}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Render sections
+            renderClinics();
+            renderProducts();
+        });
+    </script>
 </body>
 </html>

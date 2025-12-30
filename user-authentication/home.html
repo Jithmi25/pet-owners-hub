@@ -8,26 +8,87 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../../assets/css/main.css">
+    <style>
+        /* Header Styles */
+        .home-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)),
+                    url("../../assets/images/header-bg.jpg");
+            background-size: cover;
+            background-position: center;
+            height: 60vh;
+            min-height: 400px;
+            color: white;
+            padding: 1rem 0;
+        }
+
+        .home-header .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .home-header .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        .home-header .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .home-header .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .home-header .nav-links a.active {
+            background-color: rgba(255, 255, 255, 0.25);
+            font-weight: 600;
+        }
+
+        .home-header .hero-content {
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .home-header .hero-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .home-header .hero-content p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation Bar -->
-    <header>
-        <div class="logo">
-            <h1>Pet Owners Hub</h1>
+    <header class="home-header">
+        <nav>
+            <div class="logo">
+                <h1>Pet Owners Hub</h1>
+            </div>
             <ul class="nav-links">
-                <li><a href="../../../user-authentication/profile/profile.html" class="active">Profile</a></li>
+                <li><a href="../../user-authentication/home.html" class="active">Home</a></li>
+                <li><a href="../../vet-clinics/clinics.html">Vet Clinics</a></li>
+                <li><a href="../../pet-shops/shops.html">Pet Shops</a></li>
+                <li><a href="../../marketplace/marketplace.html">Marketplace</a></li>
+                <li><a href="../../user-authentication/profile/profile.html">Profile</a></li>
                 <li><a href="../../index.html">Logout</a></li>
             </ul>
-        </div>
-        
-        <div class="hero-content">
-            <h2>Your Complete Pet Care Solution</h2>
-            <p>Find everything you need to keep your furry friends happy and healthy</p>
-            <div class="hero-buttons">
-                <a href="#services" class="btn">Explore Services</a>
-                <a href="../../../user-authentication/profile/chatRoom.html" class="btn btn-outline">Chat Room</a>
-            </div>
-        </div>
+        </nav>
     </header>
 
     <!-- Search Section -->
@@ -65,28 +126,6 @@
                     <p>Our safe and secure marketplace connects pet lovers for adoption, rehoming, and sales.</p>
                     <a href="../../../marketplace/marketplace.html" class="btn btn-outline">Explore Marketplace</a>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="features">
-        <h2>Why Choose Pet Owners Hub?</h2>
-        <div class="features-container">
-            <div class="feature-card">
-                <div class="feature-icon">🐾</div>
-                <h3>Verified Providers</h3>
-                <p>All vet clinics and pet shops are thoroughly vetted to ensure quality service for your pets.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">❤️</div>
-                <h3>Community Trusted</h3>
-                <p>Real reviews from pet owners help you make the best choices for your furry family members.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🔒</div>
-                <h3>Safe Transactions</h3>
-                <p>Our secure platform ensures safe pet adoptions and purchases with verified sellers.</p>
             </div>
         </div>
     </section>

@@ -41,6 +41,14 @@
             font-size: 48px;
         }
 
+        .pet-photo {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            border-bottom: 1px solid #eee;
+        }
+
         .pet-info {
             padding: 20px;
         }
@@ -260,8 +268,9 @@
                 <a href="pets.html" class="active"><i class="fas fa-paw"></i> My Pets</a>
                 <a href="appointments.html"><i class="fas fa-calendar-alt"></i> Appointments</a>
                 <a href="saved.html"><i class="fas fa-heart"></i> Saved Items</a>
+                <a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a>
                 <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
-                <a href="../../index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="../home.html"><i class="fas fa-home"></i> Home</a>
                 <a href="../../index.html" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </nav>
         </aside>
@@ -361,7 +370,8 @@
                     type: 'dog',
                     breed: 'Local',
                     age: 3,
-                    gender: 'male'
+                    gender: 'male',
+                    photo: '../../assets/images/mypet.png'
                 },
                 {
                     id: '2',
@@ -369,7 +379,8 @@
                     type: 'cat',
                     breed: 'Siamese',
                     age: 2,
-                    gender: 'female'
+                    gender: 'female',
+                    photo: '../../assets/images/mypet.png'
                 }
             ];
 
@@ -407,10 +418,12 @@
                                 pet.type === 'cat' ? 'fa-cat' : 
                                 pet.type === 'bird' ? 'fa-dove' : 'fa-paw';
                     
+                    const imageHtml = pet.photo
+                        ? `<img class="pet-photo" src="${pet.photo}" alt="${pet.name}">`
+                        : `<div class="pet-image"><i class="fas ${icon}"></i></div>`;
+                    
                     petCard.innerHTML = `
-                        <div class="pet-image">
-                            <i class="fas ${icon}"></i>
-                        </div>
+                        ${imageHtml}
                         <div class="pet-info">
                             <h3 class="pet-name">${pet.name}</h3>
                             <div class="pet-details">
@@ -528,7 +541,7 @@
             
             petForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                
+
                 const petData = {
                     id: petIdInput.value,
                     name: document.getElementById('petName').value,
@@ -537,8 +550,27 @@
                     age: document.getElementById('petAge').value,
                     gender: document.getElementById('petGender').value
                 };
-                
-                savePet(petData);
+
+                const fileInput = document.getElementById('petPhoto');
+                const file = fileInput && fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        petData.photo = ev.target.result;
+                        savePet(petData);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // Preserve existing photo when editing if no new file is selected
+                    if (petData.id) {
+                        const existing = pets.find(p => p.id === petData.id);
+                        if (existing && existing.photo) {
+                            petData.photo = existing.photo;
+                        }
+                    }
+                    savePet(petData);
+                }
             });
             
             // Logout functionality

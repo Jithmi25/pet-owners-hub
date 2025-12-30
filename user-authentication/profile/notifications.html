@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications | Pet Owners Hub</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Notification Styles */
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .notification-header h1 {
+            font-size: 28px;
+            color: #333;
+            margin: 0;
+        }
+
+        .mark-all-read {
+            background: none;
+            border: none;
+            color: #6c63ff;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .mark-all-read:hover {
+            background: #f0f0ff;
+        }
+
+        .notification-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #e1e5e9;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #6c63ff 0%, #4d44db 100%);
+            color: white;
+            border-color: #6c63ff;
+        }
+
+        .notifications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .notification-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .notification-item.unread {
+            background: #f8f9ff;
+            border-left: 4px solid #6c63ff;
+        }
+
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 20px;
+            color: white;
+        }
+
+        .notification-icon.message {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .notification-icon.appointment {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .notification-icon.reminder {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .notification-icon.alert {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 10px;
+            height: 10px;
+            background: #6c63ff;
+            border-radius: 50%;
+        }
+
+        .empty-notifications {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 80px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .empty-notifications h3 {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .empty-notifications p {
+            color: #999;
+        }
+
+        /* Chat Message Styles */
+        .chat-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid #e1e5e9;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6c63ff 0%, #4d44db 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .chat-info h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .chat-info p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            display: flex;
+            gap: 10px;
+            max-width: 70%;
+        }
+
+        .message.sent {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #ddd;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            background: #f5f5f5;
+            padding: 12px 16px;
+            border-radius: 12px;
+        }
+
+        .message.sent .message-content {
+            background: linear-gradient(135deg, #6c63ff 0%, #4d44db 100%);
+            color: white;
+        }
+
+        .message-text {
+            margin-bottom: 5px;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .message.sent .message-time {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .chat-input {
+            padding: 20px;
+            border-top: 1px solid #e1e5e9;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .chat-input input:focus {
+            border-color: #6c63ff;
+        }
+
+        .send-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6c63ff 0%, #4d44db 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .view-type-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, #6c63ff 0%, #4d44db 100%);
+            color: white;
+            border-color: #6c63ff;
+        }
+
+        .view-container {
+            display: none;
+        }
+
+        .view-container.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="authCheck" style="display:none;"></div>
+    
+    <div class="profile-container">
+        <!-- Sidebar -->
+        <aside class="profile-sidebar">
+            <div class="profile-header">
+                <div class="avatar-container">
+                    <img src="../../assets/images/default-avatar.jpeg" alt="Profile" class="avatar">
+                    <button class="avatar-edit">Edit</button>
+                </div>
+                <h2 id="profileName">J. Kaushalya</h2>
+                <p>Member since <span id="joinDate">Jan 2023</span></p>
+            </div>
+
+            <nav class="profile-nav">
+                <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                <a href="pets.html"><i class="fas fa-paw"></i> My Pets</a>
+                <a href="appointments.html"><i class="fas fa-calendar-alt"></i> Appointments</a>
+                <a href="saved.html"><i class="fas fa-heart"></i> Saved Items</a>
+                <a href="notifications.html" class="active"><i class="fas fa-bell"></i> Notifications</a>
+                <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                <a href="../home.html"><i class="fas fa-home"></i> Home</a>
+                <a href="../../index.html" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="profile-content">
+            <div class="notification-header">
+                <h1>Notifications & Messages</h1>
+                <button class="mark-all-read" id="markAllRead">Mark all as read</button>
+            </div>
+
+            <!-- View Toggle -->
+            <div class="view-type-toggle">
+                <button class="toggle-btn active" data-view="notifications">
+                    <i class="fas fa-bell"></i> Notifications
+                </button>
+                <button class="toggle-btn" data-view="messages">
+                    <i class="fas fa-comments"></i> Messages
+                </button>
+            </div>
+
+            <!-- Notifications View -->
+            <div class="view-container active" id="notifications-view">
+                <div class="notification-filters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="unread">Unread</button>
+                    <button class="filter-btn" data-filter="messages">Messages</button>
+                    <button class="filter-btn" data-filter="appointments">Appointments</button>
+                    <button class="filter-btn" data-filter="reminders">Reminders</button>
+                </div>
+
+                <div class="notifications-list" id="notificationsList">
+                    <!-- Notifications will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Messages View -->
+            <div class="view-container" id="messages-view">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="chat-avatar">
+                            <i class="fas fa-hospital"></i>
+                        </div>
+                        <div class="chat-info">
+                            <h3>Veterinary Support</h3>
+                            <p>Online now</p>
+                        </div>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Messages will be loaded here -->
+                    </div>
+
+                    <div class="chat-input">
+                        <input type="text" id="messageInput" placeholder="Type your message...">
+                        <button class="send-btn" id="sendMessage">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const authToken = localStorage.getItem('petcareAuthToken');
+            if (!authToken) {
+                window.location.href = '../../user-authentication/login.html';
+                return;
+            }
+
+            // Hardcoded user data
+            const userData = {
+                name: "J. Kaushalya",
+                joinDate: "Jan 2023"
+            };
+
+            // Sample notifications data
+            let notifications = [
+                {
+                    id: 1,
+                    type: 'appointment',
+                    title: 'Appointment Reminder',
+                    message: 'You have an appointment with Dr. Silva tomorrow at 3:00 PM',
+                    time: '2 hours ago',
+                    read: false
+                },
+                {
+                    id: 2,
+                    type: 'message',
+                    title: 'New Message',
+                    message: 'Veterinary Clinic sent you a message about Max\'s vaccination',
+                    time: '5 hours ago',
+                    read: false
+                },
+                {
+                    id: 3,
+                    type: 'reminder',
+                    title: 'Vaccination Due',
+                    message: 'Luna\'s rabies vaccination is due in 3 days',
+                    time: '1 day ago',
+                    read: true
+                },
+                {
+                    id: 4,
+                    type: 'alert',
+                    title: 'Appointment Confirmed',
+                    message: 'Your appointment for Max has been confirmed',
+                    time: '2 days ago',
+                    read: true
+                }
+            ];
+
+            // Sample chat messages
+            let chatMessages = [
+                {
+                    id: 1,
+                    text: 'Hello! How can I help you today?',
+                    time: '10:30 AM',
+                    sent: false
+                },
+                {
+                    id: 2,
+                    text: 'Hi, I wanted to ask about Max\'s vaccination schedule',
+                    time: '10:32 AM',
+                    sent: true
+                },
+                {
+                    id: 3,
+                    text: 'Of course! Max is due for his rabies booster next month. Would you like to schedule an appointment?',
+                    time: '10:33 AM',
+                    sent: false
+                }
+            ];
+
+            // Set user data
+            document.getElementById('profileName').textContent = userData.name;
+            document.getElementById('joinDate').textContent = userData.joinDate;
+
+            // Render notifications
+            function renderNotifications(filter = 'all') {
+                const notificationsList = document.getElementById('notificationsList');
+                let filteredNotifications = notifications;
+
+                if (filter === 'unread') {
+                    filteredNotifications = notifications.filter(n => !n.read);
+                } else if (filter !== 'all') {
+                    filteredNotifications = notifications.filter(n => n.type === filter);
+                }
+
+                if (filteredNotifications.length === 0) {
+                    notificationsList.innerHTML = `
+                        <div class="empty-notifications">
+                            <i class="fas fa-bell-slash empty-icon"></i>
+                            <h3>No notifications</h3>
+                            <p>You're all caught up!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                notificationsList.innerHTML = filteredNotifications.map(notification => `
+                    <div class="notification-item ${!notification.read ? 'unread' : ''}" data-id="${notification.id}">
+                        ${!notification.read ? '<span class="notification-badge"></span>' : ''}
+                        <div class="notification-icon ${notification.type}">
+                            <i class="fas ${getNotificationIcon(notification.type)}"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">${notification.title}</div>
+                            <div class="notification-message">${notification.message}</div>
+                            <div class="notification-time">${notification.time}</div>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Add click listeners to mark as read
+                document.querySelectorAll('.notification-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const notifId = parseInt(this.getAttribute('data-id'));
+                        markAsRead(notifId);
+                    });
+                });
+            }
+
+            function getNotificationIcon(type) {
+                const icons = {
+                    message: 'fa-envelope',
+                    appointment: 'fa-calendar-check',
+                    reminder: 'fa-bell',
+                    alert: 'fa-exclamation-circle'
+                };
+                return icons[type] || 'fa-bell';
+            }
+
+            function markAsRead(notificationId) {
+                const notification = notifications.find(n => n.id === notificationId);
+                if (notification) {
+                    notification.read = true;
+                    renderNotifications(currentFilter);
+                }
+            }
+
+            // Render chat messages
+            function renderChatMessages() {
+                const chatMessagesContainer = document.getElementById('chatMessages');
+                chatMessagesContainer.innerHTML = chatMessages.map(msg => `
+                    <div class="message ${msg.sent ? 'sent' : ''}">
+                        <div class="message-avatar"></div>
+                        <div class="message-content">
+                            <div class="message-text">${msg.text}</div>
+                            <div class="message-time">${msg.time}</div>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Scroll to bottom
+                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+            }
+
+            // View toggle
+            const toggleButtons = document.querySelectorAll('.toggle-btn');
+            toggleButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const viewType = this.getAttribute('data-view');
+                    
+                    toggleButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
+                    document.getElementById(`${viewType}-view`).classList.add('active');
+                });
+            });
+
+            // Filter buttons
+            let currentFilter = 'all';
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    currentFilter = this.getAttribute('data-filter');
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    renderNotifications(currentFilter);
+                });
+            });
+
+            // Mark all as read
+            document.getElementById('markAllRead').addEventListener('click', function() {
+                notifications.forEach(n => n.read = true);
+                renderNotifications(currentFilter);
+            });
+
+            // Send message
+            document.getElementById('sendMessage').addEventListener('click', sendMessage);
+            document.getElementById('messageInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            function sendMessage() {
+                const input = document.getElementById('messageInput');
+                const text = input.value.trim();
+                
+                if (text) {
+                    const newMessage = {
+                        id: chatMessages.length + 1,
+                        text: text,
+                        time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+                        sent: true
+                    };
+                    
+                    chatMessages.push(newMessage);
+                    renderChatMessages();
+                    input.value = '';
+                }
+            }
+
+            // Logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('petcareAuthToken');
+                window.location.href = '../../index.html';
+            });
+
+            // Initial render
+            renderNotifications();
+            renderChatMessages();
+        });
+    </script>
+</body>
+</html>
