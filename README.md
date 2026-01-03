@@ -87,7 +87,7 @@ pet-owners-hub/
 1. **Clone the repository**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Jithmi25/pet-owners-hub.git
    cd pet-owners-hub
    ```
 
@@ -178,9 +178,6 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
-
-This project is part of CodeWithWie2025 - IdeaIgniters.
 
 ## 👥 Contact & Support
 
@@ -206,9 +203,6 @@ Future enhancements planned:
 ## 📊 Project Status
 
 **Status**: Completed ✅
-
-This project is part of the CodeWithWie2025 collection and has been completed as of January 2026.
-
 ---
 
 Made with ❤️ for pet owners and their furry friends 🐾
