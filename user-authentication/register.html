@@ -12,11 +12,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f8f9fa;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
-                              url("../assets/images/pet-background.jpg");
-            background-size: cover;
-            background-position: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 20px;
         }
 
@@ -463,46 +459,71 @@
             const registerBtn = document.getElementById('register-btn');
             const registerSpinner = document.getElementById('register-spinner');
 
-            registerForm.addEventListener('submit', function(e) {
+
+            registerForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                if (validateForm()) {
-                    // Show loading state
-                    registerBtn.disabled = true;
-                    registerSpinner.style.display = 'inline-block';
-                    registerBtn.querySelector('span').textContent = 'Creating account...';
-
-                    // Get form data
+                if (!validateForm()) return;
+                
+                // Show loading state
+                registerBtn.disabled = true;
+                registerSpinner.style.display = 'inline-block';
+                registerBtn.querySelector('span').textContent = 'Creating account...';
+                
+                try {
+                    const firstName = document.getElementById('firstName').value;
+                    const lastName = document.getElementById('lastName').value;
                     const formData = {
-                        firstName: document.getElementById('firstName').value,
-                        lastName: document.getElementById('lastName').value,
+                        name: `${firstName} ${lastName}`,
+                        firstName: firstName,
+                        lastName: lastName,
                         email: document.getElementById('email').value,
                         phone: document.getElementById('phone').value,
-                        password: document.getElementById('regPassword').value,
-                        newsletter: document.getElementById('newsletter').checked
+                        password: document.getElementById('regPassword').value
                     };
-
-                    // Simulate API call
-                    setTimeout(() => {
-                        // Store user data
-                        const userData = {
+                    
+                    // Call real backend API
+                    const response = await fetch('http://localhost:5000/api/users/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        // Store auth token and user data from backend
+                        localStorage.setItem('petcareAuthToken', data.token);
+                        localStorage.setItem('userData', JSON.stringify({
                             name: `${formData.firstName} ${formData.lastName}`,
                             email: formData.email,
                             phone: formData.phone,
                             joinDate: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
-                        };
-
-                        localStorage.setItem('petcareAuthToken', 'simulated-token-' + Date.now());
-                        localStorage.setItem('userData', JSON.stringify(userData));
-
-                        // Show success message
-                        showToast('Account created successfully! Redirecting...', 'success');
-
-                        // Redirect to profile
+                        }));
+                        
+                        showToast('Account created successfully!', 'success');
+                        
                         setTimeout(() => {
                             window.location.href = 'profile/profile.html';
                         }, 1500);
-                    }, 2000);
+                    } else {
+                        showToast(data.message || 'Registration failed', 'error');
+                        registerBtn.disabled = false;
+                        registerSpinner.style.display = 'none';
+                        registerBtn.querySelector('span').textContent = 'Create Account';
+                    }
+                    
+                    // Reset form
+                    registerBtn.disabled = false;
+                    registerSpinner.style.display = 'none';
+                    registerBtn.querySelector('span').textContent = 'Create Account';
+                } catch (error) {
+                    showToast('Network error. Please try again.', 'error');
+                    registerBtn.disabled = false;
+                    registerSpinner.style.display = 'none';
+                    registerBtn.querySelector('span').textContent = 'Create Account';
                 }
             });
 
@@ -705,6 +726,5 @@
             }
         });
     </script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>

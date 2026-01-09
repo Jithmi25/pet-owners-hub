@@ -534,3 +534,85 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Add to profile.html or create a separate profile.js
+document.addEventListener('DOMContentLoaded', async function() {
+    const authToken = localStorage.getItem('petcareAuthToken');
+    if (!authToken) {
+        window.location.href = '../login.html';
+        return;
+    }
+    
+    try {
+        // Get user data from localStorage
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        
+        // Split name if stored as full name
+        const nameParts = (userData.name || '').split(' ');
+        const firstName = nameParts[0] || '';
+        const lastName = nameParts.slice(1).join(' ') || '';
+        
+        // Populate form fields
+        if (document.getElementById('profileFirstName')) {
+            document.getElementById('profileFirstName').value = firstName;
+        }
+        if (document.getElementById('profileLastName')) {
+            document.getElementById('profileLastName').value = lastName;
+        }
+        if (document.getElementById('profileEmail')) {
+            document.getElementById('profileEmail').value = userData.email || '';
+        }
+        if (document.getElementById('profilePhone')) {
+            document.getElementById('profilePhone').value = userData.phone || '';
+        }
+        if (document.getElementById('profileAddress')) {
+            document.getElementById('profileAddress').value = userData.address || '';
+        }
+        
+        // Update sidebar
+        if (document.getElementById('profileName')) {
+            document.getElementById('profileName').textContent = userData.name || 'User';
+        }
+        if (document.getElementById('joinDate')) {
+            document.getElementById('joinDate').textContent = userData.joinDate || 'Recently';
+        }
+    } catch (error) {
+        console.error('Error loading profile:', error);
+    }
+    
+    // Handle profile update
+    const profileForm = document.getElementById('profileForm');
+    if (profileForm) {
+        profileForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                firstName: document.getElementById('profileFirstName').value,
+                lastName: document.getElementById('profileLastName').value,
+                email: document.getElementById('profileEmail').value,
+                phone: document.getElementById('profilePhone').value,
+                address: document.getElementById('profileAddress').value
+            };
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/users/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (response.ok) {
+                    alert('Profile updated successfully!');
+                } else {
+                    alert('Failed to update profile');
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Network error. Please try again.');
+            }
+        });
+    }
+});

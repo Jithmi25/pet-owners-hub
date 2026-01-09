@@ -460,67 +460,56 @@
             const loginBtn = document.getElementById('login-btn');
             const loginSpinner = document.getElementById('login-spinner');
 
-            loginForm.addEventListener('submit', function(e) {
+          
+            loginForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                let isValid = true;
-
-                // Validate email/phone
-                if (!loginEmail.value.trim()) {
-                    showError(loginEmail, emailError, 'Email or phone is required');
-                    isValid = false;
-                } else if (!isValidEmailOrPhone(loginEmail.value.trim())) {
-                    showError(loginEmail, emailError, 'Please enter a valid email or phone number');
-                    isValid = false;
-                } else {
-                    clearError(loginEmail, emailError);
-                }
-
-                // Validate password
-                if (!loginPassword.value.trim()) {
-                    showError(loginPassword, passwordError, 'Password is required');
-                    isValid = false;
-                } else if (loginPassword.value.length < 6) {
-                    showError(loginPassword, passwordError, 'Password must be at least 6 characters');
-                    isValid = false;
-                } else {
-                    clearError(loginPassword, passwordError);
-                }
-
-                if (isValid) {
-                    // Show loading state
-                    loginBtn.disabled = true;
-                    loginSpinner.style.display = 'inline-block';
-                    loginBtn.querySelector('span').textContent = 'Logging in...';
-
-                    // Simulate API call
-                    setTimeout(() => {
-                        // Check against hardcoded users
-                        const user = authenticateUser(loginEmail.value.trim(), loginPassword.value.trim());
+                // Show loading state
+                loginBtn.disabled = true;
+                loginSpinner.style.display = 'inline-block';
+                loginBtn.querySelector('span').textContent = 'Logging in...';
+                
+                try {
+                    const email = loginEmail.value.trim();
+                    const password = loginPassword.value.trim();
+                    
+                    // Call real backend API
+                    const response = await fetch('http://localhost:5000/api/users/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email, password })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        // Store auth token and user data from backend
+                        localStorage.setItem('petcareAuthToken', data.token);
+                        localStorage.setItem('userData', JSON.stringify({
+                            name: `${data.user.firstName} ${data.user.lastName}`,
+                            email: data.user.email,
+                            phone: data.user.phone,
+                            joinDate: new Date(data.user.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+                        }));
                         
-                        if (user) {
-                            // Store auth token and user data
-                            localStorage.setItem('petcareAuthToken', 'simulated-token-' + Date.now());
-                            localStorage.setItem('userData', JSON.stringify(user));
-                            localStorage.setItem('userRole', user.role);
-                            
-                            // Show success message
-                            showToast('Login successful! Redirecting...', 'success');
-                            
-                            // Redirect based on role
-                            setTimeout(() => {
-                                redirectBasedOnRole(user.role);
-                            }, 1500);
-                        } else {
-                            // Show error message
-                            showToast('Invalid credentials. Please try again.', 'error');
-                            
-                            // Reset loading state
-                            loginBtn.disabled = false;
-                            loginSpinner.style.display = 'none';
-                            loginBtn.querySelector('span').textContent = 'Login';
-                        }
-                    }, 1500);
+                        showToast('Login successful! Redirecting...', 'success');
+                        
+                        setTimeout(() => {
+                            window.location.href = '../user-authentication/home.html';
+                        }, 1500);
+                    } else {
+                        showToast(data.message || 'Invalid email or password', 'error');
+                        loginBtn.disabled = false;
+                        loginSpinner.style.display = 'none';
+                        loginBtn.querySelector('span').textContent = 'Login';
+                    }
+                } catch (error) {
+                    showToast('Network error. Please try again.', 'error');
+                    loginBtn.disabled = false;
+                    loginSpinner.style.display = 'none';
+                    loginBtn.querySelector('span').textContent = 'Login';
                 }
             });
 
@@ -596,8 +585,5 @@
             }
         });
     </script>
-
-    <!-- Font Awesome for icons -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>
