@@ -82,61 +82,82 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
     
     // BACKEND INTEGRATION: Load pet shops from API
-    function loadPetShops(page = 1, filters = {}) {
-        /*
-        // Example of actual backend integration:
-        const queryParams = new URLSearchParams({
-            page: page,
-            category: filters.category || '',
-            location: filters.location || '',
-            search: filters.search || ''
-        });
-        
-        fetch(`/api/shops?${queryParams}`)
-            .then(response => response.json())
-            .then(data => {
-                displayPetShops(data.shops);
-                updatePagination(data.totalPages, data.currentPage);
-            })
-            .catch(error => {
-                console.error('Error loading pet shops:', error);
-                alert('Failed to load pet shops. Please try again.');
+    async function loadPetShops(page = 1, filters = {}) {
+        try {
+            // Build query parameters
+            const queryParams = new URLSearchParams({
+                page: page,
+                limit: 12
             });
-        */
-        
-        // Filter shops based on search criteria
-        let filteredShops = allShops;
-        
-        // Apply search filter
-        if (filters.search && filters.search.trim() !== '') {
-            const searchTerm = filters.search.toLowerCase();
-            filteredShops = filteredShops.filter(shop => 
-                shop.name.toLowerCase().includes(searchTerm) ||
-                shop.description.toLowerCase().includes(searchTerm) ||
-                shop.location.toLowerCase().includes(searchTerm)
-            );
+            
+            // Add filters to query
+            if (filters.category) queryParams.append('category', filters.category);
+            if (filters.location) queryParams.append('location', filters.location);
+            if (filters.search) queryParams.append('search', filters.search);
+            
+            // Call backend API
+            const response = await fetch(`http://localhost:5000/api/shops?${queryParams}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch shops');
+            }
+            
+            const data = await response.json();
+            
+            // Process backend data
+            const shops = data.shops || data;
+            displayPetShops(shops);
+            
+            // Update pagination if provided
+            if (data.totalPages) {
+                updatePagination(data.totalPages, data.currentPage || page);
+            }
+            
+            // Update results count
+            const count = shops.length;
+            const resultsText = count === 1 ? '1 shop' : `${count} shops`;
+            console.log(`Showing ${resultsText}`);
+            
+        } catch (error) {
+            console.error('Error loading pet shops:', error);
+            console.log('Falling back to demo data');
+            
+            // Fallback to local filtering if API fails
+            let filteredShops = allShops;
+            
+            if (filters.search && filters.search.trim() !== '') {
+                const searchTerm = filters.search.toLowerCase();
+                filteredShops = filteredShops.filter(shop => 
+                    shop.name.toLowerCase().includes(searchTerm) ||
+                    shop.description.toLowerCase().includes(searchTerm) ||
+                    shop.location.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (filters.category && filters.category !== '') {
+                filteredShops = filteredShops.filter(shop => 
+                    shop.categories.includes(filters.category)
+                );
+            }
+            
+            if (filters.location && filters.location !== '') {
+                filteredShops = filteredShops.filter(shop => 
+                    shop.locationKey === filters.location
+                );
+            }
+            
+            displayPetShops(filteredShops);
+            updatePagination(1, 1);
+            
+            const resultsText = filteredShops.length === 1 ? '1 shop' : `${filteredShops.length} shops`;
+            console.log(`Showing ${resultsText}`);
         }
-        
-        // Apply category filter
-        if (filters.category && filters.category !== '') {
-            filteredShops = filteredShops.filter(shop => 
-                shop.categories.includes(filters.category)
-            );
-        }
-        
-        // Apply location filter
-        if (filters.location && filters.location !== '') {
-            filteredShops = filteredShops.filter(shop => 
-                shop.locationKey === filters.location
-            );
-        }
-        
-        displayPetShops(filteredShops);
-        updatePagination(3, 1);
-        
-        // Update results count
-        const resultsText = filteredShops.length === 1 ? '1 shop' : `${filteredShops.length} shops`;
-        console.log(`Showing ${resultsText}`);
     }
     
     function displayPetShops(shops) {

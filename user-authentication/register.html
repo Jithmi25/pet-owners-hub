@@ -145,21 +145,6 @@
             transform: translateY(-2px);
         }
 
-        .btn-google {
-            background: white;
-            color: #333;
-            border: 2px solid #e1e5e9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .btn-google:hover {
-            border-color: #6c63ff;
-        }
-
         .auth-divider {
             display: flex;
             align-items: center;
@@ -393,15 +378,6 @@
                     <div class="spinner" id="register-spinner"></div>
                 </button>
 
-                <div class="auth-divider">
-                    <span>Or sign up with</span>
-                </div>
-
-                <button type="button" class="btn btn-google">
-                    <i class="fab fa-google"></i>
-                    Sign up with Google
-                </button>
-
                 <div class="auth-footer">
                     <p>Already have an account? <a href="login.html">Login here</a></p>
                 </div>
@@ -525,12 +501,6 @@
                     registerSpinner.style.display = 'none';
                     registerBtn.querySelector('span').textContent = 'Create Account';
                 }
-            });
-
-            // Google sign up
-            const googleBtn = document.querySelector('.btn-google');
-            googleBtn.addEventListener('click', function() {
-                showToast('Google sign-up would be implemented here', 'info');
             });
 
             // Helper functions

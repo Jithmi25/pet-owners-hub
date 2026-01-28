@@ -159,21 +159,6 @@
             transform: translateY(-2px);
         }
 
-        .btn-google {
-            background: white;
-            color: #333;
-            border: 2px solid #e1e5e9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .btn-google:hover {
-            border-color: #6c63ff;
-        }
-
         .auth-divider {
             display: flex;
             align-items: center;
@@ -377,14 +362,6 @@
                     <div class="spinner" id="login-spinner"></div>
                 </button>
 
-                <div class="auth-divider">
-                    <span>Or continue with</span>
-                </div>
-
-                <button type="button" class="btn btn-google">
-                    <i class="fab fa-google"></i>
-                    Sign in with Google
-                </button>
 
                 <div class="auth-footer">
                     <p>Don't have an account? <a href="register.html">Register now</a></p>
@@ -531,12 +508,6 @@
                 if (e.target === forgotPasswordModal) {
                     forgotPasswordModal.style.display = 'none';
                 }
-            });
-
-            // Google sign in
-            const googleBtn = document.querySelector('.btn-google');
-            googleBtn.addEventListener('click', function() {
-                showToast('Google sign-in would be implemented here', 'info');
             });
 
             // Helper functions

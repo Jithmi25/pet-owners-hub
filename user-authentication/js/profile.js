@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', async function() {
     const authToken = localStorage.getItem('petcareAuthToken');
     if (!authToken) {
-        window.location.href = '../login.html';
+        window.location.href = '../register.html';
         return;
     }
 

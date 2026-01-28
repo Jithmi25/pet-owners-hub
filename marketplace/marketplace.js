@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // All available pet listings
+    // Fallback pet listings for demo purposes
     const allListings = [
         {
             id: 1,
@@ -52,64 +52,83 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     // BACKEND INTEGRATION: Load pet listings from API
-    function loadPetListings(page = 1, filters = {}) {
-        /*
-        // Example of actual backend integration:
-        const queryParams = new URLSearchParams({
-            page: page,
-            type: filters.type || '',
-            location: filters.location || '',
-            search: filters.search || ''
-        });
-        
-        fetch(`/api/marketplace/listings?${queryParams}`)
-            .then(response => response.json())
-            .then(data => {
-                displayPetListings(data.listings);
-                updatePagination(data.totalPages, data.currentPage);
-            })
-            .catch(error => {
-                console.error('Error loading pet listings:', error);
-                alert('Failed to load pet listings. Please try again.');
+    async function loadPetListings(page = 1, filters = {}) {
+        try {
+            // Build query parameters
+            const queryParams = new URLSearchParams({
+                page: page,
+                limit: 12
             });
-        */
-        
-        // Filter listings based on search criteria
-        let filteredListings = allListings;
-        
-        // Apply search filter
-        if (filters.search && filters.search.trim() !== '') {
-            const searchTerm = filters.search.toLowerCase();
-            filteredListings = filteredListings.filter(pet => 
-                pet.name.toLowerCase().includes(searchTerm) ||
-                pet.breed.toLowerCase().includes(searchTerm) ||
-                pet.description.toLowerCase().includes(searchTerm) ||
-                pet.location.toLowerCase().includes(searchTerm)
-            );
+            
+            // Add filters to query
+            if (filters.type) queryParams.append('type', filters.type);
+            if (filters.location) queryParams.append('location', filters.location);
+            if (filters.search) queryParams.append('search', filters.search);
+            
+            // Call backend API
+            const response = await fetch(`http://localhost:5000/api/listings?${queryParams}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch listings');
+            }
+            
+            const data = await response.json();
+            
+            // Process backend data
+            const listings = data.listings || data;
+            displayPetListings(listings);
+            
+            // Update pagination if provided
+            if (data.totalPages) {
+                updatePagination(data.totalPages, data.currentPage || page);
+            }
+            
+            // Update results count
+            const count = listings.length;
+            const resultsText = count === 1 ? '1 pet' : `${count} pets`;
+            const resultsEl = document.getElementById('resultsCount');
+            if (resultsEl) resultsEl.textContent = `Showing ${resultsText}`;
+            
+        } catch (error) {
+            console.error('Error loading pet listings:', error);
+            console.log('Falling back to demo data');
+            
+            // Fallback to local filtering if API fails
+            let filteredListings = allListings;
+            
+            if (filters.search && filters.search.trim() !== '') {
+                const searchTerm = filters.search.toLowerCase();
+                filteredListings = filteredListings.filter(pet => 
+                    pet.name.toLowerCase().includes(searchTerm) ||
+                    pet.breed.toLowerCase().includes(searchTerm) ||
+                    pet.description.toLowerCase().includes(searchTerm) ||
+                    pet.location.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (filters.type && filters.type !== '') {
+                filteredListings = filteredListings.filter(pet => pet.type === filters.type);
+            }
+            
+            if (filters.location && filters.location !== '') {
+                filteredListings = filteredListings.filter(pet => 
+                    pet.location.toLowerCase().includes(filters.location.toLowerCase())
+                );
+            }
+            
+            displayPetListings(filteredListings);
+            updatePagination(1, 1);
+            
+            const resultsText = filteredListings.length === 1 ? '1 pet' : `${filteredListings.length} pets`;
+            const resultsEl = document.getElementById('resultsCount');
+            if (resultsEl) resultsEl.textContent = `Showing ${resultsText}`;
         }
-        
-        // Apply type filter
-        if (filters.type && filters.type !== '') {
-            filteredListings = filteredListings.filter(pet => 
-                pet.type === filters.type
-            );
-        }
-        
-        // Apply location filter
-        if (filters.location && filters.location !== '') {
-            filteredListings = filteredListings.filter(pet => 
-                pet.location.toLowerCase().includes(filters.location.toLowerCase())
-            );
-        }
-        
-        displayPetListings(filteredListings);
-        updatePagination(3, 1);
-        
-        // Update results count
-        const resultsText = filteredListings.length === 1 ? '1 pet' : `${filteredListings.length} pets`;
-        const resultsEl = document.getElementById('resultsCount');
-        if (resultsEl) resultsEl.textContent = `Showing ${resultsText}`;
-        console.log(`Showing ${resultsText}`);
     }
     
     function displayPetListings(listings) {
@@ -320,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const listingForm = document.querySelector('.listing-form');
     if (listingForm) {
-        listingForm.addEventListener('submit', function(e) {
+        listingForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const petName = document.getElementById('pet-name').value;
@@ -331,56 +350,69 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // BACKEND INTEGRATION: Submit form data to API
-            /*
-            const formData = new FormData();
-            formData.append('petName', petName);
-            formData.append('petType', petType);
-            // Append all other form fields...
-            
-            // Append uploaded files
-            const files = document.getElementById('pet-photos').files;
-            for (let i = 0; i < files.length; i++) {
-                formData.append('photos', files[i]);
-            }
-            
-            fetch('/api/marketplace/listings', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Listing created successfully!');
-                    window.location.href = 'marketplace.html';
-                } else {
-                    alert('Error creating listing: ' + data.message);
+            try {
+                // BACKEND INTEGRATION: Submit form data to API
+                const formData = new FormData();
+                
+                // Add form fields
+                formData.append('name', petName);
+                formData.append('type', petType);
+                formData.append('breed', document.getElementById('pet-breed').value);
+                formData.append('age', document.getElementById('pet-age').value);
+                formData.append('gender', document.getElementById('pet-gender').value);
+                
+                const listingType = document.querySelector('input[name="listing-type"]:checked');
+                if (listingType) formData.append('listingType', listingType.value);
+                
+                formData.append('price', document.getElementById('pet-price').value);
+                formData.append('location', document.getElementById('pet-location').value);
+                formData.append('description', document.getElementById('pet-description').value);
+                
+                // Health information
+                const vaccinations = Array.from(document.querySelectorAll('input[name="vaccinations"]:checked'))
+                    .map(cb => cb.value);
+                formData.append('vaccinationStatus', vaccinations.join(', '));
+                formData.append('healthNotes', document.getElementById('pet-health-notes')?.value || '');
+                formData.append('veterinaryInformation', document.getElementById('pet-vet')?.value || '');
+                
+                // Add uploaded photos
+                const files = document.getElementById('pet-photos')?.files;
+                if (files) {
+                    for (let i = 0; i < files.length; i++) {
+                        formData.append('photos', files[i]);
+                    }
                 }
-            })
-            .catch(error => {
+                
+                // Get auth token if available
+                const token = localStorage.getItem('authToken');
+                const headers = {};
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+                
+                // Submit to backend
+                const response = await fetch('http://localhost:5000/api/listings', {
+                    method: 'POST',
+                    body: formData,
+                    headers: headers,
+                    credentials: 'include'
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to create listing');
+                }
+                
+                const data = await response.json();
+                console.log('Listing created:', data);
+                
+                alert('Listing submitted successfully! It will be reviewed before appearing on the marketplace.');
+                window.location.href = 'marketplace.html';
+                
+            } catch (error) {
                 console.error('Error creating listing:', error);
-                alert('Failed to create listing. Please try again.');
-            });
-            */
-            
-            // For demonstration purposes
-            console.log('Form would be submitted with:', {
-                petName,
-                petType,
-                breed: document.getElementById('pet-breed').value,
-                age: document.getElementById('pet-age').value,
-                gender: document.getElementById('pet-gender').value,
-                listingType: document.querySelector('input[name="listing-type"]:checked').value,
-                price: document.getElementById('pet-price').value,
-                location: document.getElementById('pet-location').value,
-                description: document.getElementById('pet-description').value,
-                vaccinationStatus: Array.from(document.querySelectorAll('input[name="vaccinations"]:checked')).map(cb => cb.value),
-                healthNotes: document.getElementById('pet-health-notes').value,
-                veterinaryInformation: document.getElementById('pet-vet').value,
-            });
-            
-            alert('Listing created successfully! (This is a demo)');
-            // window.location.href = 'marketplace.html';
+                alert('Failed to create listing: ' + error.message + '\n\nPlease make sure the backend server is running on port 5000.');
+            }
         });
     }
     
